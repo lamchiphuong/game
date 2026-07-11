@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocab Quest — Công Việc Hằng Ngày</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#0a1a2b;
+    --bg2:#0f2b3f;
+    --panel:#102638;
+    --panel-line: rgba(150,210,220,0.14);
+    --teal:#2dd4bf;
+    --teal-dim: rgba(45,212,191,0.18);
+    --gold:#ffd166;
+    --coral:#ff5d73;
+    --green:#4ade80;
+    --ink:#eaf6f5;
+    --ink-dim:#9fb8c2;
+    --navy-deep:#061421;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(1100px 600px at 15% -10%, rgba(45,212,191,0.14), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, rgba(255,209,102,0.10), transparent 55%),
+      linear-gradient(180deg, var(--bg1), var(--bg2) 60%, var(--navy-deep));
+    font-family:'Inter', sans-serif;
+    color: var(--ink);
+    display:flex;
+    justify-content:center;
+    padding: 22px 14px 60px;
+    overflow-x:hidden;
+  }
+  .sheet{ width:100%; max-width:660px; }
+
+  /* ---- HUD ---- */
+  .hud{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  .logo{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size: clamp(20px,5vw,28px);
+    color:#fff;
+    letter-spacing:0.5px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .logo .bolt{ color: var(--gold); text-shadow: 0 0 14px rgba(255,209,102,0.7); }
+  .hud-stats{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .lives{
+    display:flex;
+    gap:4px;
+    font-size:20px;
+    filter: drop-shadow(0 0 6px rgba(255,93,115,0.5));
+  }
+  .life.lost{ opacity:0.25; filter:none; }
+  .score-badge{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    background: linear-gradient(135deg, rgba(255,209,102,0.16), rgba(255,209,102,0.05));
+    border:1px solid rgba(255,209,102,0.4);
+    color: var(--gold);
+    padding:6px 14px;
+    border-radius: 20px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  /* ---- CARD ---- */
+  .card{
+    position:relative;
+    background: linear-gradient(180deg, rgba(20,45,63,0.9), rgba(12,32,46,0.95));
+    border: 1px solid var(--panel-line);
+    border-radius: 20px;
+    padding: 26px 24px 24px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.2), 0 24px 60px -20px rgba(0,0,0,0.6), 0 0 40px -18px rgba(45,212,191,0.35);
+    overflow:hidden;
+  }
+  .card.shake{ animation: shake 0.4s; }
+  @keyframes shake{
+    10%,90%{ transform: translateX(-2px); }
+    20%,80%{ transform: translateX(4px); }
+    30%,50%,70%{ transform: translateX(-8px); }
+    40%,60%{ transform: translateX(8px); }
+  }
+
+  .top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:'Baloo 2', sans-serif;
+    font-size:13px;
+    color: var(--ink-dim);
+    margin-bottom:10px;
+  }
+  .level-tag{
+    background: var(--teal-dim);
+    color: var(--teal);
+    border:1px solid rgba(45,212,191,0.4);
+    padding:3px 10px;
+    border-radius:20px;
+    font-weight:700;
+    letter-spacing:0.5px;
+  }
+  .streak-tag{
+    font-weight:700;
+    color: var(--gold);
+    opacity:0;
+    transform: translateY(4px);
+    transition: opacity .25s, transform .25s;
+  }
+  .streak-tag.show{ opacity:1; transform:translateY(0); }
+
+  .timer-track{
+    height:8px;
+    border-radius:6px;
+    background: rgba(255,255,255,0.06);
+    overflow:hidden;
+    margin-bottom:20px;
+  }
+  .timer-fill{
+    height:100%;
+    width:100%;
+    background: linear-gradient(90deg, var(--teal), var(--green));
+    transition: width 0.2s linear, background 0.3s;
+  }
+  .timer-fill.warn{ background: linear-gradient(90deg, var(--gold), #ffb020); }
+  .timer-fill.danger{ background: linear-gradient(90deg, var(--coral), #ff2e51); }
+
+  .quest-label{
+    font-family:'Baloo 2', sans-serif;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color: var(--teal);
+    margin-bottom:8px;
+  }
+  .prompt-en{
+    font-family:'Baloo 2', sans-serif;
+    font-size: clamp(26px,6vw,36px);
+    font-weight:800;
+    color:#fff;
+    line-height:1.2;
+    margin-bottom:4px;
+  }
+  .prompt-ipa{
+    font-size:14px;
+    color: var(--ink-dim);
+    margin-bottom:10px;
+  }
+  .prompt-example{
+    font-size:15px;
+    color:#cfe3e0;
+    font-style: italic;
+    background: rgba(255,255,255,0.03);
+    border-left:3px solid var(--gold);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    margin: 10px 0 22px;
+  }
+
+  .options{ display:flex; flex-direction:column; gap:11px; }
+  .opt{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    width:100%;
+    text-align:left;
+    font-family:'Inter', sans-serif;
+    font-size:15.5px;
+    font-weight:600;
+    color: var(--ink);
+    background: rgba(255,255,255,0.03);
+    border:1.5px solid var(--panel-line);
+    border-radius:12px;
+    padding:13px 15px;
+    cursor:pointer;
+    transition: border-color .15s, background .15s, transform .08s;
+  }
+  .opt:hover:not(:disabled){
+    border-color: var(--teal);
+    background: rgba(45,212,191,0.08);
+    transform: translateX(2px);
+  }
+  .opt:active:not(:disabled){ transform: scale(0.98); }
+  .opt-letter{
+    flex:0 0 auto;
+    width:28px; height:28px;
+    border-radius:8px;
+    border:1.5px solid rgba(255,255,255,0.18);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700; font-size:13px;
+    color: var(--ink-dim);
+  }
+  .opt.correct{
+    border-color: var(--green);
+    background: rgba(74,222,128,0.14);
+  }
+  .opt.correct .opt-letter{ background: var(--green); border-color: var(--green); color:#06210f; }
+  .opt.wrong{
+    border-color: var(--coral);
+    background: rgba(255,93,115,0.14);
+  }
+  .opt.wrong .opt-letter{ background: var(--coral); border-color: var(--coral); color:#2a0509; }
+  .opt:disabled{ cursor:default; }
+  .opt:disabled:not(.correct):not(.wrong){ opacity:0.4; }
+
+  .feedback{
+    font-family:'Baloo 2', sans-serif;
+    font-size:15px;
+    font-weight:700;
+    min-height:22px;
+    margin-top:16px;
+  }
+  .feedback.good{ color: var(--green); }
+  .feedback.bad{ color: var(--coral); }
+
+  .footer-row{ display:flex; justify-content:flex-end; margin-top:16px; }
+  .next-btn{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    color:#062018;
+    background: linear-gradient(135deg, var(--teal), #21b8a4);
+    border:none;
+    border-radius:10px;
+    padding:12px 24px;
+    cursor:pointer;
+    opacity:0;
+    pointer-events:none;
+    box-shadow: 0 8px 20px -8px rgba(45,212,191,0.6);
+    transition: opacity .2s, transform .1s;
+  }
+  .next-btn.show{ opacity:1; pointer-events:auto; }
+  .next-btn:active{ transform: scale(0.97); }
+
+  /* ---- confetti ---- */
+  .confetti-piece{
+    position:absolute;
+    top:40%;
+    left:50%;
+    width:8px; height:8px;
+    border-radius:2px;
+    opacity:0.95;
+    pointer-events:none;
+    animation: pop 0.9s ease-out forwards;
+  }
+  @keyframes pop{
+    0%{ transform: translate(0,0) rotate(0deg) scale(1); opacity:1; }
+    100%{ transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.6); opacity:0; }
+  }
+
+  /* ---- results ---- */
+  .result-screen{ text-align:center; padding: 8px 2px 4px; }
+  .result-badge{
+    font-size:56px;
+    margin-bottom:6px;
+    filter: drop-shadow(0 0 20px rgba(255,209,102,0.5));
+  }
+  .result-rank{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size: clamp(22px,5vw,30px);
+    color:#fff;
+  }
+  .result-score{
+    font-family:'Baloo 2', sans-serif;
+    font-size:44px;
+    font-weight:800;
+    color: var(--gold);
+    margin: 8px 0 0;
+  }
+  .result-label{
+    font-family:'Baloo 2', sans-serif;
+    font-size:12px;
+    color: var(--ink-dim);
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+  }
+  .result-msg{
+    font-size:15.5px;
+    color:#cfe3e0;
+    margin: 14px auto 22px;
+    max-width: 440px;
+  }
+  .btn-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .restart-btn{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    color:#fff;
+    background: rgba(255,255,255,0.06);
+    border:1.5px solid rgba(255,255,255,0.25);
+    border-radius:10px;
+    padding:12px 24px;
+    cursor:pointer;
+  }
+  .restart-btn:hover{ background: rgba(255,255,255,0.1); }
+
+  .review-list{
+    text-align:left;
+    margin-top: 22px;
+    border-top: 1px dashed var(--panel-line);
+    padding-top: 14px;
+    font-size: 13.5px;
+  }
+  .review-item{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .review-en{ font-weight:700; color: var(--coral); font-family:'Baloo 2', sans-serif; }
+  .review-vn{ color: var(--ink-dim); }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="hud">
+    <div class="logo"><span class="bolt">⚡</span>VOCAB QUEST</div>
+    <div class="hud-stats">
+      <div class="lives" id="lives"></div>
+      <div class="score-badge">🏆 <span id="scoreVal">0</span></div>
+    </div>
+  </div>
+  <div class="card" id="card"></div>
+</div>
+
+<script>
+const VOCAB = [
+  {en:"arrive at work", ipa:"/əˈraɪv ət wɜːrk/", ex:"She arrived at work at 7:45 yesterday.", vn:"đến nơi làm việc"},
+  {en:"check email", ipa:"/tʃek ˈiːmeɪl/", ex:"I checked my email before the meeting.", vn:"kiểm tra email"},
+  {en:"reply to emails", ipa:"/rɪˈplaɪ tuː ˈiːmeɪlz/", ex:"He replied to three emails this morning.", vn:"trả lời email"},
+  {en:"make a phone call", ipa:"/meɪk ə foʊn kɔːl/", ex:"She made a phone call to the client.", vn:"gọi điện thoại"},
+  {en:"answer the phone", ipa:"/ˈænsər ðə foʊn/", ex:"I answered the phone twice during lunch.", vn:"nghe điện thoại"},
+  {en:"schedule an appointment", ipa:"/ˈskedʒuːl ən əˈpɔɪntmənt/", ex:"We scheduled an appointment for Monday.", vn:"sắp xếp cuộc hẹn"},
+  {en:"attend a meeting", ipa:"/əˈtend ə ˈmiːtɪŋ/", ex:"They attended a meeting at 9 a.m.", vn:"tham dự cuộc họp"},
+  {en:"take notes", ipa:"/teɪk noʊts/", ex:"The assistant took notes during the call.", vn:"ghi chú"},
+  {en:"prepare a report", ipa:"/prɪˈper ə rɪˈpɔːrt/", ex:"He prepared a report last night.", vn:"chuẩn bị báo cáo"},
+  {en:"submit a report", ipa:"/səbˈmɪt ə rɪˈpɔːrt/", ex:"She submitted the report on time.", vn:"nộp báo cáo"},
+  {en:"review documents", ipa:"/rɪˈvjuː ˈdɑːkjəmənts/", ex:"The manager reviewed the documents carefully.", vn:"xem xét/xem lại tài liệu"},
+  {en:"file paperwork", ipa:"/faɪl ˈpeɪpərwɜːrk/", ex:"She filed all the paperwork yesterday.", vn:"sắp xếp/lưu hồ sơ"},
+  {en:"print documents", ipa:"/prɪnt ˈdɑːkjəmənts/", ex:"He printed the documents for the meeting.", vn:"in tài liệu"},
+  {en:"make copies", ipa:"/meɪk ˈkɑːpiz/", ex:"I made copies of the contract.", vn:"photocopy / sao chụp"},
+  {en:"send a package", ipa:"/send ə ˈpækɪdʒ/", ex:"We sent a package to the branch office.", vn:"gửi bưu kiện"},
+  {en:"receive an order", ipa:"/rɪˈsiːv ən ˈɔːrdər/", ex:"The shop received an order for 100 units.", vn:"nhận đơn đặt hàng"},
+  {en:"serve", ipa:"/sɜːrv/", ex:"He served customers all afternoon.", vn:"phục vụ"},
+  {en:"solve a problem", ipa:"/sɑːlv ə ˈprɑːbləm/", ex:"The IT team solved the problem quickly.", vn:"giải quyết vấn đề"},
+  {en:"finish a project", ipa:"/ˈfɪnɪʃ ə ˈprɑːdʒekt/", ex:"We finished the project two days early.", vn:"hoàn thành dự án"},
+  {en:"work overtime", ipa:"/wɜːrk ˈoʊvərtaɪm/", ex:"He worked overtime to meet the deadline.", vn:"tăng ca / làm thêm giờ"}
+];
+
+const LETTERS = ["A","B","C","D"];
+const MAX_LIVES = 3;
+const TIME_LIMIT = 12000; // ms
+const CONFETTI_COLORS = ['#2dd4bf','#ffd166','#4ade80','#ff5d73','#8ecae6'];
+
+let order = [], current = 0, score = 0, lives = MAX_LIVES, streak = 0, answered = false;
+let results = [];
+let timerInterval = null, timeLeft = TIME_LIMIT;
+
+// ---- tiny beep feedback (Web Audio, no external assets) ----
+let audioCtx = null;
+function beep(freq, dur, type='sine'){
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type;
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); o.stop(audioCtx.currentTime + dur);
+  }catch(e){}
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function buildOptions(correctItem){
+  const pool = VOCAB.filter(v => v.vn !== correctItem.vn);
+  const distractors = shuffle(pool).slice(0,3).map(v=>v.vn);
+  return shuffle([correctItem.vn, ...distractors]);
+}
+
+function renderLives(){
+  const el = document.getElementById('lives');
+  el.innerHTML = '';
+  for(let i=0;i<MAX_LIVES;i++){
+    const span = document.createElement('span');
+    span.className = 'life' + (i >= lives ? ' lost' : '');
+    span.textContent = '❤️';
+    el.appendChild(span);
+  }
+}
+
+function updateScoreBadge(){
+  document.getElementById('scoreVal').textContent = score;
+}
+
+function startQuiz(){
+  order = shuffle(VOCAB);
+  current = 0; score = 0; lives = MAX_LIVES; streak = 0; results = [];
+  renderLives();
+  updateScoreBadge();
+  renderQuestion();
+}
+
+function stopTimer(){
+  if(timerInterval){ clearInterval(timerInterval); timerInterval = null; }
+}
+
+function renderQuestion(){
+  answered = false;
+  const item = order[current];
+  const options = buildOptions(item);
+  const card = document.getElementById('card');
+
+  card.innerHTML = `
+    <div class="top-row">
+      <span class="level-tag">Câu ${current+1} / ${order.length}</span>
+      <span class="streak-tag" id="streakTag">🔥 Streak x${streak}</span>
+    </div>
+    <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+    <div class="quest-label">Nghĩa tiếng Việt là gì?</div>
+    <div class="prompt-en">${item.en}</div>
+    <div class="prompt-ipa">${item.ipa}</div>
+    <div class="prompt-example">${item.ex}</div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="footer-row"><button class="next-btn" id="nextBtn">Câu tiếp theo →</button></div>
+  `;
+
+  if(streak >= 2) document.getElementById('streakTag').classList.add('show');
+
+  const optionsDiv = document.getElementById('options');
+  options.forEach((optVn, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<span class="opt-letter">${LETTERS[idx]}</span><span>${optVn}</span>`;
+    btn.onclick = () => selectAnswer(btn, optVn, item.vn);
+    optionsDiv.appendChild(btn);
+  });
+
+  document.getElementById('nextBtn').onclick = nextQuestion;
+
+  runTimer();
+}
+
+function runTimer(){
+  stopTimer();
+  timeLeft = TIME_LIMIT;
+  const fill = document.getElementById('timerFill');
+  const startTime = Date.now();
+  timerInterval = setInterval(() => {
+    const elapsed = Date.now() - startTime;
+    timeLeft = TIME_LIMIT - elapsed;
+    const pct = Math.max(0, (timeLeft / TIME_LIMIT) * 100);
+    fill.style.width = pct + '%';
+    fill.classList.toggle('warn', pct <= 50 && pct > 20);
+    fill.classList.toggle('danger', pct <= 20);
+    if(timeLeft <= 0){
+      stopTimer();
+      if(!answered) timeoutAnswer();
+    }
+  }, 80);
+}
+
+function timeoutAnswer(){
+  answered = true;
+  const item = order[current];
+  streak = 0;
+  loseLife();
+  results.push({en: item.en, vn: item.vn, correct:false});
+
+  document.querySelectorAll('#options .opt').forEach(opt => {
+    opt.disabled = true;
+    const text = opt.querySelector('span:last-child').textContent;
+    if(text === item.vn) opt.classList.add('correct');
+  });
+  const fb = document.getElementById('feedback');
+  fb.textContent = `⏰ Hết giờ! Đáp án đúng: "${item.vn}"`;
+  fb.className = 'feedback bad';
+  document.getElementById('card').classList.add('shake');
+  setTimeout(()=>document.getElementById('card').classList.remove('shake'), 400);
+  beep(180, 0.3, 'sawtooth');
+
+  if(lives <= 0){ setTimeout(renderGameOver, 700); }
+  else { document.getElementById('nextBtn').classList.add('show'); }
+}
+
+function loseLife(){
+  lives = Math.max(0, lives - 1);
+  renderLives();
+}
+
+function spawnConfetti(container){
+  for(let i=0;i<26;i++){
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 60 + Math.random()*120;
+    p.style.setProperty('--dx', Math.cos(angle)*dist + 'px');
+    p.style.setProperty('--dy', Math.sin(angle)*dist + 'px');
+    p.style.setProperty('--rot', (Math.random()*360-180) + 'deg');
+    p.style.background = CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)];
+    p.style.left = (45 + Math.random()*10) + '%';
+    container.appendChild(p);
+    setTimeout(()=>p.remove(), 950);
+  }
+}
+
+function selectAnswer(btn, chosenVn, correctVn){
+  if(answered) return;
+  answered = true;
+  stopTimer();
+  const isCorrect = chosenVn === correctVn;
+  results.push({en: order[current].en, vn: correctVn, correct: isCorrect});
+
+  document.querySelectorAll('#options .opt').forEach(opt => {
+    opt.disabled = true;
+    const text = opt.querySelector('span:last-child').textContent;
+    if(text === correctVn) opt.classList.add('correct');
+    else if(opt === btn) opt.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  const card = document.getElementById('card');
+
+  if(isCorrect){
+    streak++;
+    const bonus = 10 + Math.min(streak-1, 5) * 5;
+    score += bonus;
+    updateScoreBadge();
+    fb.textContent = `✓ Chính xác! +${bonus} điểm`;
+    fb.className = 'feedback good';
+    spawnConfetti(card);
+    beep(660, 0.18);
+    if(streak >= 2){
+      setTimeout(()=>{
+        const st = document.getElementById('streakTag');
+        if(st){ st.textContent = `🔥 Streak x${streak}`; st.classList.add('show'); }
+      }, 50);
+    }
+  } else {
+    streak = 0;
+    loseLife();
+    fb.textContent = `✗ Chưa đúng. Đáp án đúng: "${correctVn}"`;
+    fb.className = 'feedback bad';
+    card.classList.add('shake');
+    setTimeout(()=>card.classList.remove('shake'), 400);
+    beep(180, 0.3, 'sawtooth');
+  }
+
+  if(!isCorrect && lives <= 0){
+    setTimeout(renderGameOver, 700);
+  } else {
+    document.getElementById('nextBtn').classList.add('show');
+  }
+}
+
+function nextQuestion(){
+  current++;
+  if(current >= order.length){
+    renderVictory();
+  } else {
+    renderQuestion();
+  }
+}
+
+function rankFor(pct){
+  if(pct === 100) return {badge:'👑', rank:'Bậc Thầy Từ Vựng'};
+  if(pct >= 80) return {badge:'🥇', rank:'Chuyên Viên Xuất Sắc'};
+  if(pct >= 60) return {badge:'🥈', rank:'Nhân Viên Chăm Chỉ'};
+  if(pct >= 40) return {badge:'🥉', rank:'Thực Tập Sinh Tiềm Năng'};
+  return {badge:'🌱', rank:'Người Mới Bắt Đầu'};
+}
+
+function renderReview(){
+  const missed = results.filter(r => !r.correct);
+  if(!missed.length) return '';
+  return `
+    <div class="review-list">
+      ${missed.map(m => `
+        <div class="review-item">
+          <span class="review-en">${m.en}</span>
+          <span class="review-vn">${m.vn}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderVictory(){
+  stopTimer();
+  const card = document.getElementById('card');
+  const correctCount = results.filter(r=>r.correct).length;
+  const total = order.length;
+  const pct = Math.round((correctCount/total)*100);
+  const {badge, rank} = rankFor(pct);
+
+  card.innerHTML = `
+    <div class="result-screen">
+      <div class="result-badge">${badge}</div>
+      <div class="result-rank">${rank}</div>
+      <div class="result-label">Điểm số cuối cùng</div>
+      <div class="result-score">${score} ★</div>
+      <div class="result-msg">Bạn trả lời đúng ${correctCount}/${total} câu (${pct}%). ${lives} mạng còn lại.</div>
+      <div class="btn-row"><button class="restart-btn" id="restartBtn">🔄 Chơi lại</button></div>
+      ${renderReview()}
+    </div>
+  `;
+  spawnConfetti(card);
+  document.getElementById('restartBtn').onclick = startQuiz;
+}
+
+function renderGameOver(){
+  stopTimer();
+  const card = document.getElementById('card');
+  const correctCount = results.filter(r=>r.correct).length;
+
+  card.innerHTML = `
+    <div class="result-screen">
+      <div class="result-badge">💥</div>
+      <div class="result-rank">Hết Mạng Rồi!</div>
+      <div class="result-label">Điểm số</div>
+      <div class="result-score">${score} ★</div>
+      <div class="result-msg">Bạn trả lời đúng ${correctCount}/${current+1} câu trước khi hết mạng. Đừng lo, thử lại để phá kỷ lục nhé!</div>
+      <div class="btn-row"><button class="restart-btn" id="restartBtn">🔄 Chơi lại</button></div>
+      ${renderReview()}
+    </div>
+  `;
+  document.getElementById('restartBtn').onclick = startQuiz;
+}
+
+startQuiz();
+</script>
+</body>
+</html>
