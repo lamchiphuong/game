@@ -58,17 +58,18 @@
     gap:8px;
   }
   .logo .bolt{ color: var(--gold); text-shadow: 0 0 14px rgba(255,209,102,0.7); }
-  .hud-stats{
-    display:flex;
-    align-items:center;
-    gap:10px;
+  .hud-stats{ display:flex; align-items:center; gap:10px; }
+  .player-tag{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:13px;
+    color: var(--teal);
+    background: var(--teal-dim);
+    border:1px solid rgba(45,212,191,0.4);
+    padding:5px 12px;
+    border-radius:20px;
   }
-  .lives{
-    display:flex;
-    gap:3px;
-    font-size:17px;
-    filter: drop-shadow(0 0 6px rgba(255,93,115,0.5));
-  }
+  .lives{ display:flex; gap:3px; font-size:17px; filter: drop-shadow(0 0 6px rgba(255,93,115,0.5)); }
   .life.lost{ opacity:0.25; filter:none; }
   .score-badge{
     font-family:'Baloo 2', sans-serif;
@@ -120,220 +121,134 @@
     font-weight:700;
     letter-spacing:0.5px;
   }
-  .speed-tag{
-    font-weight:700;
-    color: var(--gold);
-    opacity:0;
-    transform: translateY(4px);
-    transition: opacity .25s, transform .25s;
-  }
+  .speed-tag{ font-weight:700; color: var(--gold); opacity:0; transform: translateY(4px); transition: opacity .25s, transform .25s; }
   .speed-tag.show{ opacity:1; transform:translateY(0); }
 
-  .timer-track{
-    height:8px;
-    border-radius:6px;
-    background: rgba(255,255,255,0.06);
-    overflow:hidden;
-    margin-bottom:20px;
-  }
-  .timer-fill{
-    height:100%;
-    width:100%;
-    background: linear-gradient(90deg, var(--teal), var(--green));
-    transition: width 0.2s linear, background 0.3s;
-  }
+  .timer-track{ height:8px; border-radius:6px; background: rgba(255,255,255,0.06); overflow:hidden; margin-bottom:20px; }
+  .timer-fill{ height:100%; width:100%; background: linear-gradient(90deg, var(--teal), var(--green)); transition: width 0.2s linear, background 0.3s; }
   .timer-fill.warn{ background: linear-gradient(90deg, var(--gold), #ffb020); }
   .timer-fill.danger{ background: linear-gradient(90deg, var(--coral), #ff2e51); }
 
-  .quest-label{
-    font-family:'Baloo 2', sans-serif;
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:1.5px;
-    text-transform:uppercase;
-    color: var(--teal);
-    margin-bottom:8px;
-  }
-  .prompt-vn{
-    font-family:'Baloo 2', sans-serif;
-    font-size: clamp(24px,5.6vw,32px);
-    font-weight:800;
-    color:#fff;
-    line-height:1.28;
-    margin-bottom:12px;
-  }
-  .prompt-context{
-    font-size:14.5px;
-    color:#cfe3e0;
-    font-style: italic;
-    background: rgba(255,255,255,0.03);
-    border-left:3px solid var(--gold);
-    padding: 10px 14px;
-    border-radius: 0 8px 8px 0;
-    margin: 0 0 22px;
-  }
+  .quest-label{ font-family:'Baloo 2', sans-serif; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color: var(--teal); margin-bottom:8px; }
+  .prompt-vn{ font-family:'Baloo 2', sans-serif; font-size: clamp(24px,5.6vw,32px); font-weight:800; color:#fff; line-height:1.28; margin-bottom:12px; }
+  .prompt-context{ font-size:14.5px; color:#cfe3e0; font-style: italic; background: rgba(255,255,255,0.03); border-left:3px solid var(--gold); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 0 0 22px; }
 
   .options{ display:flex; flex-direction:column; gap:11px; }
   .opt{
-    display:flex;
-    align-items:center;
-    gap:13px;
-    width:100%;
-    text-align:left;
-    font-family:'Inter', sans-serif;
-    font-size:16px;
-    font-weight:700;
-    color: var(--ink);
-    background: rgba(255,255,255,0.03);
-    border:1.5px solid var(--panel-line);
-    border-radius:12px;
-    padding:13px 15px;
-    cursor:pointer;
-    transition: border-color .15s, background .15s, transform .08s;
+    display:flex; align-items:center; gap:13px; width:100%; text-align:left;
+    font-family:'Inter', sans-serif; font-size:16px; font-weight:700; color: var(--ink);
+    background: rgba(255,255,255,0.03); border:1.5px solid var(--panel-line); border-radius:12px;
+    padding:13px 15px; cursor:pointer; transition: border-color .15s, background .15s, transform .08s;
   }
-  .opt:hover:not(:disabled){
-    border-color: var(--teal);
-    background: rgba(45,212,191,0.08);
-    transform: translateX(2px);
-  }
+  .opt:hover:not(:disabled){ border-color: var(--teal); background: rgba(45,212,191,0.08); transform: translateX(2px); }
   .opt:active:not(:disabled){ transform: scale(0.98); }
   .opt-letter{
-    flex:0 0 auto;
-    width:28px; height:28px;
-    border-radius:8px;
-    border:1.5px solid rgba(255,255,255,0.18);
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700; font-size:13px;
-    color: var(--ink-dim);
+    flex:0 0 auto; width:28px; height:28px; border-radius:8px; border:1.5px solid rgba(255,255,255,0.18);
+    display:flex; align-items:center; justify-content:center; font-family:'Baloo 2', sans-serif; font-weight:700; font-size:13px; color: var(--ink-dim);
   }
-  .opt.correct{
-    border-color: var(--green);
-    background: rgba(74,222,128,0.14);
-  }
+  .opt.correct{ border-color: var(--green); background: rgba(74,222,128,0.14); }
   .opt.correct .opt-letter{ background: var(--green); border-color: var(--green); color:#06210f; }
-  .opt.wrong{
-    border-color: var(--coral);
-    background: rgba(255,93,115,0.14);
-  }
+  .opt.wrong{ border-color: var(--coral); background: rgba(255,93,115,0.14); }
   .opt.wrong .opt-letter{ background: var(--coral); border-color: var(--coral); color:#2a0509; }
   .opt:disabled{ cursor:default; }
   .opt:disabled:not(.correct):not(.wrong){ opacity:0.4; }
 
-  .feedback{
-    font-family:'Baloo 2', sans-serif;
-    font-size:15px;
-    font-weight:700;
-    min-height:22px;
-    margin-top:16px;
-  }
-  .feedback .ipa{
-    font-family:'Inter', sans-serif;
-    font-weight:400;
-    color: var(--ink-dim);
-    font-size:13px;
-  }
+  .feedback{ font-family:'Baloo 2', sans-serif; font-size:15px; font-weight:700; min-height:22px; margin-top:16px; }
+  .feedback .ipa{ font-family:'Inter', sans-serif; font-weight:400; color: var(--ink-dim); font-size:13px; }
   .feedback.good{ color: var(--green); }
   .feedback.bad{ color: var(--coral); }
 
   .footer-row{ display:flex; justify-content:flex-end; margin-top:16px; }
   .next-btn{
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700;
-    font-size:15px;
-    color:#062018;
-    background: linear-gradient(135deg, var(--teal), #21b8a4);
-    border:none;
-    border-radius:10px;
-    padding:12px 24px;
-    cursor:pointer;
-    opacity:0;
-    pointer-events:none;
-    box-shadow: 0 8px 20px -8px rgba(45,212,191,0.6);
-    transition: opacity .2s, transform .1s;
+    font-family:'Baloo 2', sans-serif; font-weight:700; font-size:15px; color:#062018;
+    background: linear-gradient(135deg, var(--teal), #21b8a4); border:none; border-radius:10px;
+    padding:12px 24px; cursor:pointer; opacity:0; pointer-events:none;
+    box-shadow: 0 8px 20px -8px rgba(45,212,191,0.6); transition: opacity .2s, transform .1s;
   }
   .next-btn.show{ opacity:1; pointer-events:auto; }
   .next-btn:active{ transform: scale(0.97); }
 
-  /* ---- confetti ---- */
-  .confetti-piece{
-    position:absolute;
-    top:40%;
-    left:50%;
-    width:8px; height:8px;
-    border-radius:2px;
-    opacity:0.95;
-    pointer-events:none;
-    animation: pop 0.9s ease-out forwards;
-  }
-  @keyframes pop{
-    0%{ transform: translate(0,0) rotate(0deg) scale(1); opacity:1; }
-    100%{ transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.6); opacity:0; }
-  }
+  .confetti-piece{ position:absolute; top:40%; left:50%; width:8px; height:8px; border-radius:2px; opacity:0.95; pointer-events:none; animation: pop 0.9s ease-out forwards; }
+  @keyframes pop{ 0%{ transform: translate(0,0) rotate(0deg) scale(1); opacity:1; } 100%{ transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.6); opacity:0; } }
 
-  /* ---- results ---- */
   .result-screen{ text-align:center; padding: 8px 2px 4px; }
-  .result-badge{
-    font-size:56px;
-    margin-bottom:6px;
-    filter: drop-shadow(0 0 20px rgba(255,209,102,0.5));
-  }
-  .result-rank{
-    font-family:'Baloo 2', sans-serif;
-    font-weight:800;
-    font-size: clamp(22px,5vw,30px);
-    color:#fff;
-  }
-  .result-score{
-    font-family:'Baloo 2', sans-serif;
-    font-size:44px;
-    font-weight:800;
-    color: var(--gold);
-    margin: 8px 0 0;
-  }
-  .result-label{
-    font-family:'Baloo 2', sans-serif;
-    font-size:12px;
-    color: var(--ink-dim);
-    letter-spacing:1.5px;
-    text-transform:uppercase;
-  }
-  .result-msg{
-    font-size:15.5px;
-    color:#cfe3e0;
-    margin: 14px auto 22px;
-    max-width: 440px;
-  }
+  .result-badge{ font-size:56px; margin-bottom:6px; filter: drop-shadow(0 0 20px rgba(255,209,102,0.5)); }
+  .result-rank{ font-family:'Baloo 2', sans-serif; font-weight:800; font-size: clamp(22px,5vw,30px); color:#fff; }
+  .result-score{ font-family:'Baloo 2', sans-serif; font-size:44px; font-weight:800; color: var(--gold); margin: 8px 0 0; }
+  .result-label{ font-family:'Baloo 2', sans-serif; font-size:12px; color: var(--ink-dim); letter-spacing:1.5px; text-transform:uppercase; }
+  .result-msg{ font-size:15.5px; color:#cfe3e0; margin: 14px auto 22px; max-width: 440px; }
   .btn-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .restart-btn{
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700;
-    font-size:15px;
-    color:#fff;
-    background: rgba(255,255,255,0.06);
-    border:1.5px solid rgba(255,255,255,0.25);
-    border-radius:10px;
-    padding:12px 24px;
-    cursor:pointer;
+    font-family:'Baloo 2', sans-serif; font-weight:700; font-size:15px; color:#fff;
+    background: rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.25); border-radius:10px;
+    padding:12px 24px; cursor:pointer;
   }
   .restart-btn:hover{ background: rgba(255,255,255,0.1); }
+  .restart-btn.primary{ background: linear-gradient(135deg, var(--teal), #21b8a4); border:none; color:#062018; }
 
-  .review-list{
-    text-align:left;
-    margin-top: 22px;
-    border-top: 1px dashed var(--panel-line);
-    padding-top: 14px;
-    font-size: 13.5px;
-  }
-  .review-item{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    padding:8px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
+  .review-list{ text-align:left; margin-top: 22px; border-top: 1px dashed var(--panel-line); padding-top: 14px; font-size: 13.5px; }
+  .review-item{ display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
   .review-en{ font-weight:700; color: var(--coral); font-family:'Baloo 2', sans-serif; }
   .review-vn{ color: var(--ink-dim); }
+
+  /* ---- Leaderboard ---- */
+  .leaderboard{ text-align:left; margin-top: 22px; border-top: 1px dashed var(--panel-line); padding-top: 16px; }
+  .leaderboard h3{
+    font-family:'Baloo 2', sans-serif; font-size:14px; letter-spacing:1px; text-transform:uppercase;
+    color: var(--gold); margin: 0 0 12px; display:flex; align-items:center; gap:6px;
+  }
+  .lb-row{
+    display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px;
+    font-size:13.5px; margin-bottom:4px; background: rgba(255,255,255,0.02);
+  }
+  .lb-row.me{ background: rgba(255,209,102,0.12); border:1px solid rgba(255,209,102,0.35); }
+  .lb-rank{ font-family:'Baloo 2', sans-serif; font-weight:800; width:22px; color: var(--ink-dim); }
+  .lb-row:nth-child(1) .lb-rank{ color:#ffd166; }
+  .lb-row:nth-child(2) .lb-rank{ color:#cfd8dc; }
+  .lb-row:nth-child(3) .lb-rank{ color:#d99a5b; }
+  .lb-name{ flex:1; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .lb-score{ font-family:'Baloo 2', sans-serif; font-weight:700; color: var(--teal); }
+  .lb-empty{ font-size:13px; color: var(--ink-dim); font-style:italic; }
+  .lb-loading{ font-size:13px; color: var(--ink-dim); }
+
+  /* ---- Start Modal ---- */
+  .modal-overlay{
+    position:fixed; inset:0; background: rgba(4,12,20,0.82); backdrop-filter: blur(4px);
+    display:flex; align-items:center; justify-content:center; z-index:50; padding:16px;
+  }
+  .modal-card{
+    width:100%; max-width: 440px;
+    background: linear-gradient(180deg, rgba(20,45,63,0.97), rgba(9,24,36,0.99));
+    border: 1px solid var(--panel-line); border-radius: 20px; padding: 30px 26px 26px;
+    box-shadow: 0 30px 70px -20px rgba(0,0,0,0.7), 0 0 50px -18px rgba(45,212,191,0.4);
+    text-align:center;
+    max-height: 88vh; overflow-y:auto;
+  }
+  .modal-title{
+    font-family:'Baloo 2', sans-serif; font-weight:800; font-size: clamp(24px,6vw,30px); color:#fff;
+    display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:6px;
+  }
+  .modal-sub{ font-size:14px; color: var(--ink-dim); margin-bottom:22px; line-height:1.5; }
+  .modal-input{
+    width:100%; font-family:'Inter', sans-serif; font-size:15px; font-weight:600; color:#fff;
+    background: rgba(255,255,255,0.05); border: 1.5px solid var(--panel-line); border-radius:10px;
+    padding:13px 15px; outline:none; margin-bottom:14px; transition: border-color .15s;
+  }
+  .modal-input::placeholder{ color: var(--ink-dim); }
+  .modal-input:focus{ border-color: var(--teal); }
+  .modal-hint{ font-size:12px; color: var(--coral); min-height:16px; margin: -6px 0 12px; text-align:left; }
+  .start-btn{
+    width:100%; font-family:'Baloo 2', sans-serif; font-weight:700; font-size:16px; color:#062018;
+    background: linear-gradient(135deg, var(--teal), #21b8a4); border:none; border-radius:12px;
+    padding:14px 24px; cursor:pointer; box-shadow: 0 10px 24px -10px rgba(45,212,191,0.6);
+    transition: transform .1s;
+  }
+  .start-btn:active{ transform: scale(0.98); }
+  .modal-rules{
+    display:flex; justify-content:center; gap:16px; margin: 18px 0 4px; font-size:12px; color: var(--ink-dim);
+    font-family:'Baloo 2', sans-serif; flex-wrap:wrap;
+  }
+  .modal-rules span{ display:flex; align-items:center; gap:5px; }
 </style>
 </head>
 <body>
@@ -341,6 +256,7 @@
   <div class="hud">
     <div class="logo"><span class="bolt">⚡</span>VOCAB QUEST</div>
     <div class="hud-stats">
+      <span class="player-tag" id="playerTag" style="display:none;"></span>
       <div class="lives" id="lives"></div>
       <div class="score-badge">🏆 <span id="scoreVal">0</span></div>
     </div>
@@ -348,7 +264,29 @@
   <div class="card" id="card"></div>
 </div>
 
+<!-- Start popup -->
+<div class="modal-overlay" id="startOverlay">
+  <div class="modal-card">
+    <div class="modal-title">⚡ VOCAB QUEST</div>
+    <div class="modal-sub">Chọn cụm từ tiếng Anh đúng với nghĩa tiếng Việt. Trả lời càng nhanh, điểm càng cao!</div>
+    <input type="text" class="modal-input" id="nameInput" placeholder="Nhập tên của bạn..." maxlength="20" autocomplete="off">
+    <div class="modal-hint" id="nameHint"></div>
+    <button class="start-btn" id="startBtn">🚀 Bắt đầu chơi</button>
+    <div class="modal-rules">
+      <span>❤️ 5 mạng</span>
+      <span>⏱️ 15s / câu</span>
+      <span>🔥 20 câu hỏi</span>
+    </div>
+    <div class="leaderboard" id="modalLeaderboard">
+      <h3>🏆 Bảng Xếp Hạng</h3>
+      <div class="lb-loading">Đang tải...</div>
+    </div>
+  </div>
+</div>
+
 <script>
+const FIREBASE_URL = "https://gametienganh-9af04-default-rtdb.asia-southeast1.firebasedatabase.app";
+
 const VOCAB = [
   {en:"arrive at work", ipa:"/əˈraɪv ət wɜːrk/", vn:"đến nơi làm việc", vnEx:"Cô ấy đến chỗ làm lúc 7:45 hôm qua."},
   {en:"check email", ipa:"/tʃek ˈiːmeɪl/", vn:"kiểm tra email", vnEx:"Tôi đã kiểm tra email trước cuộc họp."},
@@ -374,22 +312,22 @@ const VOCAB = [
 
 const LETTERS = ["A","B","C","D"];
 const MAX_LIVES = 5;
-const TIME_LIMIT = 15000; // ms — điểm số phụ thuộc vào thời gian còn lại khi trả lời đúng
+const TIME_LIMIT = 15000;
 const CONFETTI_COLORS = ['#2dd4bf','#ffd166','#4ade80','#ff5d73','#8ecae6'];
 
 let order = [], current = 0, score = 0, lives = MAX_LIVES, answered = false;
 let results = [];
 let timerInterval = null, timeLeft = TIME_LIMIT;
+let playerName = "";
 
-// ---- tiny beep feedback (Web Audio, no external assets) ----
+// ---- beep feedback ----
 let audioCtx = null;
 function beep(freq, dur, type='sine'){
   try{
     audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
     const o = audioCtx.createOscillator();
     const g = audioCtx.createGain();
-    o.type = type;
-    o.frequency.value = freq;
+    o.type = type; o.frequency.value = freq;
     g.gain.setValueAtTime(0.08, audioCtx.currentTime);
     g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
     o.connect(g); g.connect(audioCtx.destination);
@@ -412,6 +350,96 @@ function buildOptions(correctItem){
   return shuffle([correctItem.en, ...distractors]);
 }
 
+/* ---------------- Firebase leaderboard ---------------- */
+async function fetchLeaderboard(){
+  try{
+    const res = await fetch(`${FIREBASE_URL}/scores.json`);
+    if(!res.ok) throw new Error('bad response');
+    const data = await res.json();
+    if(!data) return [];
+    return Object.values(data)
+      .filter(e => e && typeof e.score === 'number' && e.name)
+      .sort((a,b) => b.score - a.score)
+      .slice(0, 10);
+  }catch(e){
+    return null; // signals fetch error
+  }
+}
+
+async function saveScore(name, scoreVal, correctCount, total){
+  try{
+    await fetch(`${FIREBASE_URL}/scores.json`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name: name,
+        score: scoreVal,
+        correct: correctCount,
+        total: total,
+        date: new Date().toISOString()
+      })
+    });
+  }catch(e){ /* fail silently, game still works offline */ }
+}
+
+function renderLeaderboardInto(container, list, highlightName){
+  if(list === null){
+    container.innerHTML = `<h3>🏆 Bảng Xếp Hạng</h3><div class="lb-empty">Không tải được bảng xếp hạng (kiểm tra kết nối mạng).</div>`;
+    return;
+  }
+  if(!list.length){
+    container.innerHTML = `<h3>🏆 Bảng Xếp Hạng</h3><div class="lb-empty">Chưa có điểm nào. Hãy là người đầu tiên!</div>`;
+    return;
+  }
+  const rows = list.map((e, i) => `
+    <div class="lb-row ${e.name === highlightName ? 'me' : ''}">
+      <span class="lb-rank">${i+1}</span>
+      <span class="lb-name">${escapeHtml(e.name)}</span>
+      <span class="lb-score">${e.score} ★</span>
+    </div>
+  `).join('');
+  container.innerHTML = `<h3>🏆 Bảng Xếp Hạng</h3>${rows}`;
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+async function loadModalLeaderboard(){
+  const container = document.getElementById('modalLeaderboard');
+  const list = await fetchLeaderboard();
+  renderLeaderboardInto(container, list, null);
+}
+
+/* ---------------- Start modal ---------------- */
+const startOverlay = document.getElementById('startOverlay');
+const nameInput = document.getElementById('nameInput');
+const nameHint = document.getElementById('nameHint');
+const startBtn = document.getElementById('startBtn');
+const playerTag = document.getElementById('playerTag');
+
+loadModalLeaderboard();
+
+nameInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') startBtn.click(); });
+
+startBtn.addEventListener('click', () => {
+  const val = nameInput.value.trim();
+  if(!val){
+    nameHint.textContent = "Vui lòng nhập tên của bạn để lưu điểm cao nhé!";
+    nameInput.focus();
+    return;
+  }
+  playerName = val.slice(0, 20);
+  nameHint.textContent = "";
+  playerTag.textContent = "👤 " + playerName;
+  playerTag.style.display = "inline-block";
+  startOverlay.style.display = "none";
+  startQuiz();
+});
+
+/* ---------------- Game logic ---------------- */
 function renderLives(){
   const el = document.getElementById('lives');
   el.innerHTML = '';
@@ -423,9 +451,7 @@ function renderLives(){
   }
 }
 
-function updateScoreBadge(){
-  document.getElementById('scoreVal').textContent = score;
-}
+function updateScoreBadge(){ document.getElementById('scoreVal').textContent = score; }
 
 function startQuiz(){
   order = shuffle(VOCAB);
@@ -435,9 +461,7 @@ function startQuiz(){
   renderQuestion();
 }
 
-function stopTimer(){
-  if(timerInterval){ clearInterval(timerInterval); timerInterval = null; }
-}
+function stopTimer(){ if(timerInterval){ clearInterval(timerInterval); timerInterval = null; } }
 
 function renderQuestion(){
   answered = false;
@@ -471,7 +495,6 @@ function renderQuestion(){
   });
 
   document.getElementById('nextBtn').onclick = nextQuestion;
-
   runTimer();
 }
 
@@ -512,14 +535,11 @@ function timeoutAnswer(){
   setTimeout(()=>document.getElementById('card').classList.remove('shake'), 400);
   beep(180, 0.3, 'sawtooth');
 
-  if(lives <= 0){ setTimeout(renderGameOver, 700); }
+  if(lives <= 0){ setTimeout(endGame, 700, false); }
   else { document.getElementById('nextBtn').classList.add('show'); }
 }
 
-function loseLife(){
-  lives = Math.max(0, lives - 1);
-  renderLives();
-}
+function loseLife(){ lives = Math.max(0, lives - 1); renderLives(); }
 
 function spawnConfetti(container){
   for(let i=0;i<26;i++){
@@ -537,7 +557,6 @@ function spawnConfetti(container){
   }
 }
 
-// Điểm số dựa trên thời gian còn lại khi trả lời đúng: càng nhanh càng nhiều điểm (10-100)
 function computeSpeedScore(){
   const pct = Math.max(0, timeLeft / TIME_LIMIT);
   return Math.max(10, Math.round(pct * 100));
@@ -585,7 +604,7 @@ function selectAnswer(btn, chosenEn, item){
   }
 
   if(!isCorrect && lives <= 0){
-    setTimeout(renderGameOver, 700);
+    setTimeout(() => endGame(false), 700);
   } else {
     document.getElementById('nextBtn').classList.add('show');
   }
@@ -593,11 +612,8 @@ function selectAnswer(btn, chosenEn, item){
 
 function nextQuestion(){
   current++;
-  if(current >= order.length){
-    renderVictory();
-  } else {
-    renderQuestion();
-  }
+  if(current >= order.length){ endGame(true); }
+  else { renderQuestion(); }
 }
 
 function rankFor(pct){
@@ -623,49 +639,60 @@ function renderReview(){
   `;
 }
 
-function renderVictory(){
+async function endGame(finished){
   stopTimer();
   const card = document.getElementById('card');
   const correctCount = results.filter(r=>r.correct).length;
-  const total = order.length;
-  const pct = Math.round((correctCount/total)*100);
-  const {badge, rank} = rankFor(pct);
+  const totalPlayed = finished ? order.length : current + 1;
 
-  card.innerHTML = `
-    <div class="result-screen">
-      <div class="result-badge">${badge}</div>
-      <div class="result-rank">${rank}</div>
-      <div class="result-label">Điểm số cuối cùng</div>
-      <div class="result-score">${score} ★</div>
-      <div class="result-msg">Bạn trả lời đúng ${correctCount}/${total} câu (${pct}%). ${lives} mạng còn lại.</div>
-      <div class="btn-row"><button class="restart-btn" id="restartBtn">🔄 Chơi lại</button></div>
-      ${renderReview()}
-    </div>
-  `;
-  spawnConfetti(card);
+  if(finished){
+    const pct = Math.round((correctCount/order.length)*100);
+    const {badge, rank} = rankFor(pct);
+    card.innerHTML = `
+      <div class="result-screen">
+        <div class="result-badge">${badge}</div>
+        <div class="result-rank">${rank}</div>
+        <div class="result-label">Điểm số cuối cùng</div>
+        <div class="result-score">${score} ★</div>
+        <div class="result-msg">${escapeHtml(playerName)} trả lời đúng ${correctCount}/${order.length} câu (${pct}%). ${lives} mạng còn lại.</div>
+        <div class="btn-row">
+          <button class="restart-btn primary" id="restartBtn">🔄 Chơi lại</button>
+          <button class="restart-btn" id="homeBtn">🏠 Màn hình chính</button>
+        </div>
+        <div class="leaderboard" id="resultLeaderboard"><div class="lb-loading">Đang lưu điểm...</div></div>
+        ${renderReview()}
+      </div>
+    `;
+    spawnConfetti(card);
+  } else {
+    card.innerHTML = `
+      <div class="result-screen">
+        <div class="result-badge">💥</div>
+        <div class="result-rank">Hết Mạng Rồi!</div>
+        <div class="result-label">Điểm số</div>
+        <div class="result-score">${score} ★</div>
+        <div class="result-msg">${escapeHtml(playerName)} trả lời đúng ${correctCount}/${totalPlayed} câu trước khi hết mạng. Thử lại để phá kỷ lục nhé!</div>
+        <div class="btn-row">
+          <button class="restart-btn primary" id="restartBtn">🔄 Chơi lại</button>
+          <button class="restart-btn" id="homeBtn">🏠 Màn hình chính</button>
+        </div>
+        <div class="leaderboard" id="resultLeaderboard"><div class="lb-loading">Đang lưu điểm...</div></div>
+        ${renderReview()}
+      </div>
+    `;
+  }
+
   document.getElementById('restartBtn').onclick = startQuiz;
+  document.getElementById('homeBtn').onclick = () => {
+    startOverlay.style.display = "flex";
+    loadModalLeaderboard();
+  };
+
+  await saveScore(playerName, score, correctCount, totalPlayed);
+  const list = await fetchLeaderboard();
+  const lbContainer = document.getElementById('resultLeaderboard');
+  if(lbContainer) renderLeaderboardInto(lbContainer, list, playerName);
 }
-
-function renderGameOver(){
-  stopTimer();
-  const card = document.getElementById('card');
-  const correctCount = results.filter(r=>r.correct).length;
-
-  card.innerHTML = `
-    <div class="result-screen">
-      <div class="result-badge">💥</div>
-      <div class="result-rank">Hết Mạng Rồi!</div>
-      <div class="result-label">Điểm số</div>
-      <div class="result-score">${score} ★</div>
-      <div class="result-msg">Bạn trả lời đúng ${correctCount}/${current+1} câu trước khi hết mạng. Đừng lo, thử lại để phá kỷ lục nhé!</div>
-      <div class="btn-row"><button class="restart-btn" id="restartBtn">🔄 Chơi lại</button></div>
-      ${renderReview()}
-    </div>
-  `;
-  document.getElementById('restartBtn').onclick = startQuiz;
-}
-
-startQuiz();
 </script>
 </body>
 </html>
