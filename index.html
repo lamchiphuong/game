@@ -65,8 +65,8 @@
   }
   .lives{
     display:flex;
-    gap:4px;
-    font-size:20px;
+    gap:3px;
+    font-size:17px;
     filter: drop-shadow(0 0 6px rgba(255,93,115,0.5));
   }
   .life.lost{ opacity:0.25; filter:none; }
@@ -120,14 +120,14 @@
     font-weight:700;
     letter-spacing:0.5px;
   }
-  .streak-tag{
+  .speed-tag{
     font-weight:700;
     color: var(--gold);
     opacity:0;
     transform: translateY(4px);
     transition: opacity .25s, transform .25s;
   }
-  .streak-tag.show{ opacity:1; transform:translateY(0); }
+  .speed-tag.show{ opacity:1; transform:translateY(0); }
 
   .timer-track{
     height:8px;
@@ -154,28 +154,23 @@
     color: var(--teal);
     margin-bottom:8px;
   }
-  .prompt-en{
+  .prompt-vn{
     font-family:'Baloo 2', sans-serif;
-    font-size: clamp(26px,6vw,36px);
+    font-size: clamp(24px,5.6vw,32px);
     font-weight:800;
     color:#fff;
-    line-height:1.2;
-    margin-bottom:4px;
+    line-height:1.28;
+    margin-bottom:12px;
   }
-  .prompt-ipa{
-    font-size:14px;
-    color: var(--ink-dim);
-    margin-bottom:10px;
-  }
-  .prompt-example{
-    font-size:15px;
+  .prompt-context{
+    font-size:14.5px;
     color:#cfe3e0;
     font-style: italic;
     background: rgba(255,255,255,0.03);
     border-left:3px solid var(--gold);
     padding: 10px 14px;
     border-radius: 0 8px 8px 0;
-    margin: 10px 0 22px;
+    margin: 0 0 22px;
   }
 
   .options{ display:flex; flex-direction:column; gap:11px; }
@@ -186,8 +181,8 @@
     width:100%;
     text-align:left;
     font-family:'Inter', sans-serif;
-    font-size:15.5px;
-    font-weight:600;
+    font-size:16px;
+    font-weight:700;
     color: var(--ink);
     background: rgba(255,255,255,0.03);
     border:1.5px solid var(--panel-line);
@@ -231,6 +226,12 @@
     font-weight:700;
     min-height:22px;
     margin-top:16px;
+  }
+  .feedback .ipa{
+    font-family:'Inter', sans-serif;
+    font-weight:400;
+    color: var(--ink-dim);
+    font-size:13px;
   }
   .feedback.good{ color: var(--green); }
   .feedback.bad{ color: var(--coral); }
@@ -349,34 +350,34 @@
 
 <script>
 const VOCAB = [
-  {en:"arrive at work", ipa:"/əˈraɪv ət wɜːrk/", ex:"She arrived at work at 7:45 yesterday.", vn:"đến nơi làm việc"},
-  {en:"check email", ipa:"/tʃek ˈiːmeɪl/", ex:"I checked my email before the meeting.", vn:"kiểm tra email"},
-  {en:"reply to emails", ipa:"/rɪˈplaɪ tuː ˈiːmeɪlz/", ex:"He replied to three emails this morning.", vn:"trả lời email"},
-  {en:"make a phone call", ipa:"/meɪk ə foʊn kɔːl/", ex:"She made a phone call to the client.", vn:"gọi điện thoại"},
-  {en:"answer the phone", ipa:"/ˈænsər ðə foʊn/", ex:"I answered the phone twice during lunch.", vn:"nghe điện thoại"},
-  {en:"schedule an appointment", ipa:"/ˈskedʒuːl ən əˈpɔɪntmənt/", ex:"We scheduled an appointment for Monday.", vn:"sắp xếp cuộc hẹn"},
-  {en:"attend a meeting", ipa:"/əˈtend ə ˈmiːtɪŋ/", ex:"They attended a meeting at 9 a.m.", vn:"tham dự cuộc họp"},
-  {en:"take notes", ipa:"/teɪk noʊts/", ex:"The assistant took notes during the call.", vn:"ghi chú"},
-  {en:"prepare a report", ipa:"/prɪˈper ə rɪˈpɔːrt/", ex:"He prepared a report last night.", vn:"chuẩn bị báo cáo"},
-  {en:"submit a report", ipa:"/səbˈmɪt ə rɪˈpɔːrt/", ex:"She submitted the report on time.", vn:"nộp báo cáo"},
-  {en:"review documents", ipa:"/rɪˈvjuː ˈdɑːkjəmənts/", ex:"The manager reviewed the documents carefully.", vn:"xem xét/xem lại tài liệu"},
-  {en:"file paperwork", ipa:"/faɪl ˈpeɪpərwɜːrk/", ex:"She filed all the paperwork yesterday.", vn:"sắp xếp/lưu hồ sơ"},
-  {en:"print documents", ipa:"/prɪnt ˈdɑːkjəmənts/", ex:"He printed the documents for the meeting.", vn:"in tài liệu"},
-  {en:"make copies", ipa:"/meɪk ˈkɑːpiz/", ex:"I made copies of the contract.", vn:"photocopy / sao chụp"},
-  {en:"send a package", ipa:"/send ə ˈpækɪdʒ/", ex:"We sent a package to the branch office.", vn:"gửi bưu kiện"},
-  {en:"receive an order", ipa:"/rɪˈsiːv ən ˈɔːrdər/", ex:"The shop received an order for 100 units.", vn:"nhận đơn đặt hàng"},
-  {en:"serve", ipa:"/sɜːrv/", ex:"He served customers all afternoon.", vn:"phục vụ"},
-  {en:"solve a problem", ipa:"/sɑːlv ə ˈprɑːbləm/", ex:"The IT team solved the problem quickly.", vn:"giải quyết vấn đề"},
-  {en:"finish a project", ipa:"/ˈfɪnɪʃ ə ˈprɑːdʒekt/", ex:"We finished the project two days early.", vn:"hoàn thành dự án"},
-  {en:"work overtime", ipa:"/wɜːrk ˈoʊvərtaɪm/", ex:"He worked overtime to meet the deadline.", vn:"tăng ca / làm thêm giờ"}
+  {en:"arrive at work", ipa:"/əˈraɪv ət wɜːrk/", vn:"đến nơi làm việc", vnEx:"Cô ấy đến chỗ làm lúc 7:45 hôm qua."},
+  {en:"check email", ipa:"/tʃek ˈiːmeɪl/", vn:"kiểm tra email", vnEx:"Tôi đã kiểm tra email trước cuộc họp."},
+  {en:"reply to emails", ipa:"/rɪˈplaɪ tuː ˈiːmeɪlz/", vn:"trả lời email", vnEx:"Anh ấy đã trả lời ba email sáng nay."},
+  {en:"make a phone call", ipa:"/meɪk ə foʊn kɔːl/", vn:"gọi điện thoại", vnEx:"Cô ấy đã gọi điện cho khách hàng."},
+  {en:"answer the phone", ipa:"/ˈænsər ðə foʊn/", vn:"nghe điện thoại", vnEx:"Tôi đã nghe điện thoại hai lần trong giờ ăn trưa."},
+  {en:"schedule an appointment", ipa:"/ˈskedʒuːl ən əˈpɔɪntmənt/", vn:"sắp xếp cuộc hẹn", vnEx:"Chúng tôi đã sắp xếp một cuộc hẹn vào thứ Hai."},
+  {en:"attend a meeting", ipa:"/əˈtend ə ˈmiːtɪŋ/", vn:"tham dự cuộc họp", vnEx:"Họ đã tham dự cuộc họp lúc 9 giờ sáng."},
+  {en:"take notes", ipa:"/teɪk noʊts/", vn:"ghi chú", vnEx:"Trợ lý đã ghi chú trong cuộc gọi."},
+  {en:"prepare a report", ipa:"/prɪˈper ə rɪˈpɔːrt/", vn:"chuẩn bị báo cáo", vnEx:"Anh ấy đã chuẩn bị báo cáo tối qua."},
+  {en:"submit a report", ipa:"/səbˈmɪt ə rɪˈpɔːrt/", vn:"nộp báo cáo", vnEx:"Cô ấy đã nộp báo cáo đúng hạn."},
+  {en:"review documents", ipa:"/rɪˈvjuː ˈdɑːkjəmənts/", vn:"xem xét/xem lại tài liệu", vnEx:"Quản lý đã xem xét tài liệu cẩn thận."},
+  {en:"file paperwork", ipa:"/faɪl ˈpeɪpərwɜːrk/", vn:"sắp xếp/lưu hồ sơ", vnEx:"Cô ấy đã sắp xếp toàn bộ hồ sơ hôm qua."},
+  {en:"print documents", ipa:"/prɪnt ˈdɑːkjəmənts/", vn:"in tài liệu", vnEx:"Anh ấy đã in tài liệu cho cuộc họp."},
+  {en:"make copies", ipa:"/meɪk ˈkɑːpiz/", vn:"photocopy / sao chụp", vnEx:"Tôi đã photocopy hợp đồng."},
+  {en:"send a package", ipa:"/send ə ˈpækɪdʒ/", vn:"gửi bưu kiện", vnEx:"Chúng tôi đã gửi bưu kiện đến chi nhánh."},
+  {en:"receive an order", ipa:"/rɪˈsiːv ən ˈɔːrdər/", vn:"nhận đơn đặt hàng", vnEx:"Cửa hàng đã nhận một đơn đặt hàng 100 sản phẩm."},
+  {en:"serve", ipa:"/sɜːrv/", vn:"phục vụ", vnEx:"Anh ấy đã phục vụ khách hàng suốt cả buổi chiều."},
+  {en:"solve a problem", ipa:"/sɑːlv ə ˈprɑːbləm/", vn:"giải quyết vấn đề", vnEx:"Đội IT đã giải quyết vấn đề nhanh chóng."},
+  {en:"finish a project", ipa:"/ˈfɪnɪʃ ə ˈprɑːdʒekt/", vn:"hoàn thành dự án", vnEx:"Chúng tôi đã hoàn thành dự án sớm 2 ngày."},
+  {en:"work overtime", ipa:"/wɜːrk ˈoʊvərtaɪm/", vn:"tăng ca / làm thêm giờ", vnEx:"Anh ấy đã tăng ca để kịp hạn chót."}
 ];
 
 const LETTERS = ["A","B","C","D"];
-const MAX_LIVES = 3;
-const TIME_LIMIT = 12000; // ms
+const MAX_LIVES = 5;
+const TIME_LIMIT = 15000; // ms — điểm số phụ thuộc vào thời gian còn lại khi trả lời đúng
 const CONFETTI_COLORS = ['#2dd4bf','#ffd166','#4ade80','#ff5d73','#8ecae6'];
 
-let order = [], current = 0, score = 0, lives = MAX_LIVES, streak = 0, answered = false;
+let order = [], current = 0, score = 0, lives = MAX_LIVES, answered = false;
 let results = [];
 let timerInterval = null, timeLeft = TIME_LIMIT;
 
@@ -406,9 +407,9 @@ function shuffle(arr){
 }
 
 function buildOptions(correctItem){
-  const pool = VOCAB.filter(v => v.vn !== correctItem.vn);
-  const distractors = shuffle(pool).slice(0,3).map(v=>v.vn);
-  return shuffle([correctItem.vn, ...distractors]);
+  const pool = VOCAB.filter(v => v.en !== correctItem.en);
+  const distractors = shuffle(pool).slice(0,3).map(v=>v.en);
+  return shuffle([correctItem.en, ...distractors]);
 }
 
 function renderLives(){
@@ -428,7 +429,7 @@ function updateScoreBadge(){
 
 function startQuiz(){
   order = shuffle(VOCAB);
-  current = 0; score = 0; lives = MAX_LIVES; streak = 0; results = [];
+  current = 0; score = 0; lives = MAX_LIVES; results = [];
   renderLives();
   updateScoreBadge();
   renderQuestion();
@@ -447,26 +448,25 @@ function renderQuestion(){
   card.innerHTML = `
     <div class="top-row">
       <span class="level-tag">Câu ${current+1} / ${order.length}</span>
-      <span class="streak-tag" id="streakTag">🔥 Streak x${streak}</span>
+      <span class="speed-tag" id="speedTag">⚡ Trả lời nhanh = điểm cao!</span>
     </div>
     <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
-    <div class="quest-label">Nghĩa tiếng Việt là gì?</div>
-    <div class="prompt-en">${item.en}</div>
-    <div class="prompt-ipa">${item.ipa}</div>
-    <div class="prompt-example">${item.ex}</div>
+    <div class="quest-label">Chọn cụm từ tiếng Anh phù hợp</div>
+    <div class="prompt-vn">${item.vn}</div>
+    <div class="prompt-context">${item.vnEx}</div>
     <div class="options" id="options"></div>
     <div class="feedback" id="feedback"></div>
     <div class="footer-row"><button class="next-btn" id="nextBtn">Câu tiếp theo →</button></div>
   `;
 
-  if(streak >= 2) document.getElementById('streakTag').classList.add('show');
+  document.getElementById('speedTag').classList.add('show');
 
   const optionsDiv = document.getElementById('options');
-  options.forEach((optVn, idx) => {
+  options.forEach((optEn, idx) => {
     const btn = document.createElement('button');
     btn.className = 'opt';
-    btn.innerHTML = `<span class="opt-letter">${LETTERS[idx]}</span><span>${optVn}</span>`;
-    btn.onclick = () => selectAnswer(btn, optVn, item.vn);
+    btn.innerHTML = `<span class="opt-letter">${LETTERS[idx]}</span><span>${optEn}</span>`;
+    btn.onclick = () => selectAnswer(btn, optEn, item);
     optionsDiv.appendChild(btn);
   });
 
@@ -497,17 +497,16 @@ function runTimer(){
 function timeoutAnswer(){
   answered = true;
   const item = order[current];
-  streak = 0;
   loseLife();
   results.push({en: item.en, vn: item.vn, correct:false});
 
   document.querySelectorAll('#options .opt').forEach(opt => {
     opt.disabled = true;
     const text = opt.querySelector('span:last-child').textContent;
-    if(text === item.vn) opt.classList.add('correct');
+    if(text === item.en) opt.classList.add('correct');
   });
   const fb = document.getElementById('feedback');
-  fb.textContent = `⏰ Hết giờ! Đáp án đúng: "${item.vn}"`;
+  fb.innerHTML = `⏰ Hết giờ! Đáp án đúng: <strong>${item.en}</strong> <span class="ipa">${item.ipa}</span>`;
   fb.className = 'feedback bad';
   document.getElementById('card').classList.add('shake');
   setTimeout(()=>document.getElementById('card').classList.remove('shake'), 400);
@@ -538,17 +537,30 @@ function spawnConfetti(container){
   }
 }
 
-function selectAnswer(btn, chosenVn, correctVn){
+// Điểm số dựa trên thời gian còn lại khi trả lời đúng: càng nhanh càng nhiều điểm (10-100)
+function computeSpeedScore(){
+  const pct = Math.max(0, timeLeft / TIME_LIMIT);
+  return Math.max(10, Math.round(pct * 100));
+}
+
+function speedMessage(bonus){
+  if(bonus >= 85) return "Cực nhanh! ⚡⚡⚡";
+  if(bonus >= 60) return "Nhanh tay! ⚡⚡";
+  if(bonus >= 30) return "Khá ổn ⚡";
+  return "Vừa kịp lúc!";
+}
+
+function selectAnswer(btn, chosenEn, item){
   if(answered) return;
   answered = true;
   stopTimer();
-  const isCorrect = chosenVn === correctVn;
-  results.push({en: order[current].en, vn: correctVn, correct: isCorrect});
+  const isCorrect = chosenEn === item.en;
+  results.push({en: item.en, vn: item.vn, correct: isCorrect});
 
   document.querySelectorAll('#options .opt').forEach(opt => {
     opt.disabled = true;
     const text = opt.querySelector('span:last-child').textContent;
-    if(text === correctVn) opt.classList.add('correct');
+    if(text === item.en) opt.classList.add('correct');
     else if(opt === btn) opt.classList.add('wrong');
   });
 
@@ -556,24 +568,16 @@ function selectAnswer(btn, chosenVn, correctVn){
   const card = document.getElementById('card');
 
   if(isCorrect){
-    streak++;
-    const bonus = 10 + Math.min(streak-1, 5) * 5;
+    const bonus = computeSpeedScore();
     score += bonus;
     updateScoreBadge();
-    fb.textContent = `✓ Chính xác! +${bonus} điểm`;
+    fb.innerHTML = `✓ Chính xác! +${bonus} điểm — ${speedMessage(bonus)} <span class="ipa">${item.ipa}</span>`;
     fb.className = 'feedback good';
     spawnConfetti(card);
     beep(660, 0.18);
-    if(streak >= 2){
-      setTimeout(()=>{
-        const st = document.getElementById('streakTag');
-        if(st){ st.textContent = `🔥 Streak x${streak}`; st.classList.add('show'); }
-      }, 50);
-    }
   } else {
-    streak = 0;
     loseLife();
-    fb.textContent = `✗ Chưa đúng. Đáp án đúng: "${correctVn}"`;
+    fb.innerHTML = `✗ Chưa đúng. Đáp án đúng: <strong>${item.en}</strong> <span class="ipa">${item.ipa}</span>`;
     fb.className = 'feedback bad';
     card.classList.add('shake');
     setTimeout(()=>card.classList.remove('shake'), 400);
