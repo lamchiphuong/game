@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vocab Quest — Công Việc Hằng Ngày</title>
+<title>Vocab Quest — 2 Vòng Chinh Phục</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -17,6 +17,7 @@
     --gold:#ffd166;
     --coral:#ff5d73;
     --green:#4ade80;
+    --purple:#a78bfa;
     --ink:#eaf6f5;
     --ink-dim:#9fb8c2;
     --navy-deep:#061421;
@@ -111,11 +112,22 @@
     font-size:13px;
     color: var(--ink-dim);
     margin-bottom:10px;
+    gap:8px;
+    flex-wrap:wrap;
   }
   .level-tag{
     background: var(--teal-dim);
     color: var(--teal);
     border:1px solid rgba(45,212,191,0.4);
+    padding:3px 10px;
+    border-radius:20px;
+    font-weight:700;
+    letter-spacing:0.5px;
+  }
+  .round-tag{
+    background: rgba(167,139,250,0.15);
+    color: var(--purple);
+    border:1px solid rgba(167,139,250,0.4);
     padding:3px 10px;
     border-radius:20px;
     font-weight:700;
@@ -130,8 +142,9 @@
   .timer-fill.danger{ background: linear-gradient(90deg, var(--coral), #ff2e51); }
 
   .quest-label{ font-family:'Baloo 2', sans-serif; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color: var(--teal); margin-bottom:8px; }
-  .prompt-vn{ font-family:'Baloo 2', sans-serif; font-size: clamp(24px,5.6vw,32px); font-weight:800; color:#fff; line-height:1.28; margin-bottom:12px; }
-  .prompt-context{ font-size:14.5px; color:#cfe3e0; font-style: italic; background: rgba(255,255,255,0.03); border-left:3px solid var(--gold); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 0 0 22px; }
+  .prompt-main{ font-family:'Baloo 2', sans-serif; font-size: clamp(24px,5.6vw,32px); font-weight:800; color:#fff; line-height:1.28; margin-bottom:4px; }
+  .prompt-ipa{ font-size:14px; color: var(--ink-dim); margin-bottom:6px; }
+  .prompt-context{ font-size:14.5px; color:#cfe3e0; font-style: italic; background: rgba(255,255,255,0.03); border-left:3px solid var(--gold); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 10px 0 22px; }
 
   .options{ display:flex; flex-direction:column; gap:11px; }
   .opt{
@@ -245,10 +258,19 @@
   }
   .start-btn:active{ transform: scale(0.98); }
   .modal-rules{
-    display:flex; justify-content:center; gap:16px; margin: 18px 0 4px; font-size:12px; color: var(--ink-dim);
+    display:flex; justify-content:center; gap:14px; margin: 18px 0 4px; font-size:11.5px; color: var(--ink-dim);
     font-family:'Baloo 2', sans-serif; flex-wrap:wrap;
   }
   .modal-rules span{ display:flex; align-items:center; gap:5px; }
+  .rounds-preview{
+    display:flex; gap:8px; margin: 16px 0 0; text-align:left;
+  }
+  .round-chip{
+    flex:1; background: rgba(255,255,255,0.04); border:1px solid var(--panel-line); border-radius:10px;
+    padding:10px 12px; font-family:'Baloo 2', sans-serif;
+  }
+  .round-chip .rc-title{ font-size:12px; color: var(--purple); font-weight:700; margin-bottom:2px; }
+  .round-chip .rc-desc{ font-size:11px; color: var(--ink-dim); font-family:'Inter', sans-serif; }
 </style>
 </head>
 <body>
@@ -268,14 +290,24 @@
 <div class="modal-overlay" id="startOverlay">
   <div class="modal-card">
     <div class="modal-title">⚡ VOCAB QUEST</div>
-    <div class="modal-sub">Chọn cụm từ tiếng Anh đúng với nghĩa tiếng Việt. Trả lời càng nhanh, điểm càng cao!</div>
+    <div class="modal-sub">Chinh phục 2 vòng từ vựng công sở. Trả lời càng nhanh, điểm càng cao!</div>
     <input type="text" class="modal-input" id="nameInput" placeholder="Nhập tên của bạn..." maxlength="20" autocomplete="off">
     <div class="modal-hint" id="nameHint"></div>
     <button class="start-btn" id="startBtn">🚀 Bắt đầu chơi</button>
     <div class="modal-rules">
-      <span>❤️ 5 mạng</span>
+      <span>❤️ 3 mạng</span>
       <span>⏱️ 15s / câu</span>
-      <span>🔥 20 câu hỏi</span>
+      <span>🔁 2 vòng</span>
+    </div>
+    <div class="rounds-preview">
+      <div class="round-chip">
+        <div class="rc-title">Vòng 1</div>
+        <div class="rc-desc">Anh → Việt: đọc từ tiếng Anh, chọn nghĩa đúng</div>
+      </div>
+      <div class="round-chip">
+        <div class="rc-title">Vòng 2</div>
+        <div class="rc-desc">Việt → Anh: đọc nghĩa tiếng Việt, chọn từ đúng</div>
+      </div>
     </div>
     <div class="leaderboard" id="modalLeaderboard">
       <h3>🏆 Bảng Xếp Hạng</h3>
@@ -287,35 +319,67 @@
 <script>
 const FIREBASE_URL = "https://gametienganh-9af04-default-rtdb.asia-southeast1.firebasedatabase.app";
 
-const VOCAB = [
-  {en:"arrive at work", ipa:"/əˈraɪv ət wɜːrk/", vn:"đến nơi làm việc", vnEx:"Cô ấy đến chỗ làm lúc 7:45 hôm qua."},
-  {en:"check email", ipa:"/tʃek ˈiːmeɪl/", vn:"kiểm tra email", vnEx:"Tôi đã kiểm tra email trước cuộc họp."},
-  {en:"reply to emails", ipa:"/rɪˈplaɪ tuː ˈiːmeɪlz/", vn:"trả lời email", vnEx:"Anh ấy đã trả lời ba email sáng nay."},
-  {en:"make a phone call", ipa:"/meɪk ə foʊn kɔːl/", vn:"gọi điện thoại", vnEx:"Cô ấy đã gọi điện cho khách hàng."},
-  {en:"answer the phone", ipa:"/ˈænsər ðə foʊn/", vn:"nghe điện thoại", vnEx:"Tôi đã nghe điện thoại hai lần trong giờ ăn trưa."},
-  {en:"schedule an appointment", ipa:"/ˈskedʒuːl ən əˈpɔɪntmənt/", vn:"sắp xếp cuộc hẹn", vnEx:"Chúng tôi đã sắp xếp một cuộc hẹn vào thứ Hai."},
-  {en:"attend a meeting", ipa:"/əˈtend ə ˈmiːtɪŋ/", vn:"tham dự cuộc họp", vnEx:"Họ đã tham dự cuộc họp lúc 9 giờ sáng."},
-  {en:"take notes", ipa:"/teɪk noʊts/", vn:"ghi chú", vnEx:"Trợ lý đã ghi chú trong cuộc gọi."},
-  {en:"prepare a report", ipa:"/prɪˈper ə rɪˈpɔːrt/", vn:"chuẩn bị báo cáo", vnEx:"Anh ấy đã chuẩn bị báo cáo tối qua."},
-  {en:"submit a report", ipa:"/səbˈmɪt ə rɪˈpɔːrt/", vn:"nộp báo cáo", vnEx:"Cô ấy đã nộp báo cáo đúng hạn."},
-  {en:"review documents", ipa:"/rɪˈvjuː ˈdɑːkjəmənts/", vn:"xem xét/xem lại tài liệu", vnEx:"Quản lý đã xem xét tài liệu cẩn thận."},
-  {en:"file paperwork", ipa:"/faɪl ˈpeɪpərwɜːrk/", vn:"sắp xếp/lưu hồ sơ", vnEx:"Cô ấy đã sắp xếp toàn bộ hồ sơ hôm qua."},
-  {en:"print documents", ipa:"/prɪnt ˈdɑːkjəmənts/", vn:"in tài liệu", vnEx:"Anh ấy đã in tài liệu cho cuộc họp."},
-  {en:"make copies", ipa:"/meɪk ˈkɑːpiz/", vn:"photocopy / sao chụp", vnEx:"Tôi đã photocopy hợp đồng."},
-  {en:"send a package", ipa:"/send ə ˈpækɪdʒ/", vn:"gửi bưu kiện", vnEx:"Chúng tôi đã gửi bưu kiện đến chi nhánh."},
-  {en:"receive an order", ipa:"/rɪˈsiːv ən ˈɔːrdər/", vn:"nhận đơn đặt hàng", vnEx:"Cửa hàng đã nhận một đơn đặt hàng 100 sản phẩm."},
-  {en:"serve", ipa:"/sɜːrv/", vn:"phục vụ", vnEx:"Anh ấy đã phục vụ khách hàng suốt cả buổi chiều."},
-  {en:"solve a problem", ipa:"/sɑːlv ə ˈprɑːbləm/", vn:"giải quyết vấn đề", vnEx:"Đội IT đã giải quyết vấn đề nhanh chóng."},
-  {en:"finish a project", ipa:"/ˈfɪnɪʃ ə ˈprɑːdʒekt/", vn:"hoàn thành dự án", vnEx:"Chúng tôi đã hoàn thành dự án sớm 2 ngày."},
-  {en:"work overtime", ipa:"/wɜːrk ˈoʊvərtaɪm/", vn:"tăng ca / làm thêm giờ", vnEx:"Anh ấy đã tăng ca để kịp hạn chót."}
+/* ---------------- Vocabulary: Daily Routines ---------------- */
+const ROUTINES = [
+  {en:"arrive at work", ipa:"/əˈraɪv ət wɜːrk/", vn:"đến nơi làm việc", ex:"She arrived at work at 7:45 yesterday.", vnEx:"Cô ấy đến chỗ làm lúc 7:45 hôm qua."},
+  {en:"check email", ipa:"/tʃek ˈiːmeɪl/", vn:"kiểm tra email", ex:"I checked my email before the meeting.", vnEx:"Tôi đã kiểm tra email trước cuộc họp."},
+  {en:"reply to emails", ipa:"/rɪˈplaɪ tuː ˈiːmeɪlz/", vn:"trả lời email", ex:"He replied to three emails this morning.", vnEx:"Anh ấy đã trả lời ba email sáng nay."},
+  {en:"make a phone call", ipa:"/meɪk ə foʊn kɔːl/", vn:"gọi điện thoại", ex:"She made a phone call to the client.", vnEx:"Cô ấy đã gọi điện cho khách hàng."},
+  {en:"answer the phone", ipa:"/ˈænsər ðə foʊn/", vn:"nghe điện thoại", ex:"I answered the phone twice during lunch.", vnEx:"Tôi đã nghe điện thoại hai lần trong giờ ăn trưa."},
+  {en:"schedule an appointment", ipa:"/ˈskedʒuːl ən əˈpɔɪntmənt/", vn:"sắp xếp cuộc hẹn", ex:"We scheduled an appointment for Monday.", vnEx:"Chúng tôi đã sắp xếp một cuộc hẹn vào thứ Hai."},
+  {en:"attend a meeting", ipa:"/əˈtend ə ˈmiːtɪŋ/", vn:"tham dự cuộc họp", ex:"They attended a meeting at 9 a.m.", vnEx:"Họ đã tham dự cuộc họp lúc 9 giờ sáng."},
+  {en:"take notes", ipa:"/teɪk noʊts/", vn:"ghi chú", ex:"The assistant took notes during the call.", vnEx:"Trợ lý đã ghi chú trong cuộc gọi."},
+  {en:"prepare a report", ipa:"/prɪˈper ə rɪˈpɔːrt/", vn:"chuẩn bị báo cáo", ex:"He prepared a report last night.", vnEx:"Anh ấy đã chuẩn bị báo cáo tối qua."},
+  {en:"submit a report", ipa:"/səbˈmɪt ə rɪˈpɔːrt/", vn:"nộp báo cáo", ex:"She submitted the report on time.", vnEx:"Cô ấy đã nộp báo cáo đúng hạn."},
+  {en:"review documents", ipa:"/rɪˈvjuː ˈdɑːkjəmənts/", vn:"xem xét/xem lại tài liệu", ex:"The manager reviewed the documents carefully.", vnEx:"Quản lý đã xem xét tài liệu cẩn thận."},
+  {en:"file paperwork", ipa:"/faɪl ˈpeɪpərwɜːrk/", vn:"sắp xếp/lưu hồ sơ", ex:"She filed all the paperwork yesterday.", vnEx:"Cô ấy đã sắp xếp toàn bộ hồ sơ hôm qua."},
+  {en:"print documents", ipa:"/prɪnt ˈdɑːkjəmənts/", vn:"in tài liệu", ex:"He printed the documents for the meeting.", vnEx:"Anh ấy đã in tài liệu cho cuộc họp."},
+  {en:"make copies", ipa:"/meɪk ˈkɑːpiz/", vn:"photocopy / sao chụp", ex:"I made copies of the contract.", vnEx:"Tôi đã photocopy hợp đồng."},
+  {en:"send a package", ipa:"/send ə ˈpækɪdʒ/", vn:"gửi bưu kiện", ex:"We sent a package to the branch office.", vnEx:"Chúng tôi đã gửi bưu kiện đến chi nhánh."},
+  {en:"receive an order", ipa:"/rɪˈsiːv ən ˈɔːrdər/", vn:"nhận đơn đặt hàng", ex:"The shop received an order for 100 units.", vnEx:"Cửa hàng đã nhận một đơn đặt hàng 100 sản phẩm."},
+  {en:"serve", ipa:"/sɜːrv/", vn:"phục vụ", ex:"He served customers all afternoon.", vnEx:"Anh ấy đã phục vụ khách hàng suốt cả buổi chiều."},
+  {en:"solve a problem", ipa:"/sɑːlv ə ˈprɑːbləm/", vn:"giải quyết vấn đề", ex:"The IT team solved the problem quickly.", vnEx:"Đội IT đã giải quyết vấn đề nhanh chóng."},
+  {en:"finish a project", ipa:"/ˈfɪnɪʃ ə ˈprɑːdʒekt/", vn:"hoàn thành dự án", ex:"We finished the project two days early.", vnEx:"Chúng tôi đã hoàn thành dự án sớm 2 ngày."},
+  {en:"work overtime", ipa:"/wɜːrk ˈoʊvərtaɪm/", vn:"tăng ca / làm thêm giờ", ex:"He worked overtime to meet the deadline.", vnEx:"Anh ấy đã tăng ca để kịp hạn chót."}
+];
+
+/* ---------------- Vocabulary: Nghề Nghiệp (Jobs) ---------------- */
+const JOBS = [
+  {en:"accountant", ipa:"/əˈkaʊntənt/", vn:"kế toán", ex:"The chief accountant is reviewing the quarterly financial statements right now.", vnEx:"Kế toán trưởng hiện đang soát xét các báo cáo tài chính quý."},
+  {en:"representative", ipa:"/reprɪˈzentətɪv/", vn:"người đại diện", ex:"An authorized representative from our firm is meeting with the client this afternoon.", vnEx:"Một người đại diện được ủy quyền từ công ty chúng tôi sẽ gặp khách hàng vào chiều nay."},
+  {en:"technician", ipa:"/tekˈnɪʃn/", vn:"kỹ thuật viên", ex:"The computer technician is repairing the broken server on the third floor at the moment.", vnEx:"Kỹ thuật viên máy tính hiện đang sửa chữa máy chủ bị hỏng ở tầng ba."},
+  {en:"contractor", ipa:"/kənˈtræktə(r)/", vn:"nhà thầu", ex:"The company hired an independent contractor to remodel the main office lobby.", vnEx:"Công ty đã thuê một nhà thầu độc lập để cải tạo lại sảnh văn phòng chính."},
+  {en:"consultant", ipa:"/kənˈsʌltənt/", vn:"cố vấn / chuyên viên tư vấn", ex:"We are consulting with a marketing consultant to improve our online advertising campaign.", vnEx:"Chúng tôi đang tham khảo ý kiến của một chuyên viên tư vấn tiếp thị để cải thiện chiến dịch quảng cáo trực tuyến."},
+  {en:"executive", ipa:"/ɪɡˈzekjətɪv/", vn:"ủy viên điều hành", ex:"The marketing executive is presenting the new branding strategy to the board.", vnEx:"Chuyên viên điều hành tiếp thị đang trình bày chiến lược thương hiệu mới trước hội đồng quản trị."},
+  {en:"director", ipa:"/daɪˈrektə(r)/", vn:"giám đốc", ex:"The board of directors is voting on the budget proposal at this exact moment.", vnEx:"Hội đồng quản trị đang bỏ phiếu về đề xuất ngân sách vào ngay chính thời điểm này."},
+  {en:"vendor", ipa:"/ˈvendə(r)/", vn:"người bán / nhà cung cấp", ex:"The logistics manager is negotiating a supply contract with our primary paper vendor.", vnEx:"Quản lý hậu cần đang đàm phán hợp đồng cung cấp với nhà cung cấp giấy chính của chúng tôi."},
+  {en:"inspector", ipa:"/ɪnˈspektə(r)/", vn:"thanh tra viên", ex:"A safety inspector is checking the emergency exits in the manufacturing plant today.", vnEx:"Một thanh tra viên an toàn đang kiểm tra các lối thoát hiểm trong nhà máy sản xuất ngày hôm nay."},
+  {en:"intern", ipa:"/ˈɪntɜːn/", vn:"thực tập sinh", ex:"The new intern is making copies of the meeting agenda in the supply room.", vnEx:"Thực tập sinh mới đang sao chụp các nội dung cuộc họp trong phòng vật tư."},
+  {en:"assistant", ipa:"/əˈsɪstənt/", vn:"trợ lý", ex:"The administrative assistant is organizing the file cabinet drawers this morning.", vnEx:"Trợ lý hành chính đang sắp xếp các ngăn kéo tủ hồ sơ vào sáng nay."},
+  {en:"supervisor", ipa:"/ˈsuːpəvaɪzə(r)/", vn:"người giám sát", ex:"Your immediate supervisor is evaluating your workplace performance this week.", vnEx:"Người giám sát trực tiếp của bạn đang đánh giá hiệu suất làm việc của bạn trong tuần này."},
+  {en:"client", ipa:"/ˈklaɪənt/", vn:"khách hàng (sử dụng dịch vụ)", ex:"Our sales team is treating a prospective client to lunch at a local restaurant.", vnEx:"Đội ngũ bán hàng của chúng tôi đang mời một khách hàng tiềm năng ăn trưa tại một nhà hàng địa phương."},
+  {en:"colleague", ipa:"/ˈkɒliːɡ/", vn:"đồng nghiệp", ex:"She is discussing the project timeline with her colleagues in the conference room.", vnEx:"Cô ấy đang thảo luận về tiến độ dự án với các đồng nghiệp của mình trong phòng họp."},
+  {en:"founder", ipa:"/ˈfaʊndə(r)/", vn:"nhà sáng lập", ex:"The founder of the technology startup is speaking at the conference center now.", vnEx:"Nhà sáng lập của công ty khởi nghiệp công nghệ hiện đang phát biểu tại trung tâm hội nghị."},
+  {en:"supplier", ipa:"/səˈplaɪə(r)/", vn:"nhà cung cấp", ex:"Our primary manufacturing supplier is shipping the raw materials via air freight.", vnEx:"Nhà cung cấp sản xuất chính của chúng tôi đang vận chuyển nguyên liệu thô bằng đường hàng không."},
+  {en:"operator", ipa:"/ˈɒpəreɪtə(r)/", vn:"người vận hành máy", ex:"The factory machine operator is wearing safety equipment while managing the assembly line.", vnEx:"Người vận hành máy móc nhà máy đang đeo thiết bị bảo hộ trong khi quản lý dây chuyền lắp ráp."},
+  {en:"administrator", ipa:"/ədˈmɪnɪstreɪtə(r)/", vn:"quản trị viên", ex:"The network administrator is upgrading the company's internal security database today.", vnEx:"Quản trị mạng đang nâng cấp cơ sở dữ liệu bảo mật nội bộ của công ty ngày hôm nay."},
+  {en:"candidate", ipa:"/ˈkændɪdeɪt/", vn:"ứng viên", ex:"The human resources department is interviewing three qualified candidates for the position.", vnEx:"Phòng nhân sự đang phỏng vấn ba ứng viên đủ năng lực cho vị trí công việc."},
+  {en:"personnel", ipa:"/ˌpɜːsəˈnel/", vn:"nhân sự", ex:"Only authorized personnel are entering the secure server room on the ground floor.", vnEx:"Chỉ những nhân sự có thẩm quyền mới được vào phòng máy chủ bảo mật ở tầng trệt."}
+];
+
+const ALL_VOCAB = ROUTINES.concat(JOBS);
+
+const ROUNDS = [
+  { key:'en2vn', label:'Vòng 1 · Anh → Việt' },
+  { key:'vn2en', label:'Vòng 2 · Việt → Anh' }
 ];
 
 const LETTERS = ["A","B","C","D"];
-const MAX_LIVES = 5;
+const MAX_LIVES = 3;
 const TIME_LIMIT = 15000;
 const CONFETTI_COLORS = ['#2dd4bf','#ffd166','#4ade80','#ff5d73','#8ecae6'];
 
-let order = [], current = 0, score = 0, lives = MAX_LIVES, answered = false;
+let roundIndex = 0, roundOrder = [], current = 0, score = 0, lives = MAX_LIVES, answered = false;
 let results = [];
 let timerInterval = null, timeLeft = TIME_LIMIT;
 let playerName = "";
@@ -344,10 +408,10 @@ function shuffle(arr){
   return a;
 }
 
-function buildOptions(correctItem){
-  const pool = VOCAB.filter(v => v.en !== correctItem.en);
-  const distractors = shuffle(pool).slice(0,3).map(v=>v.en);
-  return shuffle([correctItem.en, ...distractors]);
+function buildOptions(correctItem, key){
+  const pool = ALL_VOCAB.filter(v => v[key] !== correctItem[key]);
+  const distractors = shuffle(pool).slice(0,3).map(v=>v[key]);
+  return shuffle([correctItem[key], ...distractors]);
 }
 
 /* ---------------- Firebase leaderboard ---------------- */
@@ -362,7 +426,7 @@ async function fetchLeaderboard(){
       .sort((a,b) => b.score - a.score)
       .slice(0, 10);
   }catch(e){
-    return null; // signals fetch error
+    return null;
   }
 }
 
@@ -379,7 +443,7 @@ async function saveScore(name, scoreVal, correctCount, total){
         date: new Date().toISOString()
       })
     });
-  }catch(e){ /* fail silently, game still works offline */ }
+  }catch(e){ /* fail silently */ }
 }
 
 function renderLeaderboardInto(container, list, highlightName){
@@ -454,10 +518,15 @@ function renderLives(){
 function updateScoreBadge(){ document.getElementById('scoreVal').textContent = score; }
 
 function startQuiz(){
-  order = shuffle(VOCAB);
-  current = 0; score = 0; lives = MAX_LIVES; results = [];
+  roundIndex = 0; score = 0; lives = MAX_LIVES; results = [];
   renderLives();
   updateScoreBadge();
+  startRound();
+}
+
+function startRound(){
+  roundOrder = shuffle(ALL_VOCAB);
+  current = 0;
   renderQuestion();
 }
 
@@ -465,19 +534,27 @@ function stopTimer(){ if(timerInterval){ clearInterval(timerInterval); timerInte
 
 function renderQuestion(){
   answered = false;
-  const item = order[current];
-  const options = buildOptions(item);
+  const direction = ROUNDS[roundIndex].key; // 'en2vn' or 'vn2en'
+  const key = direction === 'en2vn' ? 'vn' : 'en';
+  const item = roundOrder[current];
+  const options = buildOptions(item, key);
+  const correctValue = item[key];
   const card = document.getElementById('card');
+
+  const questLabel = direction === 'en2vn' ? 'Chọn nghĩa tiếng Việt phù hợp' : 'Chọn cụm từ tiếng Anh phù hợp';
+  const mainHtml = direction === 'en2vn'
+    ? `<div class="prompt-main">${item.en}</div><div class="prompt-ipa">${item.ipa}</div><div class="prompt-context">${item.ex}</div>`
+    : `<div class="prompt-main">${item.vn}</div><div class="prompt-context">${item.vnEx}</div>`;
 
   card.innerHTML = `
     <div class="top-row">
-      <span class="level-tag">Câu ${current+1} / ${order.length}</span>
-      <span class="speed-tag" id="speedTag">⚡ Trả lời nhanh = điểm cao!</span>
+      <span class="round-tag">${ROUNDS[roundIndex].label}</span>
+      <span class="level-tag">Câu ${current+1} / ${roundOrder.length}</span>
+      <span class="speed-tag" id="speedTag">⚡ Nhanh = điểm cao!</span>
     </div>
     <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
-    <div class="quest-label">Chọn cụm từ tiếng Anh phù hợp</div>
-    <div class="prompt-vn">${item.vn}</div>
-    <div class="prompt-context">${item.vnEx}</div>
+    <div class="quest-label">${questLabel}</div>
+    ${mainHtml}
     <div class="options" id="options"></div>
     <div class="feedback" id="feedback"></div>
     <div class="footer-row"><button class="next-btn" id="nextBtn">Câu tiếp theo →</button></div>
@@ -486,11 +563,11 @@ function renderQuestion(){
   document.getElementById('speedTag').classList.add('show');
 
   const optionsDiv = document.getElementById('options');
-  options.forEach((optEn, idx) => {
+  options.forEach((optText, idx) => {
     const btn = document.createElement('button');
     btn.className = 'opt';
-    btn.innerHTML = `<span class="opt-letter">${LETTERS[idx]}</span><span>${optEn}</span>`;
-    btn.onclick = () => selectAnswer(btn, optEn, item);
+    btn.innerHTML = `<span class="opt-letter">${LETTERS[idx]}</span><span>${optText}</span>`;
+    btn.onclick = () => selectAnswer(btn, optText, correctValue, item, direction);
     optionsDiv.appendChild(btn);
   });
 
@@ -519,23 +596,26 @@ function runTimer(){
 
 function timeoutAnswer(){
   answered = true;
-  const item = order[current];
+  const direction = ROUNDS[roundIndex].key;
+  const key = direction === 'en2vn' ? 'vn' : 'en';
+  const item = roundOrder[current];
+  const correctValue = item[key];
   loseLife();
-  results.push({en: item.en, vn: item.vn, correct:false});
+  results.push({en: item.en, vn: item.vn, correct:false, round: roundIndex+1});
 
   document.querySelectorAll('#options .opt').forEach(opt => {
     opt.disabled = true;
     const text = opt.querySelector('span:last-child').textContent;
-    if(text === item.en) opt.classList.add('correct');
+    if(text === correctValue) opt.classList.add('correct');
   });
   const fb = document.getElementById('feedback');
-  fb.innerHTML = `⏰ Hết giờ! Đáp án đúng: <strong>${item.en}</strong> <span class="ipa">${item.ipa}</span>`;
+  fb.innerHTML = `⏰ Hết giờ! Đáp án đúng: <strong>${correctValue}</strong> ${direction === 'vn2en' ? `<span class="ipa">${item.ipa}</span>` : ''}`;
   fb.className = 'feedback bad';
   document.getElementById('card').classList.add('shake');
   setTimeout(()=>document.getElementById('card').classList.remove('shake'), 400);
   beep(180, 0.3, 'sawtooth');
 
-  if(lives <= 0){ setTimeout(endGame, 700, false); }
+  if(lives <= 0){ setTimeout(() => endGame(false), 700); }
   else { document.getElementById('nextBtn').classList.add('show'); }
 }
 
@@ -569,34 +649,35 @@ function speedMessage(bonus){
   return "Vừa kịp lúc!";
 }
 
-function selectAnswer(btn, chosenEn, item){
+function selectAnswer(btn, chosenValue, correctValue, item, direction){
   if(answered) return;
   answered = true;
   stopTimer();
-  const isCorrect = chosenEn === item.en;
-  results.push({en: item.en, vn: item.vn, correct: isCorrect});
+  const isCorrect = chosenValue === correctValue;
+  results.push({en: item.en, vn: item.vn, correct: isCorrect, round: roundIndex+1});
 
   document.querySelectorAll('#options .opt').forEach(opt => {
     opt.disabled = true;
     const text = opt.querySelector('span:last-child').textContent;
-    if(text === item.en) opt.classList.add('correct');
+    if(text === correctValue) opt.classList.add('correct');
     else if(opt === btn) opt.classList.add('wrong');
   });
 
   const fb = document.getElementById('feedback');
   const card = document.getElementById('card');
+  const ipaHtml = direction === 'vn2en' ? ` <span class="ipa">${item.ipa}</span>` : '';
 
   if(isCorrect){
     const bonus = computeSpeedScore();
     score += bonus;
     updateScoreBadge();
-    fb.innerHTML = `✓ Chính xác! +${bonus} điểm — ${speedMessage(bonus)} <span class="ipa">${item.ipa}</span>`;
+    fb.innerHTML = `✓ Chính xác! +${bonus} điểm — ${speedMessage(bonus)}${ipaHtml}`;
     fb.className = 'feedback good';
     spawnConfetti(card);
     beep(660, 0.18);
   } else {
     loseLife();
-    fb.innerHTML = `✗ Chưa đúng. Đáp án đúng: <strong>${item.en}</strong> <span class="ipa">${item.ipa}</span>`;
+    fb.innerHTML = `✗ Chưa đúng. Đáp án đúng: <strong>${correctValue}</strong>${ipaHtml}`;
     fb.className = 'feedback bad';
     card.classList.add('shake');
     setTimeout(()=>card.classList.remove('shake'), 400);
@@ -612,8 +693,40 @@ function selectAnswer(btn, chosenEn, item){
 
 function nextQuestion(){
   current++;
-  if(current >= order.length){ endGame(true); }
-  else { renderQuestion(); }
+  if(current >= roundOrder.length){
+    if(roundIndex >= ROUNDS.length - 1){
+      endGame(true);
+    } else {
+      renderRoundComplete();
+    }
+  } else {
+    renderQuestion();
+  }
+}
+
+function renderRoundComplete(){
+  stopTimer();
+  const card = document.getElementById('card');
+  const roundResults = results.filter(r => r.round === roundIndex+1);
+  const correctInRound = roundResults.filter(r=>r.correct).length;
+
+  card.innerHTML = `
+    <div class="result-screen">
+      <div class="result-badge">🎉</div>
+      <div class="result-rank">Hoàn thành ${ROUNDS[roundIndex].label}!</div>
+      <div class="result-label">Điểm số hiện tại</div>
+      <div class="result-score">${score} ★</div>
+      <div class="result-msg">${escapeHtml(playerName)} trả lời đúng ${correctInRound}/${roundOrder.length} câu ở vòng này. ${lives} mạng còn lại. Sẵn sàng cho ${ROUNDS[roundIndex+1].label}?</div>
+      <div class="btn-row">
+        <button class="restart-btn primary" id="continueBtn">${ROUNDS[roundIndex+1].label} →</button>
+      </div>
+    </div>
+  `;
+  spawnConfetti(card);
+  document.getElementById('continueBtn').onclick = () => {
+    roundIndex++;
+    startRound();
+  };
 }
 
 function rankFor(pct){
@@ -643,18 +756,18 @@ async function endGame(finished){
   stopTimer();
   const card = document.getElementById('card');
   const correctCount = results.filter(r=>r.correct).length;
-  const totalPlayed = finished ? order.length : current + 1;
+  const totalPlayed = results.length;
 
   if(finished){
-    const pct = Math.round((correctCount/order.length)*100);
+    const pct = Math.round((correctCount/totalPlayed)*100);
     const {badge, rank} = rankFor(pct);
     card.innerHTML = `
       <div class="result-screen">
         <div class="result-badge">${badge}</div>
         <div class="result-rank">${rank}</div>
-        <div class="result-label">Điểm số cuối cùng</div>
+        <div class="result-label">Điểm số cuối cùng — Hoàn thành cả 2 vòng!</div>
         <div class="result-score">${score} ★</div>
-        <div class="result-msg">${escapeHtml(playerName)} trả lời đúng ${correctCount}/${order.length} câu (${pct}%). ${lives} mạng còn lại.</div>
+        <div class="result-msg">${escapeHtml(playerName)} trả lời đúng ${correctCount}/${totalPlayed} câu (${pct}%). ${lives} mạng còn lại.</div>
         <div class="btn-row">
           <button class="restart-btn primary" id="restartBtn">🔄 Chơi lại</button>
           <button class="restart-btn" id="homeBtn">🏠 Màn hình chính</button>
@@ -671,7 +784,7 @@ async function endGame(finished){
         <div class="result-rank">Hết Mạng Rồi!</div>
         <div class="result-label">Điểm số</div>
         <div class="result-score">${score} ★</div>
-        <div class="result-msg">${escapeHtml(playerName)} trả lời đúng ${correctCount}/${totalPlayed} câu trước khi hết mạng. Thử lại để phá kỷ lục nhé!</div>
+        <div class="result-msg">${escapeHtml(playerName)} trả lời đúng ${correctCount}/${totalPlayed} câu (${ROUNDS[roundIndex].label}) trước khi hết mạng. Thử lại để phá kỷ lục nhé!</div>
         <div class="btn-row">
           <button class="restart-btn primary" id="restartBtn">🔄 Chơi lại</button>
           <button class="restart-btn" id="homeBtn">🏠 Màn hình chính</button>
