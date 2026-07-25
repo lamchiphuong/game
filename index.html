@@ -146,13 +146,14 @@
   #timerBar{height:100%; width:100%; background:linear-gradient(90deg,var(--mint),var(--gold)); transition:width .1s linear;}
 
   #promptBox{
-    margin-top:8px; text-align:center;
+    position:fixed; left:16px; bottom:16px; z-index:25;
+    text-align:left; max-width:min(340px, 42vw);
     background:var(--panel); backdrop-filter:blur(6px);
-    border-radius:20px; padding:16px 30px; max-width:90%;
-    position:relative; z-index:20;
+    border-radius:20px; padding:12px 20px;
+    border:2px solid rgba(255,255,255,.15);
   }
   #promptLabel{font-size:.78rem; opacity:.8; text-transform:uppercase; letter-spacing:1.5px; font-weight:700;}
-  #promptWord{font-family:var(--font-display); font-size:clamp(1.5rem,3.4vw,2.3rem); font-weight:700; color:var(--ink);}
+  #promptWord{font-family:var(--font-display); font-size:clamp(1.15rem,2.4vw,1.7rem); font-weight:700; color:var(--ink); word-break:break-word;}
 
   #field{
     position:relative; width:100%; max-width:1000px; flex:1; margin-top:6px;
@@ -321,7 +322,12 @@
         <div class="stat"><div class="val" id="lcCorrect">0</div><div class="lbl">Số câu đúng</div></div>
         <div class="stat"><div class="val" id="lcTotal">0</div><div class="lbl">Điểm tổng</div></div>
       </div>
+      <input type="text" id="lcPlayerName" placeholder="Nhập tên của bạn để lưu điểm" maxlength="20">
       <div class="btn-row">
+        <button class="btn coral" id="lcSaveScoreBtn">Lưu điểm 🏆</button>
+      </div>
+      <div id="lcLeaderboard"><div style="opacity:.7; font-size:.85rem;">Đang tải bảng xếp hạng…</div></div>
+      <div class="btn-row" style="margin-top:14px;">
         <button class="btn secondary" id="lcRetryBtn">Chơi lại level</button>
         <button class="btn" id="lcNextBtn">Level tiếp theo →</button>
       </div>
@@ -790,6 +796,8 @@ function finishLevel(){
     nextBtn.onclick = ()=> showFinal();
   }
   document.getElementById("lcRetryBtn").onclick = ()=> startLevel(idx);
+  document.getElementById("lcPlayerName").value = "";
+  loadLeaderboard("lcLeaderboard");
 
   showScreen("levelCompleteScreen");
 }
@@ -803,13 +811,13 @@ function showFinal(){
   document.getElementById("finalScore").textContent = totalScore;
   document.getElementById("playerName").value = "";
   showScreen("finalScreen");
-  loadLeaderboard();
+  loadLeaderboard("leaderboard");
 }
 
-document.getElementById("saveScoreBtn").addEventListener("click", async ()=>{
-  const nameInput = document.getElementById("playerName");
+async function saveScore(nameInputId, btnId, leaderboardId){
+  const nameInput = document.getElementById(nameInputId);
   const name = (nameInput.value || "Ẩn danh").trim().slice(0,20);
-  const btn = document.getElementById("saveScoreBtn");
+  const btn = document.getElementById(btnId);
   btn.disabled = true; btn.textContent = "Đang lưu...";
   try{
     await fetch(FIREBASE_URL + "/scores.json", {
@@ -818,15 +826,18 @@ document.getElementById("saveScoreBtn").addEventListener("click", async ()=>{
       body: JSON.stringify({name, score: totalScore, date: new Date().toISOString()})
     });
     btn.textContent = "Đã lưu ✔";
-    loadLeaderboard();
+    loadLeaderboard(leaderboardId);
   }catch(e){
     btn.textContent = "Lỗi, thử lại";
   }
   setTimeout(()=>{ btn.disabled=false; btn.textContent="Lưu điểm 🏆"; }, 1500);
-});
+}
 
-async function loadLeaderboard(){
-  const box = document.getElementById("leaderboard");
+document.getElementById("saveScoreBtn").addEventListener("click", ()=> saveScore("playerName","saveScoreBtn","leaderboard"));
+document.getElementById("lcSaveScoreBtn").addEventListener("click", ()=> saveScore("lcPlayerName","lcSaveScoreBtn","lcLeaderboard"));
+
+async function loadLeaderboard(boxId){
+  const box = document.getElementById(boxId);
   box.innerHTML = '<div style="opacity:.7; font-size:.85rem;">Đang tải bảng xếp hạng…</div>';
   try{
     const res = await fetch(FIREBASE_URL + '/scores.json?orderBy="score"&limitToLast=10');
