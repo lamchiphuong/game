@@ -1165,7 +1165,7 @@ function renderWritingExercise(container){
       <p style="font-weight:700;margin-bottom:6px;">Sắp xếp các từ dưới đây thành câu đúng:</p>
       <div class="wr-answer-slot" id="wrAnswerSlot"></div>
       <div class="wr-pool" id="wrPool"></div>
-      <div class="wr-btn-row">
+      <div class="wr-btn-row" id="wrBtnRow">
         <button class="btn secondary" id="wrClearBtn">Xoá hết</button>
         <button class="btn secondary" id="wrHintBtn">👁️ Xem gợi ý (Tiếng Việt)</button>
         <button class="btn coral" id="wrCheckBtn">Kiểm tra</button>
@@ -1180,16 +1180,28 @@ function renderWritingExercise(container){
   const poolEl = document.getElementById("wrPool");
   const msgEl = document.getElementById("wrMsg");
   const hintEl = document.getElementById("wrHint");
+  const btnRowEl = document.getElementById("wrBtnRow");
+
+  let answered = false;
 
   function draw(){
     if(idx >= sentences.length){ finish(); return; }
     const s = sentences[idx];
     placed = [];
     pool = shuffle(s.question);
+    answered = false;
     progressEl.textContent = `Câu ${idx+1} / ${sentences.length} · từ khoá: ${s.target}`;
     msgEl.textContent = "";
     hintEl.classList.add("hidden");
     hintEl.textContent = s.hint;
+    btnRowEl.innerHTML = `
+      <button class="btn secondary" id="wrClearBtn">Xoá hết</button>
+      <button class="btn secondary" id="wrHintBtn">👁️ Xem gợi ý (Tiếng Việt)</button>
+      <button class="btn coral" id="wrCheckBtn">Kiểm tra</button>
+    `;
+    document.getElementById("wrClearBtn").addEventListener("click", onClear);
+    document.getElementById("wrHintBtn").addEventListener("click", onHint);
+    document.getElementById("wrCheckBtn").addEventListener("click", onCheck);
     renderChips();
   }
 
@@ -1199,6 +1211,7 @@ function renderWritingExercise(container){
 
     slotEl.querySelectorAll(".wr-chip").forEach(chip=>{
       chip.addEventListener("click", ()=>{
+        if(answered) return;
         const i = parseInt(chip.dataset.i,10);
         pool.push(placed[i]);
         placed.splice(i,1);
@@ -1207,6 +1220,7 @@ function renderWritingExercise(container){
     });
     poolEl.querySelectorAll(".wr-chip").forEach(chip=>{
       chip.addEventListener("click", ()=>{
+        if(answered) return;
         const i = parseInt(chip.dataset.i,10);
         placed.push(pool[i]);
         pool.splice(i,1);
@@ -1215,29 +1229,35 @@ function renderWritingExercise(container){
     });
   }
 
-  document.getElementById("wrClearBtn").addEventListener("click", ()=>{
+  function onClear(){
+    if(answered) return;
     pool = pool.concat(placed);
     placed = [];
     renderChips();
-  });
+  }
 
-  document.getElementById("wrHintBtn").addEventListener("click", ()=>{
+  function onHint(){
     hintEl.classList.toggle("hidden");
-  });
+  }
 
-  document.getElementById("wrCheckBtn").addEventListener("click", ()=>{
+  function onCheck(){
+    if(answered) return;
+    answered = true;
     const s = sentences[idx];
     const correct = placed.length === s.answer.length && placed.every((w,i)=> w.toLowerCase() === s.answer[i].toLowerCase());
     if(correct){
       correctCount++;
-      msgEl.textContent = "🎉 Chính xác!"; msgEl.style.color = "var(--mint)";
+      msgEl.innerHTML = `🎉 Chính xác! <br><span style="font-weight:600;">${escapeHtml(s.answer.join(" "))}</span>`;
+      msgEl.style.color = "var(--mint)";
       playCorrectSound();
     } else {
-      msgEl.textContent = `❌ Chưa đúng. Đáp án: ${s.answer.join(" ")}`; msgEl.style.color = "var(--danger)";
+      msgEl.innerHTML = `❌ Chưa đúng. Đáp án đúng là:<br><span style="font-weight:600;">${escapeHtml(s.answer.join(" "))}</span>`;
+      msgEl.style.color = "var(--danger)";
       playWrongSound();
     }
-    setTimeout(()=>{ idx++; draw(); }, 1800);
-  });
+    btnRowEl.innerHTML = `<button class="btn coral" id="wrNextBtn">Câu tiếp theo →</button>`;
+    document.getElementById("wrNextBtn").addEventListener("click", ()=>{ idx++; draw(); });
+  }
 
   function finish(){
     document.querySelector(".wr-box").innerHTML = `
