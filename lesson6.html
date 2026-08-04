@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocab Lesson 6 — Hotel & Accommodation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFF8ED;
+  --panel:#ffffff;
+  --ink:#1E3D59;
+  --ink-soft:#5b7185;
+  --coral:#FF6F59;
+  --gold:#FFC857;
+  --mint:#3FAE6B;
+  --mint-soft:#7FD858;
+  --violet:#8C6FE6;
+  --danger:#E5484D;
+  --line:#EBE2D2;
+  --radius:20px;
+  --shadow:0 10px 26px rgba(30,61,89,.10);
+  --font-display:'Baloo 2',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-body);
+  background:var(--cream);
+  color:var(--ink);
+  min-height:100vh;
+  padding-bottom:78px;
+}
+button{font-family:inherit;cursor:pointer;}
+.hidden{display:none !important;}
+
+/* ---------- TOPBAR ---------- */
+.topbar{
+  position:sticky;top:0;z-index:30;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;background:var(--panel);
+  border-bottom:1px solid var(--line);
+}
+.brand{font-family:var(--font-display);font-weight:800;font-size:1.4rem;color:var(--ink);}
+.brand span{color:var(--coral);}
+.desktop-nav{display:flex;gap:6px;}
+.nav-btn{
+  border:none;background:transparent;color:var(--ink-soft);
+  font-weight:700;font-size:.92rem;padding:10px 16px;border-radius:14px;
+  display:flex;align-items:center;gap:8px;transition:.15s;
+}
+.nav-btn:hover{background:#fbeee0;color:var(--ink);}
+.nav-btn.active{background:var(--ink);color:#fff;}
+@media (max-width:820px){.desktop-nav{display:none;}}
+
+/* ---------- BOTTOM NAV (mobile) ---------- */
+.bottom-nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;
+  display:none;background:var(--panel);border-top:1px solid var(--line);
+  padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+  justify-content:space-around;
+}
+@media (max-width:820px){.bottom-nav{display:flex;}}
+.bnav-btn{
+  border:none;background:transparent;color:var(--ink-soft);
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  font-size:.68rem;font-weight:700;padding:4px 6px;border-radius:10px;
+}
+.bnav-btn .ic{font-size:1.25rem;}
+.bnav-btn.active{color:var(--coral);}
+
+/* ---------- LAYOUT ---------- */
+main{max-width:1080px;margin:0 auto;padding:26px 20px 40px;}
+.view{display:none;}
+.view.active{display:block;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+h1.page-title{font-family:var(--font-display);font-size:1.7rem;margin:0 0 6px;}
+p.page-sub{color:var(--ink-soft);margin:0 0 22px;font-size:.98rem;}
+
+/* ---------- CARDS / GRID ---------- */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;}
+.mod-card{
+  background:var(--panel);border-radius:var(--radius);padding:20px;
+  box-shadow:var(--shadow);border:2px solid transparent;
+  display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:.15s;
+  text-align:left;
+}
+.mod-card:hover{transform:translateY(-3px);border-color:var(--gold);}
+.mod-icon{font-size:2rem;}
+.mod-name{font-family:var(--font-display);font-weight:700;font-size:1.08rem;}
+.mod-desc{font-size:.82rem;color:var(--ink-soft);line-height:1.4;}
+.live-badge{
+  display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.4px;
+  background:#e4f7ea;color:#1c7a44;padding:3px 10px;border-radius:20px;
+  align-self:flex-start;
+}
+
+/* dashboard */
+.dash-hero{
+  background:linear-gradient(135deg,#2a3d59,#1e3d59);
+  color:#fff;border-radius:24px;padding:28px 26px;margin-bottom:24px;
+  display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;
+}
+.dash-hero h2{font-family:var(--font-display);margin:0 0 8px;font-size:1.5rem;}
+.dash-hero p{margin:0;color:#cdd8e6;font-size:.92rem;max-width:440px;}
+.dash-stats{display:flex;gap:18px;flex-wrap:wrap;}
+.dash-stat{background:rgba(255,255,255,.1);border-radius:16px;padding:10px 18px;text-align:center;}
+.dash-stat b{display:block;font-family:var(--font-display);font-size:1.3rem;color:var(--gold);}
+.dash-stat span{font-size:.7rem;color:#cdd8e6;text-transform:uppercase;letter-spacing:.5px;}
+.section-label{font-family:var(--font-display);font-weight:700;font-size:1.05rem;margin:26px 0 12px;}
+
+/* back link */
+.back-link{
+  background:none;border:none;color:var(--ink-soft);font-weight:700;font-size:.9rem;
+  margin-bottom:14px;display:inline-flex;align-items:center;gap:6px;
+}
+.back-link:hover{color:var(--ink);}
+
+/* topic header */
+.topic-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.topic-head .ic{font-size:2.4rem;}
+.topic-head h1{margin:0;font-family:var(--font-display);font-size:1.5rem;}
+.topic-head p{margin:2px 0 0;color:var(--ink-soft);font-size:.88rem;}
+
+/* tabs */
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.tab-btn{
+  border:2px solid var(--line);background:var(--panel);color:var(--ink-soft);
+  font-weight:700;font-size:.88rem;padding:9px 18px;border-radius:14px;
+}
+.tab-btn.active{background:var(--ink);border-color:var(--ink);color:#fff;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ---------- FLASHCARD ---------- */
+.flash-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;}
+.flash-card{
+  width:100%;max-width:380px;height:230px;perspective:1200px;cursor:pointer;
+}
+.flash-inner{
+  position:relative;width:100%;height:100%;transition:transform .5s;
+  transform-style:preserve-3d;
+}
+.flash-card.flipped .flash-inner{transform:rotateY(180deg);}
+.flash-face{
+  position:absolute;inset:0;backface-visibility:hidden;
+  border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px;text-align:center;box-shadow:var(--shadow);
+}
+.flash-front{background:var(--panel);}
+.flash-front .word{font-family:var(--font-display);font-size:1.9rem;font-weight:700;}
+.flash-front .ipa{color:var(--ink-soft);margin-top:6px;}
+.speak-btn{
+  position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;
+  border:none;background:var(--violet);color:#fff;font-size:1.15rem;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(140,111,230,.35);
+  transition:transform .15s;
+}
+.speak-btn:hover{transform:scale(1.08);}
+.speak-btn:active{transform:scale(.94);}
+.speak-btn.speaking{animation:speakPulse .5s ease infinite;}
+@keyframes speakPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+.speak-btn-dark{background:rgba(255,255,255,.25);}
+.flash-back{background:var(--violet);color:#fff;transform:rotateY(180deg);}
+.flash-back .meaning{font-family:var(--font-display);font-size:1.6rem;font-weight:700;}
+.flash-back .example{margin-top:10px;font-size:.86rem;opacity:.9;font-style:italic;}
+.flash-nav{display:flex;gap:14px;align-items:center;}
+.round-btn{
+  width:46px;height:46px;border-radius:50%;border:none;background:var(--ink);color:#fff;
+  font-size:1.2rem;display:flex;align-items:center;justify-content:center;
+}
+.flash-count{font-weight:700;color:var(--ink-soft);}
+
+/* ---------- FALLING WORD GAME ---------- */
+.fw-hud{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;font-weight:700;font-size:.92rem;}
+.fw-area{
+  position:relative;max-width:640px;margin:0 auto 14px;
+  height:clamp(130px,30vh,220px);
+  border-radius:20px;overflow:hidden;
+  background:linear-gradient(to bottom,#e8f6ff,#ffffff);box-shadow:var(--shadow);
+}
+.fw-word{
+  position:absolute;left:50%;top:-46px;transform:translateX(-50%);
+  font-family:var(--font-display);font-weight:700;color:var(--ink);
+  font-size:clamp(.9rem,4.4vw,1.5rem);
+  animation:fwFall linear forwards;white-space:nowrap;
+  max-width:90%;overflow:hidden;text-overflow:ellipsis;text-align:center;
+  padding:2px 6px;
+}
+@keyframes fwFall{to{top:calc(100% - 6px);}}
+.fw-timer{
+  position:absolute;top:8px;right:10px;z-index:2;font-family:var(--font-display);font-size:1.05rem;font-weight:700;
+  color:var(--danger);background:rgba(255,255,255,.92);padding:4px 10px;border-radius:12px;
+}
+.fw-boxes{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;max-width:640px;margin:0 auto 12px;padding:0 8px;}
+.fw-box{
+  width:clamp(22px,7vw,38px);height:clamp(28px,8.4vw,46px);border:3px solid var(--violet);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(.8rem,3.6vw,1.15rem);
+  text-transform:uppercase;background:#f5f0ff;color:var(--ink);flex-shrink:0;
+}
+.fw-box.filled{background:var(--violet);color:#fff;}
+.fw-box.correct{background:var(--mint-soft);border-color:var(--mint);}
+.fw-box.wrong{background:var(--danger);border-color:#c33;color:#fff;}
+.fw-box.hint{background:var(--gold);border-color:#e0a930;color:#fff;}
+.fw-box.space{background:#e4e4e4;border-color:#ccc;color:#999;}
+.fw-msg{text-align:center;min-height:26px;font-weight:700;margin-bottom:8px;padding:0 10px;}
+.fw-controls{display:flex;justify-content:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.fw-area.paused .fw-word{animation-play-state:paused;}
+.btn.pause-btn{background:var(--violet);color:#fff;box-shadow:0 4px 0 #6f52c4;}
+.btn.pause-btn.is-paused{background:var(--mint-soft);color:#12401f;box-shadow:0 4px 0 #4f9c34;}
+
+/* on-screen keyboard */
+.fw-keyboard{max-width:560px;margin:0 auto;padding:0 4px;user-select:none;}
+.kb-row{display:flex;justify-content:center;gap:4px;margin-bottom:6px;}
+.kb-key{
+  flex:1 1 0;max-width:42px;min-width:0;height:clamp(36px,9vw,44px);border:none;border-radius:8px;
+  background:var(--panel);box-shadow:0 2px 4px rgba(30,61,89,.18);
+  font-family:var(--font-display);font-weight:700;font-size:clamp(.82rem,3.4vw,1rem);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;transition:.1s;touch-action:manipulation;
+}
+.kb-key:active{transform:scale(.92);background:#efe9fb;}
+.kb-key.kb-wide{flex:2.4 1 0;max-width:120px;font-size:clamp(.72rem,2.8vw,.85rem);gap:4px;}
+.kb-key.kb-back{background:var(--coral);color:#fff;}
+.kb-key.kb-back:active{background:#e65c46;}
+
+/* ---------- BALLOON GAME ---------- */
+.bg-hud{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;font-weight:700;font-size:.92rem;}
+.bg-prompt{
+  text-align:center;font-family:var(--font-display);font-weight:700;
+  font-size:clamp(1rem,4.6vw,1.4rem);
+  margin-bottom:10px;color:var(--ink);padding:0 10px;
+}
+.bg-timerbar-wrap{max-width:400px;margin:0 auto 14px;height:10px;border-radius:8px;background:#eee;overflow:hidden;}
+.bg-timerbar{height:100%;width:100%;background:linear-gradient(90deg,var(--mint-soft),var(--gold));transition:width .1s linear;}
+.bg-field{
+  position:relative;max-width:640px;width:100%;
+  height:clamp(260px,56vh,360px);margin:0 auto 14px;border-radius:20px;
+  overflow:hidden;background:linear-gradient(to bottom,#d9f0ff,#fef8e8);box-shadow:var(--shadow);
+}
+.balloon{
+  position:absolute;bottom:-34%;text-align:center;cursor:pointer;user-select:none;
+  animation-name:bgRise;animation-timing-function:linear;animation-fill-mode:forwards;
+  filter:drop-shadow(0 6px 8px rgba(0,0,0,.18));
+  transform:translateX(-50%);touch-action:manipulation;
+}
+@keyframes bgRise{to{bottom:106%;}}
+.balloon .body{
+  width:100%;aspect-ratio:4/5;margin:0 auto;border-radius:50% 50% 50% 50% / 62% 62% 40% 40%;
+  display:flex;align-items:center;justify-content:center;padding:8%;
+  font-weight:700;font-size:clamp(.58rem,2.8vw,.8rem);color:#2a1a0a;line-height:1.1;
+  box-shadow:inset 0 -14px 16px rgba(0,0,0,.12),inset 0 10px 14px rgba(255,255,255,.45);
+  overflow-wrap:break-word;word-break:break-word;
+}
+.balloon.pop .body{animation:bgPop .35s ease forwards;}
+@keyframes bgPop{0%{transform:scale(1);opacity:1;}50%{transform:scale(1.25);opacity:.8;}100%{transform:scale(.2);opacity:0;}}
+.balloon.wrongFlash .body{animation:bgWrong .3s ease;}
+@keyframes bgWrong{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+.balloon.disabled{pointer-events:none;opacity:.3;filter:grayscale(.5);}
+.bg-field.paused .balloon{animation-play-state:paused;}
+.bg-msg{text-align:center;min-height:26px;font-weight:700;margin-bottom:8px;padding:0 10px;}
+.bg-controls{display:flex;justify-content:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+
+/* ---------- QUIZ ---------- */
+.quiz-box{background:var(--panel);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);}
+.quiz-progress{font-weight:700;color:var(--ink-soft);margin-bottom:8px;font-size:.88rem;}
+.quiz-q{font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:16px;}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;}
+.quiz-opt{
+  text-align:left;padding:13px 18px;border-radius:14px;border:2px solid var(--line);
+  background:#fff;font-weight:600;font-size:.95rem;
+}
+.quiz-opt:hover{border-color:var(--gold);}
+.quiz-opt.correct{background:#e4f7ea;border-color:var(--mint);}
+.quiz-opt.wrong{background:#fdecec;border-color:var(--danger);}
+.quiz-result{text-align:center;padding:30px 10px;}
+.quiz-result .big{font-family:var(--font-display);font-size:2.4rem;color:var(--mint);}
+
+/* ---------- WRITING ---------- */
+.wr-box{background:var(--panel);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);}
+.wr-progress{font-weight:700;color:var(--ink-soft);margin-bottom:14px;font-size:.88rem;}
+.wr-answer-slot{
+  min-height:56px;border:2px dashed var(--line);border-radius:14px;padding:10px;
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;background:#fbfaf7;
+}
+.wr-chip{
+  padding:9px 16px;border-radius:12px;font-weight:700;font-size:.92rem;border:none;
+}
+.wr-chip.pool{background:var(--ink);color:#fff;}
+.wr-chip.placed{background:var(--gold);color:#5c3d00;}
+.wr-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.wr-btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+.wr-msg{margin-top:12px;font-weight:700;min-height:24px;}
+.wr-hint{margin-top:10px;font-size:.88rem;color:var(--ink-soft);font-style:italic;}
+
+/* ---------- BUTTONS ---------- */
+.btn{
+  border:none;border-radius:14px;font-weight:700;font-size:.92rem;padding:11px 22px;
+  background:var(--gold);color:#4a2f00;box-shadow:0 4px 0 #d9a72e;
+}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #d9a72e;}
+.btn.secondary{background:#fff;color:var(--ink);box-shadow:none;border:2px solid var(--line);}
+.btn.coral{background:var(--coral);color:#fff;box-shadow:0 4px 0 #c9503f;}
+.btn.mint{background:var(--mint-soft);color:#12401f;box-shadow:0 4px 0 #4f9c34;}
+.btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;}
+
+/* ---------- PROGRESS VIEW ---------- */
+.prog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:28px;}
+.prog-card{background:var(--panel);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
+.prog-card h3{margin:0 0 10px;font-family:var(--font-display);font-size:1.02rem;}
+.prog-bar-wrap{height:14px;border-radius:8px;background:#eee;overflow:hidden;margin-bottom:6px;}
+.prog-bar{height:100%;border-radius:8px;}
+.prog-pct{font-weight:700;font-size:.85rem;color:var(--ink-soft);}
+
+/* empty state */
+.empty-state{text-align:center;padding:40px 20px;color:var(--ink-soft);}
+.empty-state .big-ic{font-size:2.6rem;margin-bottom:8px;}
+
+.loading{text-align:center;padding:40px;color:var(--ink-soft);font-weight:700;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">🏨 Lesson 6 <span>Hotel</span></div>
+  <nav class="desktop-nav" id="desktopNav">
+    <button class="nav-btn" data-nav="dashboard">🏠 Dashboard</button>
+    <button class="nav-btn" data-nav="vocab-topic">🔤 Từ vựng</button>
+    <button class="nav-btn" data-nav="writing-topic">✍️ Luyện câu</button>
+    <button class="nav-btn" data-nav="progress">📊 Tiến trình</button>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ============ DASHBOARD ============ -->
+  <section class="view active" data-view="dashboard">
+    <div class="dash-hero">
+      <div>
+        <h2>Chào bạn 👋</h2>
+        <p>Ôn 20 từ vựng chủ đề Khách sạn & Lưu trú (Lesson 6) bằng flashcard, game từ rơi, game bắn bóng bay, trắc nghiệm — và luyện sắp xếp câu với các ví dụ trong bài.</p>
+      </div>
+      <div class="dash-stats">
+        <div class="dash-stat"><b id="statXp">0</b><span>XP</span></div>
+        <div class="dash-stat"><b id="statWords">20</b><span>Từ vựng</span></div>
+      </div>
+    </div>
+
+    <div class="section-label">Bắt đầu học</div>
+    <div class="card-grid">
+      <button class="mod-card" data-nav="vocab-topic">
+        <div class="mod-icon">🔤</div>
+        <div class="live-badge">✅ 20 từ</div>
+        <div class="mod-name">Từ vựng: Hotel & Accommodation</div>
+        <div class="mod-desc">Flashcard · Game từ rơi · Game bắn bóng bay · Trắc nghiệm</div>
+      </button>
+      <button class="mod-card" data-nav="writing-topic">
+        <div class="mod-icon">✍️</div>
+        <div class="live-badge">✅ 20 câu</div>
+        <div class="mod-name">Luyện câu: Hotel & Accommodation</div>
+        <div class="mod-desc">Sắp xếp từ thành câu hoàn chỉnh từ các ví dụ trong bài</div>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ VOCAB TOPIC ============ -->
+  <section class="view" data-view="vocab-topic">
+    <button class="back-link" data-nav="dashboard">← Quay lại Dashboard</button>
+    <div class="topic-head">
+      <div class="ic">🏨</div>
+      <div>
+        <h1>Hotel & Accommodation</h1>
+        <p>20 từ vựng · Lesson 6</p>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="flash">🃏 Flashcard</button>
+      <button class="tab-btn" data-tab="falling">🌧️ Từ rơi</button>
+      <button class="tab-btn" data-tab="balloon">🎈 Bắn bóng bay</button>
+      <button class="tab-btn" data-tab="quiz">📝 Trắc nghiệm</button>
+    </div>
+    <div class="tab-panel active" data-panel="flash">
+      <div id="flashContainer" class="loading">Đang tải...</div>
+    </div>
+    <div class="tab-panel" data-panel="falling">
+      <div id="fallingContainer" class="loading">Đang tải...</div>
+    </div>
+    <div class="tab-panel" data-panel="balloon">
+      <div id="balloonContainer" class="loading">Đang tải...</div>
+    </div>
+    <div class="tab-panel" data-panel="quiz">
+      <div id="quizContainer" class="loading">Đang tải...</div>
+    </div>
+  </section>
+
+  <!-- ============ WRITING TOPIC ============ -->
+  <section class="view" data-view="writing-topic">
+    <button class="back-link" data-nav="dashboard">← Quay lại Dashboard</button>
+    <div id="writingContainer" class="loading">Đang tải...</div>
+  </section>
+
+  <!-- ============ PROGRESS ============ -->
+  <section class="view" data-view="progress">
+    <h1 class="page-title">Tiến trình học tập</h1>
+    <p class="page-sub">Dữ liệu được lưu ngay trên máy của bạn (localStorage).</p>
+    <div class="prog-grid" id="progGrid"></div>
+    <button class="btn secondary" id="resetProgressBtn">🗑️ Xoá tiến trình đã lưu</button>
+  </section>
+
+</main>
+
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bnav-btn" data-nav="dashboard"><span class="ic">🏠</span>Trang chủ</button>
+  <button class="bnav-btn" data-nav="vocab-topic"><span class="ic">🔤</span>Từ vựng</button>
+  <button class="bnav-btn" data-nav="writing-topic"><span class="ic">✍️</span>Luyện câu</button>
+  <button class="bnav-btn" data-nav="progress"><span class="ic">📊</span>Tiến trình</button>
+</nav>
+
+<script>
+/* =========================================================
+   DATA — Vocab Lesson 6: Hotel & Accommodation
+   (lấy từ file vocab_lesson_6.pdf, không dùng Firebase)
+========================================================= */
+const VOCAB_WORDS = [
+  {word:"accommodation", ipa:"/əˌkɒm.əˈdeɪ.ʃən/", meaning:"chỗ ở, nơi lưu trú",
+   example:"The conference fee includes full accommodation at the Grand Plaza Hotel for two nights.",
+   exampleVi:"Chi phí hội thảo bao gồm trọn gói chỗ ở tại Khách sạn Grand Plaza trong hai đêm."},
+  {word:"vacancy", ipa:"/ˈveɪ.kən.si/", meaning:"phòng trống (khách sạn), vị trí trống (tuyển dụng)",
+   example:"We apologize, but the hotel has no vacancy for tonight due to the holiday festival.",
+   exampleVi:"Chúng tôi xin lỗi, nhưng khách sạn không còn phòng trống nào cho tối nay do lễ hội."},
+  {word:"suite", ipa:"/swiːt/", meaning:"phòng suite",
+   example:"Mr. Harrison upgraded his booking to an executive suite to hold client meetings.",
+   exampleVi:"Ông Harrison đã nâng hạng đặt phòng lên phòng suite cao cấp để họp với khách hàng."},
+  {word:"reservation confirmation", ipa:"/ˌrez.əˈveɪ.ʃən kən.fəˈmeɪ.ʃən/", meaning:"mã/xác nhận đặt phòng",
+   example:"Please present your reservation confirmation email upon check-in at the front counter.",
+   exampleVi:"Vui lòng xuất trình email xác nhận đặt phòng khi làm thủ tục nhận phòng tại quầy lễ tân."},
+  {word:"front desk", ipa:"/frʌnt desk/", meaning:"quầy lễ tân",
+   example:"If you need extra towels, please dial 0 to reach the front desk.",
+   exampleVi:"Nếu bạn cần thêm khăn tắm, vui lòng bấm số 0 để kết nối với quầy lễ tân."},
+  {word:"housekeeping", ipa:"/ˈhaʊsˌkiː.pɪŋ/", meaning:"bộ phận dọn phòng",
+   example:"Housekeeping cleans all guest rooms daily between 10:00 AM and 2:00 PM.",
+   exampleVi:"Bộ phận dọn phòng vệ sinh tất cả các phòng khách hàng ngày từ 10:00 sáng đến 2:00 chiều."},
+  {word:"concierge", ipa:"/kɒn.siˈeərʒ/", meaning:"nhân viên hỗ trợ khách hàng",
+   example:"The concierge helped us reserve a table at a top-rated seafood restaurant.",
+   exampleVi:"Nhân viên hỗ trợ khách hàng đã giúp chúng tôi đặt bàn tại một nhà hàng hải sản hàng đầu."},
+  {word:"complimentary breakfast", ipa:"/ˌkɒm.plɪˈmen.tər.i ˈbrek.fəst/", meaning:"bữa sáng miễn phí",
+   example:"All hotel guests are entitled to a daily complimentary breakfast buffet on the second floor.",
+   exampleVi:"Tất cả khách lưu trú đều được hưởng bữa sáng buffet miễn phí hàng ngày ở tầng hai."},
+  {word:"amenities", ipa:"/əˈmiː.nə.tiːz/", meaning:"tiện nghi (khách sạn, căn hộ)",
+   example:"The hotel offers premium amenities including a high-speed Wi-Fi network and a luxury spa.",
+   exampleVi:"Khách sạn cung cấp các tiện nghi cao cấp bao gồm mạng Wi-Fi tốc độ cao và spa sang trọng."},
+  {word:"room service", ipa:"/ruːm ˈsɜː.vɪs/", meaning:"dịch vụ ăn uống tại phòng",
+   example:"We arrived very late, so we decided to order room service instead of going out.",
+   exampleVi:"Chúng tôi đến rất muộn, vì vậy chúng tôi quyết định gọi phục vụ đồ ăn tại phòng thay vì đi ra ngoài."},
+  {word:"check-in counter", ipa:"/ˈtʃek.ɪn ˈkaʊn.tər/", meaning:"quầy làm thủ tục nhận phòng",
+   example:"There was a long line of tourists at the check-in counter during peak hours.",
+   exampleVi:"Có một hàng dài du khách tại quầy làm thủ tục nhận phòng trong giờ cao điểm."},
+  {word:"wake-up call", ipa:"/ˈweɪk.ʌp kɔːl/", meaning:"cuộc gọi báo thức",
+   example:"I requested a wake-up call for 6:00 AM tomorrow so I wouldn't miss my morning meeting.",
+   exampleVi:"Tôi đã yêu cầu một cuộc gọi báo thức lúc 6:00 sáng mai để không bị lỡ cuộc họp buổi sáng."},
+  {word:"laundry service", ipa:"/ˈlɔːn.dri ˈsɜː.vɪs/", meaning:"dịch vụ giặt ủi",
+   example:"If you place your clothes in the bag by 9 AM, the laundry service will return them by evening.",
+   exampleVi:"Nếu bạn để quần áo vào túi trước 9 giờ sáng, dịch vụ giặt ủi sẽ trả lại vào buổi tối."},
+  {word:"occupancy", ipa:"/ˈɒk.jə.pən.si/", meaning:"tỷ lệ lấp đầy phòng / sức chứa",
+   example:"The city's hotels recorded an average occupancy rate of 90 percent during the summer holiday.",
+   exampleVi:"Các khách sạn trong thành phố đạt tỷ lệ lấp đầy phòng trung bình 90 phần trăm trong kỳ nghỉ hè."},
+  {word:"deposit", ipa:"/dɪˈpɒz.ɪt/", meaning:"tiền đặt cọc / đặt cọc",
+   example:"Guests must pay a $50 refundable deposit upon arrival to cover incidental charges.",
+   exampleVi:"Khách phải trả khoản tiền cọc có thể hoàn lại 50 đô la khi đến nơi để chi trả cho các khoản phí phát sinh."},
+  {word:"spacious", ipa:"/ˈspeɪ.ʃəs/", meaning:"rộng rãi",
+   example:"Our room was surprisingly spacious and offered a magnificent view of the ocean.",
+   exampleVi:"Phòng của chúng tôi rộng rãi một cách kinh ngạc và có tầm nhìn tuyệt đẹp ra đại dương."},
+  {word:"shuttle service", ipa:"/ˈʃʌt.əl ˈsɜː.vɪs/", meaning:"dịch vụ xe đưa đón",
+   example:"The hotel operates a free shuttle service that runs to the downtown shopping district every hour.",
+   exampleVi:"Khách sạn vận hành dịch vụ xe đưa đón miễn phí chạy đến khu mua sắm trung tâm mỗi giờ."},
+  {word:"standard room", ipa:"/ˈstæn.dəd ruːm/", meaning:"phòng tiêu chuẩn",
+   example:"The standard room features a queen-size bed, a desk, and a private bathroom.",
+   exampleVi:"Phòng tiêu chuẩn bao gồm một giường đôi lớn, một bàn làm việc và một phòng tắm riêng."},
+  {word:"bellhop", ipa:"/ˈbel.hɒp/", meaning:"nhân viên hành lý",
+   example:"The bellhop carried our heavy luggage up to our room on the fourth floor.",
+   exampleVi:"Nhân viên hành lý đã mang chiếc vali nặng của chúng tôi lên phòng ở tầng bốn."},
+  {word:"valet parking", ipa:"/ˈvæl.eɪ ˈpɑː.kɪŋ/", meaning:"dịch vụ đỗ xe hộ",
+   example:"Guests arriving by car can utilize our valet parking service near the main lobby entrance.",
+   exampleVi:"Khách đến bằng ô tô có thể sử dụng dịch vụ đỗ xe hộ của chúng tôi gần lối vào sảnh chính."}
+];
+
+/* =========================================================
+   HELPERS
+========================================================= */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function emptyState(msg){
+  return `<div class="empty-state"><div class="big-ic">🚧</div>${escapeHtml(msg)}</div>`;
+}
+
+/* ---------- Sound FX (Web Audio API) ---------- */
+let audioCtx = null;
+function getAudioCtx(){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === "suspended") audioCtx.resume();
+    return audioCtx;
+  }catch(e){ return null; }
+}
+function playTone(freq, duration, type, startTime, gainPeak){
+  const ctx = getAudioCtx();
+  if(!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type || "sine";
+  osc.frequency.value = freq;
+  const t0 = ctx.currentTime + (startTime || 0);
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.linearRampToValueAtTime(gainPeak || 0.22, t0 + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.start(t0); osc.stop(t0 + duration + 0.03);
+}
+function playCorrectSound(){
+  try{
+    playTone(523.25, 0.13, "sine", 0);
+    playTone(659.25, 0.13, "sine", 0.1);
+    playTone(783.99, 0.2, "sine", 0.2);
+  }catch(e){}
+}
+function playWrongSound(){
+  try{
+    playTone(220, 0.18, "sawtooth", 0, 0.16);
+    playTone(150, 0.28, "sawtooth", 0.1, 0.16);
+  }catch(e){}
+}
+
+/* ---------- Pronunciation (Web Speech API) ---------- */
+let ttsVoice = null;
+function pickEnglishVoice(){
+  if(!("speechSynthesis" in window)) return;
+  const voices = speechSynthesis.getVoices();
+  ttsVoice = voices.find(v=>v.lang === "en-US") || voices.find(v=>v.lang && v.lang.startsWith("en")) || null;
+}
+if("speechSynthesis" in window){
+  pickEnglishVoice();
+  speechSynthesis.onvoiceschanged = pickEnglishVoice;
+}
+function speakWord(text, btnEl){
+  if(!("speechSynthesis" in window)){
+    alert("Trình duyệt của bạn chưa hỗ trợ phát âm giọng nói.");
+    return;
+  }
+  speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "en-US";
+  utter.rate = 0.9;
+  if(ttsVoice) utter.voice = ttsVoice;
+  if(btnEl){
+    btnEl.classList.add("speaking");
+    utter.onend = () => btnEl.classList.remove("speaking");
+    utter.onerror = () => btnEl.classList.remove("speaking");
+  }
+  speechSynthesis.speak(utter);
+}
+
+/* =========================================================
+   LOCAL PROGRESS — localStorage only, no Firebase
+========================================================= */
+const PROGRESS_KEY = "vocab_lesson6_progress_v1";
+function loadProgress(){
+  try{
+    const p = JSON.parse(localStorage.getItem(PROGRESS_KEY));
+    if(p && typeof p === "object") return Object.assign({
+      xp:0, vocabulary:{correct:0,total:0}, writing:{correct:0,total:0}
+    }, p);
+  }catch(e){}
+  return {xp:0, vocabulary:{correct:0,total:0}, writing:{correct:0,total:0}};
+}
+let progress = loadProgress();
+function saveProgress(){ localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress)); }
+function addXp(amount){ progress.xp += amount; saveProgress(); renderDashboardStats(); }
+function recordResult(module, correct, total){
+  progress[module].correct += correct;
+  progress[module].total += total;
+  saveProgress();
+}
+function renderDashboardStats(){
+  const xpEl = document.getElementById("statXp");
+  if(xpEl) xpEl.textContent = progress.xp;
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+function showView(view){
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.dataset.view === view));
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.nav === view));
+  document.querySelectorAll(".bnav-btn").forEach(b => b.classList.toggle("active", b.dataset.nav === view));
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+document.querySelectorAll("[data-nav]").forEach(el=>{
+  el.addEventListener("click", () => {
+    const view = el.dataset.nav;
+    showView(view);
+    if(view === "vocab-topic") openVocabTopic();
+    if(view === "writing-topic") openWritingTopic();
+    if(view === "progress") renderProgressView();
+  });
+});
+
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active", b===btn));
+    document.querySelectorAll(".tab-panel").forEach(p=>p.classList.toggle("active", p.dataset.panel===btn.dataset.tab));
+  });
+});
+
+/* =========================================================
+   VOCAB TOPIC — tabs: flashcard / falling word / balloon / quiz
+========================================================= */
+let vocabInited = false;
+function openVocabTopic(){
+  document.querySelectorAll(".tab-btn").forEach((b,i)=>b.classList.toggle("active", i===0));
+  document.querySelectorAll(".tab-panel").forEach((p,i)=>p.classList.toggle("active", i===0));
+  if(vocabInited) return; // build the games once, keep state while switching tabs
+  vocabInited = true;
+  renderFlashcards(VOCAB_WORDS);
+  renderFallingGame(VOCAB_WORDS);
+  renderBalloonGame(VOCAB_WORDS);
+  renderVocabQuiz(VOCAB_WORDS);
+}
+
+/* ---------- Flashcards ---------- */
+function renderFlashcards(words){
+  const container = document.getElementById("flashContainer");
+  if(!words.length){ container.innerHTML = emptyState("Chưa có từ nào."); return; }
+  let idx = 0;
+
+  function draw(){
+    const w = words[idx];
+    container.innerHTML = `
+      <div class="flash-wrap">
+        <div class="flash-card" id="flashCard">
+          <div class="flash-inner">
+            <div class="flash-face flash-front">
+              <button class="speak-btn" id="flashSpeakBtn" title="Nghe phát âm" aria-label="Nghe phát âm">🔊</button>
+              <div class="word">${escapeHtml(w.word)}</div>
+              <div class="ipa">${escapeHtml(w.ipa || "")}</div>
+            </div>
+            <div class="flash-face flash-back">
+              <button class="speak-btn speak-btn-dark" id="flashSpeakBtnBack" title="Nghe phát âm" aria-label="Nghe phát âm">🔊</button>
+              <div class="meaning">${escapeHtml(w.meaning || "")}</div>
+              <div class="example">${escapeHtml(w.example || "")}</div>
+            </div>
+          </div>
+        </div>
+        <div class="flash-nav">
+          <button class="round-btn" id="flashPrev">←</button>
+          <div class="flash-count">${idx+1} / ${words.length}</div>
+          <button class="round-btn" id="flashNext">→</button>
+        </div>
+        <p style="color:var(--ink-soft);font-size:.85rem;">Nhấn vào thẻ để xem nghĩa · Nhấn 🔊 để nghe phát âm</p>
+      </div>
+    `;
+    document.getElementById("flashCard").addEventListener("click", function(){ this.classList.toggle("flipped"); });
+    document.getElementById("flashPrev").addEventListener("click", ()=>{ idx = (idx-1+words.length)%words.length; draw(); });
+    document.getElementById("flashNext").addEventListener("click", ()=>{ idx = (idx+1)%words.length; draw(); });
+    ["flashSpeakBtn","flashSpeakBtnBack"].forEach(id=>{
+      const btn = document.getElementById(id);
+      btn.addEventListener("click", (e)=>{ e.stopPropagation(); speakWord(w.word, btn); });
+    });
+  }
+  draw();
+}
+
+/* ---------- Falling word game (on-screen keyboard) ---------- */
+const FW_KB_ROWS = [
+  ["Q","W","E","R","T","Y","U","I","O","P"],
+  ["A","S","D","F","G","H","J","K","L"],
+  ["Z","X","C","V","B","N","M","'","-"]
+];
+function fwBuildKeyboardHtml(){
+  const rows = FW_KB_ROWS.map(row=>{
+    const keys = row.map(k=>`<button type="button" class="kb-key" data-key="${k}">${k}</button>`).join("");
+    return `<div class="kb-row">${keys}</div>`;
+  }).join("");
+  return `${rows}<div class="kb-row"><button type="button" class="kb-key kb-wide kb-back" data-action="back">⌫ Xoá</button></div>`;
+}
+
+function renderFallingGame(words){
+  const container = document.getElementById("fallingContainer");
+  if(!words.length){ container.innerHTML = emptyState("Chưa có từ nào."); return; }
+
+  container.innerHTML = `
+    <div class="fw-hud">
+      <div>Điểm: <span id="fwScore">0</span></div>
+      <div>Từ đã làm: <span id="fwProgress">0/${words.length}</span></div>
+    </div>
+    <div id="fwStartWrap" style="text-align:center;margin-bottom:14px;">
+      <button class="btn coral" id="fwStartBtn">Bắt đầu chơi</button>
+    </div>
+    <div class="fw-area hidden" id="fwArea"></div>
+    <div class="fw-msg" id="fwMsg"></div>
+    <div class="fw-boxes" id="fwBoxes"></div>
+    <div class="fw-controls hidden" id="fwControls">
+      <button class="btn pause-btn" id="fwPauseBtn">⏸️ Tạm dừng</button>
+      <button class="btn secondary" id="fwHintBtn">💡 Gợi ý</button>
+    </div>
+    <div class="fw-keyboard hidden" id="fwKeyboard">${fwBuildKeyboardHtml()}</div>
+  `;
+
+  const area = document.getElementById("fwArea");
+  const boxesWrap = document.getElementById("fwBoxes");
+  const msg = document.getElementById("fwMsg");
+  const keyboard = document.getElementById("fwKeyboard");
+  const scoreEl = document.getElementById("fwScore");
+  const progressEl = document.getElementById("fwProgress");
+  const controls = document.getElementById("fwControls");
+
+  let pool, current, score, completed, hintedIdx, boxes, timerInterval, lastHintCompleted, typedValue;
+  let roundActive = false, paused = false, remainingMs = 0;
+  const DURATION = 25000;
+  const pauseBtn = document.getElementById("fwPauseBtn");
+
+  function startGame(){
+    getAudioCtx();
+    document.getElementById("fwStartWrap").classList.add("hidden");
+    area.classList.remove("hidden");
+    controls.classList.remove("hidden");
+    keyboard.classList.remove("hidden");
+    pool = shuffle(words);
+    score = 0; completed = 0;
+    scoreEl.textContent = 0;
+    progressEl.textContent = `0/${words.length}`;
+    paused = false;
+    pauseBtn.textContent = "⏸️ Tạm dừng";
+    pauseBtn.classList.remove("is-paused");
+    nextWord();
+  }
+
+  function setPaused(v){
+    paused = v;
+    area.classList.toggle("paused", paused);
+    pauseBtn.textContent = paused ? "▶️ Tiếp tục" : "⏸️ Tạm dừng";
+    pauseBtn.classList.toggle("is-paused", paused);
+  }
+  pauseBtn.addEventListener("click", ()=>{
+    if(!roundActive) return;
+    setPaused(!paused);
+  });
+
+  function nextWord(){
+    if(pool.length === 0){ finishGame(); return; }
+    current = pool.pop();
+    hintedIdx = [];
+    lastHintCompleted = false;
+    typedValue = "";
+    area.innerHTML = `<div class="fw-timer" id="fwTimer">${DURATION/1000}</div>
+      <div class="fw-word" id="fwWordEl" style="animation-duration:${DURATION/1000}s;">${escapeHtml(current.meaning)}</div>`;
+
+    boxesWrap.innerHTML = "";
+    boxes = [];
+    const target = current.word;
+    for(let i=0;i<target.length;i++){
+      const box = document.createElement("div");
+      box.className = "fw-box";
+      if(target[i] === " "){ box.classList.add("space"); box.textContent = "␣"; }
+      boxesWrap.appendChild(box);
+      boxes.push(box);
+    }
+    msg.textContent = "";
+    updateBoxes();
+
+    roundActive = true;
+    remainingMs = DURATION;
+    document.getElementById("fwTimer").textContent = Math.ceil(remainingMs/1000);
+    clearInterval(timerInterval);
+    timerInterval = setInterval(()=>{
+      if(paused) return;
+      remainingMs -= 100;
+      const tEl = document.getElementById("fwTimer");
+      if(tEl) tEl.textContent = Math.max(0, Math.ceil(remainingMs/1000));
+      if(remainingMs <= 0){
+        clearInterval(timerInterval);
+        revealAnswer();
+      }
+    }, 100);
+  }
+
+  function letterIndex(boxIdx){
+    let count=0;
+    for(let i=0;i<=boxIdx;i++){ if(current.word[i] !== " ") count++; }
+    return count-1;
+  }
+  function currentTyped(){
+    let result="", typedIdx=0;
+    const typed = typedValue.toUpperCase();
+    for(let i=0;i<current.word.length;i++){
+      if(current.word[i] === " ") continue;
+      const li = letterIndex(i);
+      if(hintedIdx.includes(li)) result += current.word[i].toUpperCase();
+      else { result += (typed[typedIdx] || ""); typedIdx++; }
+    }
+    return result;
+  }
+  function updateBoxes(){
+    const typed = typedValue.toUpperCase();
+    let typedIdx = 0;
+    boxes.forEach((box, i)=>{
+      if(current.word[i] === " ") return;
+      const li = letterIndex(i);
+      if(hintedIdx.includes(li)){
+        box.textContent = current.word[i].toUpperCase();
+        box.className = "fw-box hint filled";
+      } else {
+        const ch = typed[typedIdx] || "";
+        box.textContent = ch;
+        box.className = "fw-box" + (ch ? " filled" : "");
+        typedIdx++;
+      }
+    });
+  }
+
+  keyboard.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".kb-key");
+    if(!btn || !roundActive || paused) return;
+    getAudioCtx();
+    const needed = current.word.replace(/ /g,"").length - hintedIdx.length;
+    if(btn.dataset.action === "back"){
+      typedValue = typedValue.slice(0, -1);
+    } else if(typedValue.length < needed){
+      typedValue += btn.dataset.key;
+    }
+    updateBoxes();
+    if(currentTyped().length === current.word.replace(/ /g,"").length){
+      lastHintCompleted = false;
+      checkAnswer();
+    }
+  });
+
+  document.getElementById("fwHintBtn").addEventListener("click", ()=>{
+    if(!roundActive || paused) return;
+    const clean = current.word.replace(/ /g,"").toUpperCase();
+    const before = currentTyped();
+    for(let i=0;i<clean.length;i++){
+      if(!hintedIdx.includes(i) && (before[i]||"") !== clean[i]){ hintedIdx.push(i); updateBoxes(); break; }
+    }
+    if(currentTyped() === clean){ lastHintCompleted = true; checkAnswer(); }
+  });
+
+  function checkAnswer(){
+    if(!roundActive) return;
+    roundActive = false;
+    clearInterval(timerInterval);
+    const correct = current.word.replace(/ /g,"").toUpperCase();
+    const typed = currentTyped();
+    if(typed === correct && !lastHintCompleted){
+      score++; scoreEl.textContent = score;
+      msg.textContent = "🎉 Đúng rồi! +1 điểm"; msg.style.color = "var(--mint)";
+      boxes.forEach(b=>{ if(!b.classList.contains("space")){ b.classList.remove("hint"); b.classList.add("correct"); }});
+      playCorrectSound();
+    } else if(typed === correct && lastHintCompleted){
+      msg.textContent = "✅ Đúng nhưng dùng gợi ý — không tính điểm"; msg.style.color = "var(--gold)";
+    } else {
+      msg.textContent = `❌ Sai rồi! Đáp án: ${current.word}`; msg.style.color = "var(--danger)";
+      boxes.forEach((b,i)=>{ if(current.word[i]!==" "){ b.textContent = current.word[i].toUpperCase(); b.classList.add("wrong"); }});
+      playWrongSound();
+    }
+    completed++; progressEl.textContent = `${completed}/${words.length}`;
+    setTimeout(nextWord, 2200);
+  }
+
+  function revealAnswer(){
+    roundActive = false;
+    clearInterval(timerInterval);
+    msg.textContent = `⏰ Hết giờ! Đáp án: ${current.word}`; msg.style.color = "var(--gold)";
+    boxes.forEach((b,i)=>{ if(current.word[i]!==" "){ b.textContent = current.word[i].toUpperCase(); b.classList.add("hint"); }});
+    completed++; progressEl.textContent = `${completed}/${words.length}`;
+    playWrongSound();
+    setTimeout(nextWord, 2200);
+  }
+
+  function finishGame(){
+    setPaused(false);
+    controls.classList.add("hidden");
+    keyboard.classList.add("hidden");
+    area.innerHTML = "";
+    msg.textContent = `🎉 Hoàn thành! Điểm: ${score}/${words.length}`;
+    msg.style.color = "var(--ink)";
+    recordResult("vocabulary", score, words.length);
+    addXp(score * 10);
+    const again = document.createElement("button");
+    again.className = "btn coral"; again.textContent = "Chơi lại"; again.style.marginTop="10px";
+    again.addEventListener("click", startGame);
+    container.querySelector(".fw-msg").after(again);
+  }
+
+  document.getElementById("fwStartBtn").addEventListener("click", startGame);
+}
+
+/* ---------- Balloon game ---------- */
+function renderBalloonGame(words){
+  const container = document.getElementById("balloonContainer");
+  if(words.length < 3){ container.innerHTML = emptyState("Cần ít nhất 3 từ để chơi game này."); return; }
+
+  container.innerHTML = `
+    <div class="bg-hud">
+      <div>Câu <span id="bgQNum">1</span>/<span id="bgQTotal">0</span></div>
+      <div>Điểm: <span id="bgScore">0</span></div>
+    </div>
+    <div style="text-align:center;margin-bottom:14px;" id="bgStartWrap">
+      <p style="color:var(--ink-soft);font-size:.88rem;">Bắn trúng bóng bay có đáp án đúng trước khi bóng bay hết màn hình!</p>
+      <button class="btn coral" id="bgStartBtn">Bắt đầu chơi</button>
+    </div>
+    <div class="bg-prompt hidden" id="bgPrompt"></div>
+    <div class="bg-timerbar-wrap hidden" id="bgTimerWrap"><div class="bg-timerbar" id="bgTimerBar"></div></div>
+    <div class="bg-field hidden" id="bgField"></div>
+    <div class="bg-controls hidden" id="bgControls">
+      <button class="btn pause-btn" id="bgPauseBtn">⏸️ Tạm dừng</button>
+    </div>
+    <div class="bg-msg" id="bgMsg"></div>
+  `;
+
+  const field = document.getElementById("bgField");
+  const promptEl = document.getElementById("bgPrompt");
+  const timerWrap = document.getElementById("bgTimerWrap");
+  const timerBar = document.getElementById("bgTimerBar");
+  const msg = document.getElementById("bgMsg");
+  const qNumEl = document.getElementById("bgQNum");
+  const qTotalEl = document.getElementById("bgQTotal");
+  const scoreEl = document.getElementById("bgScore");
+
+  const DURATION = 12;
+  const COLORS = ["#f4e3c1","#d9cf9a","#e8b98a","#c9dba0","#f0c48f","#dcc4e8"];
+  let questions, qIdx, score, answered, timerInterval, timeLeft, paused = false;
+  const controls = document.getElementById("bgControls");
+  const pauseBtn = document.getElementById("bgPauseBtn");
+
+  function startGame(){
+    getAudioCtx();
+    document.getElementById("bgStartWrap").classList.add("hidden");
+    promptEl.classList.remove("hidden");
+    timerWrap.classList.remove("hidden");
+    field.classList.remove("hidden");
+    controls.classList.remove("hidden");
+    setPaused(false);
+    questions = shuffle(words).slice(0, Math.min(8, words.length));
+    qTotalEl.textContent = questions.length;
+    qIdx = 0; score = 0; scoreEl.textContent = 0;
+    loadQuestion();
+  }
+
+  function setPaused(v){
+    paused = v;
+    field.classList.toggle("paused", paused);
+    pauseBtn.textContent = paused ? "▶️ Tiếp tục" : "⏸️ Tạm dừng";
+    pauseBtn.classList.toggle("is-paused", paused);
+  }
+  pauseBtn.addEventListener("click", ()=>{
+    if(qIdx >= (questions ? questions.length : 0)) return;
+    setPaused(!paused);
+  });
+
+  function loadQuestion(){
+    clearInterval(timerInterval);
+    field.innerHTML = "";
+    msg.textContent = "";
+    if(qIdx >= questions.length){ finishGame(); return; }
+    qNumEl.textContent = qIdx+1;
+    const word = questions[qIdx];
+    promptEl.textContent = word.meaning;
+    answered = false;
+
+    const distractors = shuffle(words.filter(w=>w.word!==word.word)).slice(0,2).map(w=>w.word);
+    const options = shuffle([word.word, ...distractors]);
+    const n = options.length;
+
+    const fieldWidth = field.clientWidth || 320;
+    const gap = 10;
+    const balloonW = Math.max(64, Math.min(120, fieldWidth / n - gap));
+
+    options.forEach((opt,i)=>{
+      const b = document.createElement("div");
+      b.className = "balloon";
+      const laneCenter = (i + 0.5) * (fieldWidth / n);
+      b.style.left = laneCenter + "px";
+      b.style.width = balloonW + "px";
+      b.style.animationDuration = DURATION + "s";
+      const color = COLORS[i % COLORS.length];
+      b.innerHTML = `<div class="body" style="background:${color};">${escapeHtml(opt)}</div>`;
+      b.addEventListener("click", ()=> handleAnswer(b, opt === word.word));
+      field.appendChild(b);
+    });
+
+    timeLeft = DURATION;
+    updateBar();
+    timerInterval = setInterval(()=>{
+      if(paused) return;
+      timeLeft -= 0.1;
+      updateBar();
+      if(timeLeft <= 0){
+        clearInterval(timerInterval);
+        if(!answered){
+          answered = true;
+          msg.textContent = `⏰ Hết giờ! Đáp án: ${word.word}`; msg.style.color="var(--gold)";
+          playWrongSound();
+          setTimeout(()=>{ qIdx++; loadQuestion(); }, 900);
+        }
+      }
+    }, 100);
+  }
+
+  function updateBar(){
+    const pct = Math.max(0,(timeLeft/DURATION)*100);
+    timerBar.style.width = pct + "%";
+  }
+
+  function handleAnswer(balloonEl, correct){
+    if(answered || paused) return;
+    getAudioCtx();
+    if(correct){
+      answered = true;
+      clearInterval(timerInterval);
+      document.querySelectorAll(".balloon").forEach(b=>{ if(b!==balloonEl) b.classList.add("disabled"); });
+      balloonEl.classList.add("pop");
+      const bonus = Math.round((timeLeft/DURATION)*20);
+      const pts = 10 + bonus;
+      score += pts; scoreEl.textContent = score;
+      msg.textContent = `🎉 Chính xác! +${pts} điểm`; msg.style.color = "var(--mint)";
+      playCorrectSound();
+      setTimeout(()=>{ qIdx++; loadQuestion(); }, 800);
+    } else {
+      balloonEl.classList.add("wrongFlash","disabled");
+      msg.textContent = "❌ Sai rồi, thử quả khác!"; msg.style.color = "var(--danger)";
+      playWrongSound();
+    }
+  }
+
+  function finishGame(){
+    setPaused(false);
+    controls.classList.add("hidden");
+    timerWrap.classList.add("hidden");
+    field.innerHTML = "";
+    promptEl.textContent = "";
+    msg.textContent = `🎉 Hoàn thành! Tổng điểm: ${score}`;
+    msg.style.color = "var(--ink)";
+    addXp(score);
+    const again = document.createElement("button");
+    again.className = "btn coral"; again.textContent = "Chơi lại"; again.style.marginTop = "10px";
+    again.addEventListener("click", startGame);
+    msg.after(again);
+  }
+
+  document.getElementById("bgStartBtn").addEventListener("click", startGame);
+}
+
+/* ---------- Vocab quiz (multiple choice: word -> Vietnamese meaning) ---------- */
+function renderVocabQuiz(words){
+  const box = document.getElementById("quizContainer");
+  if(words.length < 4){ box.innerHTML = emptyState("Cần ít nhất 4 từ để làm trắc nghiệm."); return; }
+
+  let questions, idx, score;
+
+  function buildQuestions(){
+    return shuffle(words).map(w=>{
+      const distractors = shuffle(words.filter(x=>x.word!==w.word)).slice(0,3).map(x=>x.meaning);
+      return {
+        question: `"${w.word}" có nghĩa là gì?`,
+        options: shuffle([w.meaning, ...distractors]),
+        answer: w.meaning
+      };
+    });
+  }
+
+  function start(){
+    questions = buildQuestions();
+    idx = 0; score = 0;
+    draw();
+  }
+
+  function draw(){
+    if(idx >= questions.length){ finish(); return; }
+    const q = questions[idx];
+    box.innerHTML = `
+      <div class="quiz-progress">Câu ${idx+1} / ${questions.length}</div>
+      <div class="quiz-q">${escapeHtml(q.question)}</div>
+      <div class="quiz-opts" id="quizOpts"></div>
+    `;
+    const optsWrap = document.getElementById("quizOpts");
+    q.options.forEach(opt=>{
+      const b = document.createElement("button");
+      b.className = "quiz-opt";
+      b.textContent = opt;
+      b.addEventListener("click", ()=> pick(b, opt, q));
+      optsWrap.appendChild(b);
+    });
+  }
+
+  function pick(btn, opt, q){
+    document.querySelectorAll(".quiz-opt").forEach(o=>o.disabled = true);
+    const correct = opt === q.answer;
+    btn.classList.add(correct ? "correct" : "wrong");
+    if(correct){ score++; playCorrectSound(); }
+    else {
+      playWrongSound();
+      document.querySelectorAll(".quiz-opt").forEach(o=>{
+        if(o.textContent === q.answer) o.classList.add("correct");
+      });
+    }
+    setTimeout(()=>{ idx++; draw(); }, 1200);
+  }
+
+  function finish(){
+    box.innerHTML = `
+      <div class="quiz-result">
+        <div class="big">${score}/${questions.length}</div>
+        <p>Bạn đã trả lời đúng ${score} trên ${questions.length} câu.</p>
+        <button class="btn coral" id="quizRetry">Làm lại</button>
+      </div>
+    `;
+    recordResult("vocabulary", score, questions.length);
+    addXp(score * 10);
+    document.getElementById("quizRetry").addEventListener("click", start);
+  }
+
+  start();
+}
+
+/* =========================================================
+   WRITING — arrange words into the example sentences
+========================================================= */
+const WRITING_SENTENCES = VOCAB_WORDS.map(w=>({
+  question: w.example.split(" "),
+  answer: w.example.split(" "),
+  hint: w.exampleVi,
+  target: w.word
+}));
+
+let writingInited = false;
+function openWritingTopic(){
+  if(writingInited) return;
+  writingInited = true;
+  renderWritingExercise(document.getElementById("writingContainer"));
+}
+
+function renderWritingExercise(container){
+  const sentences = shuffle(WRITING_SENTENCES);
+  if(!sentences.length){ container.innerHTML = emptyState("Chưa có câu nào."); return; }
+
+  let idx = 0, correctCount = 0, placed = [], pool = [];
+
+  container.innerHTML = `
+    <h1 class="page-title">Luyện câu: Hotel & Accommodation</h1>
+    <p class="page-sub">Sắp xếp các từ để tạo thành câu đúng, dựa trên các ví dụ từ vựng trong Lesson 6.</p>
+    <div class="wr-box">
+      <div class="wr-progress" id="wrProgress"></div>
+      <p style="font-weight:700;margin-bottom:6px;">Sắp xếp các từ dưới đây thành câu đúng:</p>
+      <div class="wr-answer-slot" id="wrAnswerSlot"></div>
+      <div class="wr-pool" id="wrPool"></div>
+      <div class="wr-btn-row">
+        <button class="btn secondary" id="wrClearBtn">Xoá hết</button>
+        <button class="btn secondary" id="wrHintBtn">👁️ Xem gợi ý (Tiếng Việt)</button>
+        <button class="btn coral" id="wrCheckBtn">Kiểm tra</button>
+      </div>
+      <div class="wr-msg" id="wrMsg"></div>
+      <div class="wr-hint hidden" id="wrHint"></div>
+    </div>
+  `;
+
+  const progressEl = document.getElementById("wrProgress");
+  const slotEl = document.getElementById("wrAnswerSlot");
+  const poolEl = document.getElementById("wrPool");
+  const msgEl = document.getElementById("wrMsg");
+  const hintEl = document.getElementById("wrHint");
+
+  function draw(){
+    if(idx >= sentences.length){ finish(); return; }
+    const s = sentences[idx];
+    placed = [];
+    pool = shuffle(s.question);
+    progressEl.textContent = `Câu ${idx+1} / ${sentences.length} · từ khoá: ${s.target}`;
+    msgEl.textContent = "";
+    hintEl.classList.add("hidden");
+    hintEl.textContent = s.hint;
+    renderChips();
+  }
+
+  function renderChips(){
+    slotEl.innerHTML = placed.map((w,i)=>`<button class="wr-chip placed" data-i="${i}">${escapeHtml(w)}</button>`).join("") || "";
+    poolEl.innerHTML = pool.map((w,i)=>`<button class="wr-chip pool" data-i="${i}">${escapeHtml(w)}</button>`).join("");
+
+    slotEl.querySelectorAll(".wr-chip").forEach(chip=>{
+      chip.addEventListener("click", ()=>{
+        const i = parseInt(chip.dataset.i,10);
+        pool.push(placed[i]);
+        placed.splice(i,1);
+        renderChips();
+      });
+    });
+    poolEl.querySelectorAll(".wr-chip").forEach(chip=>{
+      chip.addEventListener("click", ()=>{
+        const i = parseInt(chip.dataset.i,10);
+        placed.push(pool[i]);
+        pool.splice(i,1);
+        renderChips();
+      });
+    });
+  }
+
+  document.getElementById("wrClearBtn").addEventListener("click", ()=>{
+    pool = pool.concat(placed);
+    placed = [];
+    renderChips();
+  });
+
+  document.getElementById("wrHintBtn").addEventListener("click", ()=>{
+    hintEl.classList.toggle("hidden");
+  });
+
+  document.getElementById("wrCheckBtn").addEventListener("click", ()=>{
+    const s = sentences[idx];
+    const correct = placed.length === s.answer.length && placed.every((w,i)=> w.toLowerCase() === s.answer[i].toLowerCase());
+    if(correct){
+      correctCount++;
+      msgEl.textContent = "🎉 Chính xác!"; msgEl.style.color = "var(--mint)";
+      playCorrectSound();
+    } else {
+      msgEl.textContent = `❌ Chưa đúng. Đáp án: ${s.answer.join(" ")}`; msgEl.style.color = "var(--danger)";
+      playWrongSound();
+    }
+    setTimeout(()=>{ idx++; draw(); }, 1800);
+  });
+
+  function finish(){
+    document.querySelector(".wr-box").innerHTML = `
+      <div class="quiz-result">
+        <div class="big">${correctCount}/${sentences.length}</div>
+        <p>Bạn đã làm đúng ${correctCount} trên ${sentences.length} câu.</p>
+        <button class="btn coral" id="wrRetry">Làm lại</button>
+      </div>
+    `;
+    recordResult("writing", correctCount, sentences.length);
+    addXp(correctCount * 10);
+    document.getElementById("wrRetry").addEventListener("click", ()=>{
+      idx=0; correctCount=0;
+      renderWritingExercise(document.getElementById("writingContainer"));
+    });
+  }
+
+  draw();
+}
+
+/* =========================================================
+   PROGRESS VIEW
+========================================================= */
+function renderProgressView(){
+  const grid = document.getElementById("progGrid");
+  const mods = [
+    {key:"vocabulary", label:"Từ vựng", color:"var(--coral)"},
+    {key:"writing", label:"Luyện câu", color:"var(--mint-soft)"}
+  ];
+  grid.innerHTML = mods.map(m=>{
+    const d = progress[m.key];
+    const pct = d.total ? Math.round((d.correct/d.total)*100) : 0;
+    return `
+      <div class="prog-card">
+        <h3>${m.label}</h3>
+        <div class="prog-bar-wrap"><div class="prog-bar" style="width:${pct}%;background:${m.color};"></div></div>
+        <div class="prog-pct">${pct}% · ${d.correct}/${d.total} câu đúng</div>
+      </div>
+    `;
+  }).join("");
+}
+
+document.getElementById("resetProgressBtn").addEventListener("click", ()=>{
+  if(!confirm("Bạn có chắc muốn xoá toàn bộ tiến trình đã lưu trên máy này?")) return;
+  localStorage.removeItem(PROGRESS_KEY);
+  progress = loadProgress();
+  renderDashboardStats();
+  renderProgressView();
+});
+
+/* =========================================================
+   INIT
+========================================================= */
+renderDashboardStats();
+</script>
+</body>
+</html>
