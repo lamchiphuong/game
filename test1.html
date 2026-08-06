@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TOEIC Practice — Bài thi mô phỏng</title>
+<link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/128/12886/12886027.png">
+<link rel="shortcut icon" type="image/png" href="https://cdn-icons-png.flaticon.com/128/12886/12886027.png">
+<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/128/12886/12886027.png">
+<meta name="description" content="Bài kiểm tra TOEIC Reading Part 5 &amp; 6 mô phỏng — 50 câu, 60 phút, có chấm điểm và lưu lịch sử.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TOEIC Practice — Bài thi mô phỏng">
+<meta property="og:description" content="Bài kiểm tra TOEIC Reading Part 5 &amp; 6 mô phỏng — 50 câu, 60 phút, có chấm điểm và lưu lịch sử.">
+<meta property="og:image" content="https://cdn-icons-png.flaticon.com/128/12886/12886027.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TOEIC Practice — Bài thi mô phỏng">
+<meta name="twitter:description" content="Bài kiểm tra TOEIC Reading Part 5 &amp; 6 mô phỏng — 50 câu, 60 phút, có chấm điểm và lưu lịch sử.">
+<meta name="twitter:image" content="https://cdn-icons-png.flaticon.com/128/12886/12886027.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E8EEF2;
+  --paper-card:#FFFFFF;
+  --ink:#16233A;
+  --ink-soft:#4A5A72;
+  --rule:#C7D2DC;
+  --navy:#1B3A6B;
+  --navy-deep:#0E1E36;
+  --stamp-red:#B23A32;
+  --gold:#F6C445;
+  --highlight:#FFE066;
+  --underline-c:#1F8A70;
+  --correct:#22823E;
+  --wrong:#C43D3D;
+  --shadow:0 1px 2px rgba(14,30,54,.06),0 8px 24px rgba(14,30,54,.08);
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--navy-deep);
+  color:var(--ink);
+  -webkit-tap-highlight-color:transparent;
+}
+::selection{background:var(--highlight);color:var(--ink);}
+.mono{font-family:'JetBrains Mono',monospace;}
+.serif{font-family:'Source Serif 4',serif;}
+
+/* ---------- disable copy affordances visually (selection allowed for highlight tool) ---------- */
+.no-select{-webkit-user-select:none;user-select:none;}
+
+/* ---------- App shell ---------- */
+#app{min-height:100vh;display:flex;flex-direction:column;}
+
+/* ================= START SCREEN ================= */
+.start-wrap{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:32px 16px;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(246,196,69,.08), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(31,138,112,.10), transparent 45%),
+    var(--navy-deep);
+}
+.start-card{
+  width:100%;max-width:480px;background:var(--paper-card);border-radius:20px;
+  box-shadow:var(--shadow);overflow:hidden;border:1px solid rgba(22,35,58,.06);
+}
+.start-head{
+  background:var(--navy);color:#fff;padding:28px 28px 22px;position:relative;
+  background-image:repeating-linear-gradient(115deg, rgba(255,255,255,.035) 0 2px, transparent 2px 26px);
+}
+.start-head .eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);margin:0 0 8px;
+}
+.start-head h1{font-family:'Source Serif 4',serif;font-size:26px;line-height:1.25;margin:0 0 6px;font-weight:700;}
+.start-head p{margin:0;font-size:13.5px;color:#C7D5EA;}
+.start-body{padding:26px 28px 28px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;letter-spacing:.01em;}
+.field input[type=text]{
+  width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid var(--rule);
+  font-size:15px;font-family:inherit;color:var(--ink);background:#FBFCFD;transition:border-color .15s;
+}
+.field input[type=text]:focus{outline:none;border-color:var(--navy);background:#fff;}
+.meta-row{display:flex;gap:10px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-soft);
+  background:#F2F5F7;border-radius:10px;padding:10px 12px;margin-bottom:18px;flex-wrap:wrap;}
+.meta-row span{white-space:nowrap;}
+.meta-row b{color:var(--ink);}
+.confirm-row{display:flex;gap:10px;align-items:flex-start;background:#FDF7E7;border:1px solid #F0DFA6;
+  border-radius:10px;padding:12px 14px;margin-bottom:20px;}
+.confirm-row input{margin-top:3px;accent-color:var(--navy);width:16px;height:16px;flex-shrink:0;}
+.confirm-row label{font-size:13px;line-height:1.5;color:#6b5a1f;}
+.btn{
+  appearance:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;
+  border-radius:11px;padding:13px 22px;font-size:15px;letter-spacing:.01em;transition:transform .1s,box-shadow .15s,opacity .15s;
+}
+.btn:active{transform:scale(.98);}
+.btn-primary{background:var(--navy);color:#fff;width:100%;box-shadow:0 4px 14px rgba(27,58,107,.35);}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--rule);width:100%;margin-top:10px;}
+.err-msg{color:var(--wrong);font-size:12.5px;margin-top:6px;min-height:16px;}
+
+/* ================= EXAM SCREEN ================= */
+#screen-exam{display:none;flex:1;flex-direction:column;min-height:100vh;background:var(--paper);}
+.exam-topbar{position:sticky;top:0;z-index:30;flex-shrink:0;}
+.exam-header{
+  background:var(--navy-deep);color:#fff;display:flex;align-items:center;gap:14px;
+  padding:10px 18px;flex-shrink:0;border-bottom:2px solid var(--gold);
+  box-shadow:0 2px 10px rgba(0,0,0,.25);z-index:20;
+}
+.exam-header .brand{font-family:'Source Serif 4',serif;font-weight:700;font-size:15px;white-space:nowrap;}
+.exam-header .brand small{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:400;color:#9DAFC8;letter-spacing:.06em;}
+.student-chip{
+  font-size:12px;background:rgba(255,255,255,.08);padding:6px 12px;border-radius:20px;
+  color:#DCE6F4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px;
+}
+.progress-wrap{flex:1;min-width:60px;}
+.progress-track{height:6px;background:rgba(255,255,255,.15);border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--gold);width:0%;transition:width .25s;}
+.progress-label{font-size:10.5px;color:#9DAFC8;margin-top:3px;font-family:'JetBrains Mono',monospace;}
+.timer-chip{
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:18px;letter-spacing:.03em;
+  background:var(--navy);border:1.5px solid #2C4A7C;border-radius:10px;padding:6px 14px;
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.timer-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+.timer-chip.warn{background:#3A2418;border-color:var(--stamp-red);}
+.timer-chip.warn .dot{background:var(--stamp-red);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+.submit-btn-top{
+  background:var(--gold);color:#3A2A05;border:none;padding:8px 16px;border-radius:9px;
+  font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;flex-shrink:0;
+}
+
+.exam-body{flex:1;display:flex;align-items:flex-start;}
+.exam-pane{
+  flex:1 1 62%;padding:26px 30px 90px;
+}
+.tool-pane{
+  flex:0 0 340px;max-width:340px;background:#F3F0E7;border-left:2px solid var(--rule);
+  padding:18px 18px 30px;
+  position:sticky;top:var(--topbar-h,64px);
+  max-height:calc(100vh - var(--topbar-h,64px));overflow-y:auto;
+}
+.part-title{
+  font-family:'Source Serif 4',serif;font-weight:700;font-size:20px;color:var(--navy);
+  margin:26px 0 6px;padding-bottom:8px;border-bottom:2.5px solid var(--navy);
+  display:flex;align-items:baseline;gap:10px;
+}
+.part-title:first-child{margin-top:0;}
+.part-title .tag{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--navy);color:#fff;padding:3px 8px;border-radius:5px;font-weight:600;}
+.part-sub{font-size:12.5px;color:var(--ink-soft);margin:0 0 18px;font-style:italic;}
+.passage-box{
+  background:#fff;border:1px solid var(--rule);border-left:4px solid var(--navy);border-radius:8px;
+  padding:16px 18px;margin:14px 0 20px;font-family:'Source Serif 4',serif;font-size:15px;line-height:1.7;
+  white-space:pre-wrap;color:var(--ink);
+}
+.q-block{
+  background:var(--paper-card);border-radius:12px;padding:18px 20px 16px;margin-bottom:14px;
+  border:1px solid rgba(22,35,58,.08);scroll-margin-top:calc(var(--topbar-h,64px) + 16px);
+}
+.q-block.answered{border-left:4px solid var(--underline-c);}
+.q-num{
+  font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--navy);font-size:13px;
+  display:inline-block;margin-bottom:6px;
+}
+.q-stem{font-family:'Source Serif 4',serif;font-size:16px;line-height:1.6;margin:0 0 14px;color:var(--ink);}
+.q-options{display:flex;flex-direction:column;gap:9px;}
+.opt{
+  display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:9px;cursor:pointer;
+  border:1.5px solid transparent;transition:background .12s,border-color .12s;
+}
+.opt:hover{background:#F3F6F8;}
+.opt input{display:none;}
+.opt .bubble{
+  width:26px;height:26px;border-radius:50%;border:2px solid var(--ink-soft);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;
+  font-weight:700;font-size:12px;color:var(--ink-soft);transition:all .12s;
+}
+.opt input:checked ~ .bubble{background:var(--navy);border-color:var(--navy);color:#fff;}
+.opt input:checked ~ .otext{color:var(--navy);font-weight:600;}
+.opt.selected{background:#EAF0FA;border-color:#BFD1EC;}
+.otext{font-size:14.5px;color:var(--ink);}
+
+mark.user-mark{background:var(--highlight);padding:0 1px;border-radius:2px;}
+u.user-underline{text-decoration:underline;text-decoration-color:var(--underline-c);text-decoration-thickness:2.5px;text-underline-offset:2px;}
+
+/* ---- tool pane ---- */
+.tool-title{font-family:'Source Serif 4',serif;font-weight:700;font-size:15px;color:var(--navy);margin:0 0 4px;}
+.tool-sub{font-size:11.5px;color:var(--ink-soft);margin:0 0 12px;}
+.tool-card{background:#fff;border-radius:12px;padding:14px 15px;margin-bottom:14px;border:1px solid var(--rule);}
+.mark-btns{display:flex;gap:8px;margin-bottom:8px;}
+.mark-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;
+  border-radius:9px;border:1.5px solid var(--rule);background:#FAFBFC;cursor:pointer;font-size:11px;
+  font-weight:600;color:var(--ink-soft);
+}
+.mark-btn .ic{font-size:16px;}
+.mark-btn.hl .ic{color:#B8931E;}
+.mark-btn.ul .ic{color:var(--underline-c);}
+.mark-btn.clear .ic{color:var(--wrong);}
+.mark-hint{font-size:11px;color:var(--ink-soft);line-height:1.5;margin:0;}
+textarea#notes{
+  width:100%;min-height:130px;border:1.5px solid var(--rule);border-radius:9px;padding:10px 12px;
+  font-family:'Inter',sans-serif;font-size:13px;resize:vertical;color:var(--ink);background:#FAFBFC;
+}
+textarea#notes:focus{outline:none;border-color:var(--navy);background:#fff;}
+.nav-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;}
+.nav-cell{
+  aspect-ratio:1;border-radius:6px;border:1.5px solid var(--rule);background:#fff;font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:600;color:var(--ink-soft);cursor:pointer;display:flex;align-items:center;justify-content:center;
+}
+.nav-cell.done{background:var(--underline-c);border-color:var(--underline-c);color:#fff;}
+
+.mobile-tabs{display:none;}
+.exam-footer{display:none;}
+
+/* ================= RESULT / HISTORY ================= */
+.page-wrap{flex:1;display:none;padding:24px 16px 60px;background:var(--paper);min-height:100vh;}
+.page-inner{max-width:880px;margin:0 auto;}
+.score-hero{
+  background:var(--navy);color:#fff;border-radius:20px;padding:30px 28px;margin-bottom:22px;
+  display:flex;align-items:center;gap:26px;flex-wrap:wrap;box-shadow:var(--shadow);
+  background-image:repeating-linear-gradient(115deg, rgba(255,255,255,.03) 0 2px, transparent 2px 26px);
+}
+.score-num{font-family:'JetBrains Mono',monospace;font-size:56px;font-weight:700;line-height:1;color:var(--gold);}
+.score-num span{font-size:22px;color:#C7D5EA;}
+.score-meta{flex:1;min-width:200px;}
+.score-meta h2{font-family:'Source Serif 4',serif;margin:0 0 6px;font-size:20px;}
+.score-meta p{margin:2px 0;font-size:13px;color:#C7D5EA;}
+.stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px;}
+.stat-card{flex:1;min-width:120px;background:#fff;border-radius:12px;padding:14px 16px;border:1px solid var(--rule);text-align:center;}
+.stat-card .n{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;}
+.stat-card .l{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+.stat-card.c .n{color:var(--correct);}
+.stat-card.w .n{color:var(--wrong);}
+.section-h{font-family:'Source Serif 4',serif;font-size:19px;font-weight:700;color:var(--navy);margin:26px 0 12px;}
+.review-item{background:#fff;border-radius:12px;padding:16px 18px;margin-bottom:10px;border-left:5px solid var(--rule);border:1px solid var(--rule);}
+.review-item.wrong{border-left-color:var(--wrong);}
+.review-item.correct{border-left-color:var(--correct);}
+.review-item .rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.review-item .rh .qn{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--navy);}
+.badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.02em;}
+.badge.correct{background:#E3F3E6;color:var(--correct);}
+.badge.wrong{background:#FBE7E5;color:var(--wrong);}
+.review-item .stem{font-family:'Source Serif 4',serif;font-size:14.5px;margin:0 0 8px;color:var(--ink);}
+.ans-line{font-size:13px;margin:3px 0;}
+.ans-line b{font-family:'JetBrains Mono',monospace;}
+.ans-line.your.bad b{color:var(--wrong);}
+.ans-line.your.good b{color:var(--correct);}
+.ans-line.correctans b{color:var(--correct);}
+.explain-box{margin-top:8px;background:#F6F4EC;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.55;color:#4A4326;}
+.top-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+.btn-sm{padding:9px 16px;font-size:13px;border-radius:9px;}
+.btn-outline{background:#fff;color:var(--navy);border:1.5px solid var(--navy);}
+.filter-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:13px;color:var(--ink-soft);}
+.filter-row input{accent-color:var(--navy);width:16px;height:16px;}
+table.history{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--rule);}
+table.history th{background:var(--navy);color:#fff;text-align:left;padding:10px 12px;font-size:11.5px;letter-spacing:.03em;text-transform:uppercase;font-weight:600;}
+table.history td{padding:10px 12px;font-size:13.5px;border-bottom:1px solid #EEF1F4;}
+table.history tr:last-child td{border-bottom:none;}
+table.history tr:hover td{background:#F7F9FB;}
+.rank-me{background:#FDF6E3 !important;}
+.empty-note{text-align:center;color:var(--ink-soft);font-size:13.5px;padding:30px 0;}
+.loading-note{text-align:center;color:var(--ink-soft);font-size:13px;padding:18px 0;font-family:'JetBrains Mono',monospace;}
+
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy-deep);color:#fff;
+  padding:11px 20px;border-radius:10px;font-size:13px;box-shadow:var(--shadow);z-index:200;
+  opacity:0;pointer-events:none;transition:opacity .25s, bottom .25s;
+}
+.toast.show{opacity:1;bottom:34px;}
+
+/* ============== RESPONSIVE ============== */
+.tool-pane-handle{display:none;}
+@media (max-width:880px){
+  .exam-body{flex-direction:column;position:relative;align-items:stretch;}
+  .exam-pane{flex:1 1 auto;padding:16px 14px 90px;}
+  .tool-pane{
+    position:fixed;left:0;right:0;bottom:0;top:auto;height:66vh;max-height:none;max-width:none;width:100%;
+    border-left:none;border-top:2px solid var(--rule);border-radius:18px 18px 0 0;
+    box-shadow:0 -10px 28px rgba(14,30,54,.28);transform:translateY(102%);
+    transition:transform .28s ease;z-index:60;
+  }
+  .tool-pane.open{transform:translateY(0);}
+  .tool-pane-handle{display:flex;justify-content:center;padding:6px 0 6px;}
+  .tool-pane-handle span{width:38px;height:4px;border-radius:3px;background:var(--rule);}
+  .mobile-tabs{display:flex;background:#fff;border-bottom:1px solid var(--rule);flex-shrink:0;}
+  .mobile-tabs button{flex:1;padding:11px 0;background:none;border:none;font-weight:700;font-size:13px;color:var(--ink-soft);border-bottom:3px solid transparent;font-family:'Inter',sans-serif;}
+  .mobile-tabs button.active{color:var(--navy);border-color:var(--navy);}
+  .exam-header{padding:8px 12px;gap:8px;flex-wrap:wrap;}
+  .exam-header .brand{font-size:13px;}
+  .progress-wrap{order:5;flex-basis:100%;}
+  .submit-btn-top{padding:7px 12px;font-size:12px;}
+  .timer-chip{font-size:15px;padding:5px 10px;}
+  .score-num{font-size:42px;}
+  .score-hero{padding:22px 18px;}
+}
+@media (max-width:520px){
+  .nav-grid{grid-template-columns:repeat(6,1fr);}
+  table.history{font-size:12px;}
+  table.history th,table.history td{padding:8px 6px;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ START SCREEN ============ -->
+  <div class="start-wrap" id="screen-start">
+    <div class="start-card">
+      <div class="start-head">
+        <p class="eyebrow">TOEIC · Practice Test</p>
+        <h1>BÀI KIỂM TRA TOEIC<br>Reading — Part 5 &amp; 6</h1>
+        <p>50 câu · 60 phút làm bài · Nộp bài tự động khi hết giờ</p>
+      </div>
+      <div class="start-body">
+        <div class="field">
+          <label for="input-name">Họ và tên học sinh</label>
+          <input type="text" id="input-name" placeholder="Nguyễn Văn A" maxlength="60" autocomplete="off">
+          <div class="err-msg" id="name-err"></div>
+        </div>
+        <div class="meta-row">
+          <span>⏱ <b>60:00</b> phút</span>
+          <span>📝 <b>50</b> câu hỏi</span>
+          <span>🔒 Không copy/paste</span>
+        </div>
+        <div class="confirm-row">
+          <input type="checkbox" id="input-confirm">
+          <label for="input-confirm">Tôi xác nhận sẽ tự làm bài nghiêm túc, không sử dụng tài liệu hỗ trợ, và hiểu rằng bài thi sẽ tự nộp khi hết 60 phút.</label>
+        </div>
+        <button class="btn btn-primary" id="btn-start" disabled>Bắt đầu làm bài</button>
+        <button class="btn btn-ghost" id="btn-view-history">Xem lịch sử &amp; điểm số</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ EXAM SCREEN ============ -->
+  <div id="screen-exam">
+    <div class="exam-topbar">
+      <div class="exam-header">
+        <div class="brand">TOEIC Test<small>PART 5–6 · READING</small></div>
+        <div class="student-chip no-select" id="header-student-name"></div>
+        <div class="progress-wrap no-select">
+          <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+          <div class="progress-label"><span id="progress-label">0/50 đã trả lời</span></div>
+        </div>
+        <div class="timer-chip" id="timer-chip"><span class="dot"></span><span id="timer-text">60:00</span></div>
+        <button class="submit-btn-top" id="btn-submit-top">Nộp bài</button>
+      </div>
+
+      <div class="mobile-tabs">
+        <button class="active" id="tab-exam">📝 Đề thi</button>
+        <button id="tab-tools">🛠 Công cụ &amp; ghi chú</button>
+      </div>
+    </div>
+
+    <div class="exam-body">
+      <div class="exam-pane" id="exam-pane"></div>
+      <div class="tool-pane" id="tool-pane">
+        <div class="tool-pane-handle"><span></span></div>
+        <div class="tool-title">Công cụ đánh dấu</div>
+        <p class="tool-sub">Bôi đen (chọn) một đoạn văn bản trong đề thi, rồi bấm nút bên dưới.</p>
+        <div class="tool-card">
+          <div class="mark-btns">
+            <button class="mark-btn hl" id="btn-highlight" type="button"><span class="ic">🖍️</span>Highlight</button>
+            <button class="mark-btn ul" id="btn-underline" type="button"><span class="ic">🖊️</span>Gạch chân</button>
+            <button class="mark-btn clear" id="btn-clear-marks" type="button"><span class="ic">✕</span>Xoá đánh dấu</button>
+          </div>
+          <p class="mark-hint">Mẹo: chọn từ khoá quan trọng trong câu hỏi để dễ dàng rà soát lại trước khi nộp bài.</p>
+        </div>
+        <div class="tool-title" style="margin-top:4px;">Ghi chú cá nhân</div>
+        <div class="tool-card">
+          <textarea id="notes" placeholder="Ghi chú của bạn ở đây... (không lưu vào hệ thống, chỉ dùng khi làm bài)"></textarea>
+        </div>
+        <div class="tool-title">Bảng câu hỏi</div>
+        <div class="tool-card">
+          <div class="nav-grid" id="nav-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RESULT SCREEN ============ -->
+  <div class="page-wrap" id="screen-result">
+    <div class="page-inner">
+      <div class="top-actions">
+        <button class="btn btn-sm btn-outline" id="result-view-history">Xem lịch sử tất cả học sinh</button>
+        <button class="btn btn-sm btn-outline" id="result-retake">Làm lại bài thi khác</button>
+      </div>
+      <div class="score-hero">
+        <div class="score-num" id="result-score">0<span>/50</span></div>
+        <div class="score-meta">
+          <h2 id="result-name">—</h2>
+          <p id="result-percent">0%</p>
+          <p id="result-time">Thời gian làm bài: —</p>
+          <p id="result-flag" style="display:none;color:#F6C445;font-weight:700;">⏰ Bài đã tự động nộp khi hết giờ</p>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card c"><div class="n" id="stat-correct">0</div><div class="l">Câu đúng</div></div>
+        <div class="stat-card w"><div class="n" id="stat-wrong">0</div><div class="l">Câu sai</div></div>
+        <div class="stat-card"><div class="n" id="stat-blank">0</div><div class="l">Bỏ trống</div></div>
+      </div>
+      <div class="section-h">Chi tiết bài làm — 50 câu</div>
+      <div id="review-all"></div>
+    </div>
+  </div>
+
+  <!-- ============ HISTORY SCREEN ============ -->
+  <div class="page-wrap" id="screen-history">
+    <div class="page-inner">
+      <div class="top-actions">
+        <button class="btn btn-sm btn-outline" id="history-back">← Quay lại</button>
+        <button class="btn btn-sm btn-outline" id="history-refresh">↻ Tải lại</button>
+      </div>
+      <div class="section-h" style="margin-top:6px;">Lịch sử &amp; điểm số</div>
+      <div class="filter-row">
+        <input type="checkbox" id="filter-mine">
+        <label for="filter-mine">Chỉ hiển thị bài của tôi</label>
+      </div>
+      <div id="history-content"><div class="loading-note">Đang tải dữ liệu...</div></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "part": 5, "passage": null, "stem": "The chief ________ is reviewing the financial statements in his office right now.", "options": ["accountant", "technician", "founder", "intern"], "correct": 0, "explain": "Kế toán trưởng (chief accountant) đang xem xét các báo cáo tài chính trong văn phòng của ông ấy ngay lúc này."}, {"id": 2, "part": 5, "passage": null, "stem": "An authorized ________ from our firm will meet with the client this afternoon.", "options": ["supervisor", "representative", "operator", "bellhop"], "correct": 1, "explain": "Đại diện được ủy quyền (authorized representative) từ công ty chúng tôi sẽ gặp khách hàng vào chiều nay."}, {"id": 3, "part": 5, "passage": null, "stem": "Please call the computer ________ to fix the broken printer in room 302.", "options": ["contractor", "vendor", "candidate", "technician"], "correct": 3, "explain": "Vui lòng gọi kỹ thuật viên máy tính (computer technician) đến sửa máy in bị hỏng ở phòng 302."}, {"id": 4, "part": 5, "passage": null, "stem": "The company hired an independent ________ to renovate (sửa chữa) the main office lobby.", "options": ["colleague", "assistant", "client", "contractor"], "correct": 3, "explain": "Công ty đã thuê một nhà thầu (contractor) độc lập để cải tạo sảnh chính của văn phòng."}, {"id": 5, "part": 5, "passage": null, "stem": "We are speaking with a marketing ________ to improve our advertising strategy (phương pháp quảng cáo).", "options": ["operator", "inspector", "consultant", "bellhop"], "correct": 2, "explain": "Chúng tôi đang thảo luận với một tư vấn viên (consultant) marketing để cải thiện chiến lược quảng cáo."}, {"id": 6, "part": 5, "passage": null, "stem": "The marketing ________ will present the new branding strategy to the board (hội đồng).", "options": ["executive", "vacancy", "departure", "deposit"], "correct": 0, "explain": "Giám đốc/chuyên viên quản lý (executive) marketing sẽ trình bày chiến lược thương hiệu mới cho hội đồng."}, {"id": 7, "part": 5, "passage": null, "stem": "The board of ________ is voting on the budget proposal (dự toán ngân sách) at this moment.", "options": ["directors", "candidates", "itineraries", "terminals"], "correct": 0, "explain": "Hội đồng quản trị (board of directors) đang bỏ phiếu về đề xuất ngân sách ngay lúc này."}, {"id": 8, "part": 5, "passage": null, "stem": "The purchasing manager is negotiating (đàm phán) a supply contract with our primary paper ________.", "options": ["intern", "vendor", "suite", "gate"], "correct": 1, "explain": "Trưởng phòng mua hàng đang đàm phán hợp đồng cung ứng với nhà cung cấp (vendor) giấy chính của chúng tôi."}, {"id": 9, "part": 5, "passage": null, "stem": "A safety ________ is checking the emergency exits in the factory today.", "options": ["colleague", "assistant", "inspector", "founder"], "correct": 2, "explain": "Thanh tra/kiểm tra viên (inspector) an toàn đang kiểm tra các lối thoát hiểm trong nhà máy hôm nay."}, {"id": 10, "part": 5, "passage": null, "stem": "The new ________ is making copies of the meeting agenda (nội dung cuộc họp) in the supply room.", "options": ["intern", "executive", "supervisor", "contractor"], "correct": 0, "explain": "Thực tập sinh (intern) mới đang photo chương trình họp trong phòng vật tư."}, {"id": 11, "part": 5, "passage": null, "stem": "The administrative (hành chính) ________ is organizing (sắp xếp) the file cabinet drawers this morning.", "options": ["director", "representative", "technician", "assistant"], "correct": 3, "explain": "Trợ lý (assistant) hành chính đang sắp xếp các ngăn kéo tủ tài liệu sáng nay."}, {"id": 12, "part": 5, "passage": null, "stem": "Your immediate ________ is going to evaluate (đánh giá) your performance at work this week.", "options": ["client", "supervisor", "candidate", "vendor"], "correct": 1, "explain": "Người giám sát (supervisor) trực tiếp của bạn sẽ đánh giá hiệu suất làm việc của bạn trong tuần này."}, {"id": 13, "part": 5, "passage": null, "stem": "Our sales team is meeting with a prospective (tiềm năng) ________ at a local restaurant today.", "options": ["departure", "terminal", "itinerary", "client"], "correct": 3, "explain": "Đội ngũ bán hàng của chúng tôi đang gặp gỡ một khách hàng (client) tiềm năng tại một nhà hàng địa phương hôm nay."}, {"id": 14, "part": 5, "passage": null, "stem": "She is discussing the project schedule with her ________ in the conference room.", "options": ["deposits", "vacancies", "colleagues", "amenities"], "correct": 2, "explain": "Cô ấy đang thảo luận về tiến độ dự án với các đồng nghiệp (colleagues) trong phòng họp."}, {"id": 15, "part": 5, "passage": null, "stem": "The ________ of the technology startup (công ty khởi nghiệp về công nghệ) is speaking at the conference center today.", "options": ["founder", "technician", "bellhop", "operator"], "correct": 0, "explain": "Nhà sáng lập (founder) của công ty khởi nghiệp công nghệ đang phát biểu tại trung tâm hội nghị hôm nay."}, {"id": 16, "part": 5, "passage": null, "stem": "Our primary manufacturing ________ is shipping raw materials via air freight.", "options": ["supplier", "suite", "visa", "passport"], "correct": 0, "explain": "Nhà cung cấp (supplier) sản xuất chính của chúng tôi đang vận chuyển nguyên liệu thô qua đường hàng không."}, {"id": 17, "part": 5, "passage": null, "stem": "The factory machine ________ is wearing safety equipment (đồ bảo hộ) while working.", "options": ["consultant", "operator", "representative", "director"], "correct": 1, "explain": "Người vận hành (operator) máy móc nhà máy đang mặc đồ bảo hộ trong lúc làm việc."}, {"id": 18, "part": 5, "passage": null, "stem": "The network ________ is upgrading the company's internal security database (bảo mật dữ liệu nội bộ) today.", "options": ["administrator", "candidate", "intern", "contractor"], "correct": 0, "explain": "Quản trị viên (administrator) mạng đang nâng cấp cơ sở dữ liệu bảo mật nội bộ của công ty hôm nay."}, {"id": 19, "part": 5, "passage": null, "stem": "Human resources is interviewing (phỏng vấn) three qualified ________ for the new manager position.", "options": ["arrivals", "terminals", "itineraries", "candidates"], "correct": 3, "explain": "Bộ phận nhân sự đang phỏng vấn ba ứng viên (candidates) đủ năng lực cho vị trí quản lý mới."}, {"id": 20, "part": 5, "passage": null, "stem": "Only authorized (được cấp quyền) ________ are permitted (được phép) to enter the server room on the ground floor.", "options": ["personnel", "luggage", "amenities", "departures"], "correct": 0, "explain": "Chỉ nhân sự (personnel) được cấp quyền mới được phép vào phòng máy chủ ở tầng trệt."}, {"id": 21, "part": 5, "passage": null, "stem": "Mr. Miller usually ________ at 8:00 AM every morning.", "options": ["files paperwork", "checks email", "arrives at work", "prints documents"], "correct": 2, "explain": "Ông Miller thường đến nơi làm việc (arrives at work) lúc 8:00 sáng mỗi ngày."}, {"id": 22, "part": 5, "passage": null, "stem": "Before starting her tasks, the secretary needs to ________ to see if there are new messages.", "options": ["check email", "attend a meeting", "serve", "work overtime"], "correct": 0, "explain": "Trước khi bắt đầu công việc, thư ký cần kiểm tra email (check email) để xem có tin nhắn mới không."}, {"id": 23, "part": 5, "passage": null, "stem": "Please ________ from Mr. Smith as soon as possible because it is urgent (khẩn cấp/gấp).", "options": ["file paperwork", "print documents", "reply to emails", "solve a problem"], "correct": 2, "explain": "Vui lòng phản hồi email (reply to emails) từ ông Smith càng sớm càng tốt vì việc này rất khẩn cấp."}, {"id": 24, "part": 5, "passage": null, "stem": "I need to ________ to the client to confirm the details of our agreement (thỏa thuận).", "options": ["submit a report", "take notes", "receive an order", "make a phone call"], "correct": 3, "explain": "Tôi cần gọi một cuộc điện thoại (make a phone call) cho khách hàng để xác nhận các chi tiết của thỏa thuận."}, {"id": 25, "part": 5, "passage": null, "stem": "The receptionist was busy, so she could not ________ when it rang.", "options": ["answer the phone", "finish a project", "send a package", "review documents"], "correct": 0, "explain": "Nhân viên lễ tân bận nên cô ấy không thể nghe điện thoại (answer the phone) khi nó reo."}, {"id": 26, "part": 5, "passage": null, "stem": "You should ________ with the doctor before going to the clinic.", "options": ["serve", "work overtime", "schedule an appointment", "file paperwork"], "correct": 2, "explain": "Bạn nên đặt lịch hẹn (schedule an appointment) với bác sĩ trước khi đến phòng khám."}, {"id": 27, "part": 5, "passage": null, "stem": "All team members must ________ in Room B at 10:00 AM.", "options": ["attend a meeting", "arrive at work", "make copies", "reply to emails"], "correct": 0, "explain": "Tất cả các thành viên trong đội phải tham dự cuộc họp (attend a meeting) tại Phòng B lúc 10:00 sáng."}, {"id": 28, "part": 5, "passage": null, "stem": "Please ________ during the lecture (bài giảng) so you don't forget the main points.", "options": ["solve a problem", "send a package", "take notes", "check email"], "correct": 2, "explain": "Vui lòng ghi chú (take notes) trong bài giảng để không quên các ý chính."}, {"id": 29, "part": 5, "passage": null, "stem": "The manager asked me to ________ about our monthly sales figures.", "options": ["answer the phone", "prepare a report", "serve", "make a phone call"], "correct": 1, "explain": "Quản lý bảo tôi chuẩn bị một báo cáo (prepare a report) về doanh số hàng tháng của chúng tôi."}, {"id": 30, "part": 5, "passage": null, "stem": "Employees must ________ a report to their supervisor by Friday afternoon.", "options": ["work", "schedule", "submit", "arrive"], "correct": 2, "explain": "Nhân viên phải nộp (submit) báo cáo cho người giám sát trước chiều thứ Sáu."}, {"id": 31, "part": 5, "passage": null, "stem": "The lawyer needs time to ________ before signing the contract (ký hợp đồng).", "options": ["review documents", "make copies", "receive an order", "attend a meeting"], "correct": 0, "explain": "Luật sư cần thời gian để xem xét tài liệu (review documents) trước khi ký hợp đồng."}, {"id": 32, "part": 5, "passage": null, "stem": "After the meeting, please ________ in the cabinet in alphabetical order (theo thứ tự ABC).", "options": ["answer the phone", "solve a problem", "take notes", "file paperwork"], "correct": 3, "explain": "Sau cuộc họp, vui lòng lưu trữ/sắp xếp hồ sơ (file paperwork) trong tủ theo thứ tự bảng chữ cái."}, {"id": 33, "part": 5, "passage": null, "stem": "Can you please ________ for the attendees (người tham dự) of the seminar (hội thảo)?", "options": ["print documents", "reply to emails", "work overtime", "arrive at work"], "correct": 0, "explain": "Bạn có thể in tài liệu (print documents) cho những người tham dự buổi hội thảo được không?"}, {"id": 34, "part": 5, "passage": null, "stem": "I need to ________ of this invoice (hóa đơn) for our financial records.", "options": ["solve a problem", "schedule an appointment", "make copies", "submit a report"], "correct": 2, "explain": "Tôi cần sao chép/photocopy (make copies) hóa đơn này cho hồ sơ tài chính của chúng tôi."}, {"id": 35, "part": 5, "passage": null, "stem": "The mailroom clerk (nhân viên phòng thư) will ________ to our branch office in Chicago.", "options": ["review documents", "check email", "attend a meeting", "send a package"], "correct": 3, "explain": "Nhân viên phòng thư sẽ gửi một kiện hàng/bưu phẩm (send a package) đến chi nhánh của chúng tôi ở Chicago."}, {"id": 36, "part": 5, "passage": null, "stem": "The factory hopes to ________ for 500 units from the new customer today.", "options": ["file paperwork", "receive an order", "make a phone call", "prepare a report"], "correct": 1, "explain": "Nhà máy hy vọng sẽ nhận được đơn hàng (receive an order) 500 sản phẩm từ khách hàng mới hôm nay."}, {"id": 37, "part": 5, "passage": null, "stem": "Waiters in this restaurant always ________ customers with a friendly smile.", "options": ["serve", "print documents", "submit a report", "schedule an appointment"], "correct": 0, "explain": "Nhân viên phục vụ ở nhà hàng này luôn phục vụ (serve) khách hàng với nụ cười thân thiện."}, {"id": 38, "part": 5, "passage": null, "stem": "The technical support team worked hard to ________ with the software.", "options": ["take notes", "make copies", "answer the phone", "solve a problem"], "correct": 3, "explain": "Đội ngũ hỗ trợ kỹ thuật đã làm việc chăm chỉ để giải quyết sự cố/vấn đề (solve a problem) với phần mềm."}, {"id": 39, "part": 5, "passage": null, "stem": "We need to ________ before the end of this month to meet the deadline.", "options": ["reply to emails", "finish a project", "receive an order", "check email"], "correct": 1, "explain": "Chúng tôi cần hoàn thành dự án (finish a project) trước cuối tháng này để kịp thời hạn."}, {"id": 40, "part": 5, "passage": null, "stem": "Staff members had to ________ until 11:00 p.m last night to prepare for today's presentation.", "options": ["send a package", "file paperwork", "work overtime", "print documents"], "correct": 2, "explain": "Nhân viên đã phải làm thêm giờ (work overtime) đến 11:00 đêm qua để chuẩn bị cho buổi thuyết trình hôm nay."}, {"id": 41, "part": 6, "passage": "To: All Employees\nFrom: Travel Department\nSubject: Upcoming Trip to Tokyo\n\nDear Team,\n\nMr. Binh will go on an urgent (41) ________ to Tokyo next week to meet with new partners. Please review the travel (42) ________ attached to this email to see his daily schedules and meeting details. We have already completed his hotel (43) ________ at the Grand Hotel.", "blank_no": 41, "stem": "(41)", "options": ["business trip", "boarding pass", "baggage claim", "flight delay"], "correct": 0, "explain": "\"Mr. Binh will go on an urgent business trip to Tokyo...\" — Ông Bình sẽ đi công tác gấp tới Tokyo..."}, {"id": 42, "part": 6, "passage": "To: All Employees\nFrom: Travel Department\nSubject: Upcoming Trip to Tokyo\n\nDear Team,\n\nMr. Binh will go on an urgent (41) ________ to Tokyo next week to meet with new partners. Please review the travel (42) ________ attached to this email to see his daily schedules and meeting details. We have already completed his hotel (43) ________ at the Grand Hotel.", "blank_no": 42, "stem": "(42)", "options": ["terminal", "itinerary", "deposit", "bellhop"], "correct": 1, "explain": "\"...review the travel itinerary attached to this email...\" — ...xem lịch trình chuyến đi được gắn kèm email này..."}, {"id": 43, "part": 6, "passage": "To: All Employees\nFrom: Travel Department\nSubject: Upcoming Trip to Tokyo\n\nDear Team,\n\nMr. Binh will go on an urgent (41) ________ to Tokyo next week to meet with new partners. Please review the travel (42) ________ attached to this email to see his daily schedules and meeting details. We have already completed his hotel (43) ________ at the Grand Hotel.", "blank_no": 43, "stem": "(43)", "options": ["gate", "passport", "visa", "reservation"], "correct": 3, "explain": "\"...completed his hotel reservation at the Grand Hotel.\" — ...đã hoàn tất việc đặt phòng khách sạn tại Grand Hotel."}, {"id": 44, "part": 6, "passage": "Attention Passengers:\n\nBefore going through airport security, make sure you have your (44) ________ and valid passport ready. If you are traveling internationally, please check if you need an entry (45) ________ for your destination country. Please note that heavy rain has caused a brief (46) ________ for Flight VN123.", "blank_no": 44, "stem": "(44)", "options": ["boarding pass", "arrival", "departure", "suite"], "correct": 0, "explain": "\"...make sure you have your boarding pass and valid passport ready.\" — ...đảm bảo bạn đã chuẩn bị sẵn thẻ lên máy bay và hộ chiếu còn hiệu lực."}, {"id": 45, "part": 6, "passage": "Attention Passengers:\n\nBefore going through airport security, make sure you have your (44) ________ and valid passport ready. If you are traveling internationally, please check if you need an entry (45) ________ for your destination country. Please note that heavy rain has caused a brief (46) ________ for Flight VN123.", "blank_no": 45, "stem": "(45)", "options": ["gate", "terminal", "visa", "luggage"], "correct": 2, "explain": "\"...check if you need an entry visa for your destination country.\" — ...kiểm tra xem bạn có cần thị thực nhập cảnh vào quốc gia điểm đến hay không."}, {"id": 46, "part": 6, "passage": "Attention Passengers:\n\nBefore going through airport security, make sure you have your (44) ________ and valid passport ready. If you are traveling internationally, please check if you need an entry (45) ________ for your destination country. Please note that heavy rain has caused a brief (46) ________ for Flight VN123.", "blank_no": 46, "stem": "(46)", "options": ["travel expense", "flight delay", "front desk", "housekeeping"], "correct": 1, "explain": "\"...heavy rain has caused a brief flight delay for Flight VN123.\" — ...mưa lớn đã gây ra sự chậm chuyến ngắn cho chuyến bay VN123."}, {"id": 47, "part": 6, "passage": "Dear Guest,\n\nWelcome to the Grand Plaza Hotel! We offer excellent (47) ________ for your stay, including free Wi-Fi and access to our swimming pool. Our hotel features modern, (48) ________ rooms with ocean views.\n\nIf you need any help with your luggage upon arrival, our (49) ________ will be happy to assist you in the lobby. Every morning, guests can enjoy a (50) ________ on the second floor from 6:30 AM to 9:30 AM at no extra charge.\n\nEnjoy your stay!", "blank_no": 47, "stem": "(47)", "options": ["accommodation", "amenities", "occupancy", "vacancy"], "correct": 1, "explain": "\"We offer excellent amenities for your stay...\" — Chúng tôi cung cấp các tiện nghi tuyệt vời cho kỳ nghỉ của bạn..."}, {"id": 48, "part": 6, "passage": "Dear Guest,\n\nWelcome to the Grand Plaza Hotel! We offer excellent (47) ________ for your stay, including free Wi-Fi and access to our swimming pool. Our hotel features modern, (48) ________ rooms with ocean views.\n\nIf you need any help with your luggage upon arrival, our (49) ________ will be happy to assist you in the lobby. Every morning, guests can enjoy a (50) ________ on the second floor from 6:30 AM to 9:30 AM at no extra charge.\n\nEnjoy your stay!", "blank_no": 48, "stem": "(48)", "options": ["immediate", "overtime", "authorized", "spacious"], "correct": 3, "explain": "\"...features modern, spacious rooms with ocean views.\" — ...có các phòng hiện đại, rộng rãi hướng ra biển."}, {"id": 49, "part": 6, "passage": "Dear Guest,\n\nWelcome to the Grand Plaza Hotel! We offer excellent (47) ________ for your stay, including free Wi-Fi and access to our swimming pool. Our hotel features modern, (48) ________ rooms with ocean views.\n\nIf you need any help with your luggage upon arrival, our (49) ________ will be happy to assist you in the lobby. Every morning, guests can enjoy a (50) ________ on the second floor from 6:30 AM to 9:30 AM at no extra charge.\n\nEnjoy your stay!", "blank_no": 49, "stem": "(49)", "options": ["bellhop", "consultant", "contractor", "founder"], "correct": 0, "explain": "\"...our bellhop will be happy to assist you in the lobby.\" — ...nhân viên vác hành lý của chúng tôi sẽ rất vui lòng hỗ trợ bạn tại sảnh."}, {"id": 50, "part": 6, "passage": "Dear Guest,\n\nWelcome to the Grand Plaza Hotel! We offer excellent (47) ________ for your stay, including free Wi-Fi and access to our swimming pool. Our hotel features modern, (48) ________ rooms with ocean views.\n\nIf you need any help with your luggage upon arrival, our (49) ________ will be happy to assist you in the lobby. Every morning, guests can enjoy a (50) ________ on the second floor from 6:30 AM to 9:30 AM at no extra charge.\n\nEnjoy your stay!", "blank_no": 50, "stem": "(50)", "options": ["laundry service", "reservation confirmation", "complimentary breakfast", "wake-up call"], "correct": 2, "explain": "\"...guests can enjoy a complimentary breakfast on the second floor...\" — ...khách hàng có thể thưởng thức bữa sáng miễn phí tại tầng hai..."}];
+const DB_URL = "https://gametienganh-9af04-default-rtdb.asia-southeast1.firebasedatabase.app";
+const EXAM_SECONDS = 60 * 60;
+
+let studentName = "";
+let answers = {};      // {qid: optionIndex}
+let examStartTime = null;
+let timeLeft = EXAM_SECONDS;
+let timerInterval = null;
+let submitted = false;
+let autoTimeUp = false;
+let lastSavedRange = null;
+
+const $ = (sel) => document.querySelector(sel);
+const $all = (sel) => Array.from(document.querySelectorAll(sel));
+
+/* ---------------- toast ---------------- */
+let toastTimer = null;
+function toast(msg, ms=2600){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), ms);
+}
+
+/* ---------------- anti copy/paste ---------------- */
+['copy','cut','paste'].forEach(evt=>{
+  document.addEventListener(evt, (e)=>{
+    e.preventDefault();
+    toast('Chức năng copy/paste đã bị vô hiệu hoá trong bài thi.');
+  });
+});
+document.addEventListener('contextmenu', (e)=>{
+  if(e.target.closest('#screen-exam')){ e.preventDefault(); }
+});
+document.addEventListener('dragstart', (e)=> e.preventDefault());
+document.addEventListener('keydown', (e)=>{
+  const k = e.key.toLowerCase();
+  if((e.ctrlKey||e.metaKey) && ['c','x','v','p','s','u'].includes(k)){
+    if(document.getElementById('screen-exam').style.display !== 'none'){
+      e.preventDefault();
+    }
+  }
+});
+
+/* ================= START SCREEN LOGIC ================= */
+const nameInput = $('#input-name');
+const confirmCb = $('#input-confirm');
+const startBtn = $('#btn-start');
+
+function refreshStartBtn(){
+  const ok = nameInput.value.trim().length >= 2 && confirmCb.checked;
+  startBtn.disabled = !ok;
+}
+nameInput.addEventListener('input', refreshStartBtn);
+confirmCb.addEventListener('change', refreshStartBtn);
+
+startBtn.addEventListener('click', ()=>{
+  const name = nameInput.value.trim();
+  if(name.length < 2){ $('#name-err').textContent = 'Vui lòng nhập đầy đủ họ và tên.'; return; }
+  studentName = name;
+  beginExam();
+});
+
+$('#btn-view-history').addEventListener('click', ()=> showHistory());
+
+/* ================= BUILD EXAM DOM ================= */
+function buildExamPane(){
+  const pane = $('#exam-pane');
+  pane.innerHTML = '';
+
+  const p5 = QUESTIONS.filter(q=>q.part===5);
+  const p6 = QUESTIONS.filter(q=>q.part===6);
+
+  // PART 5
+  const h5 = document.createElement('div');
+  h5.className = 'part-title';
+  h5.innerHTML = '<span class="tag">PART 5</span> Incomplete Sentences';
+  pane.appendChild(h5);
+  const s5 = document.createElement('p');
+  s5.className = 'part-sub';
+  s5.textContent = 'Chọn từ/cụm từ (A, B, C, hoặc D) phù hợp nhất để hoàn thành câu.';
+  pane.appendChild(s5);
+  p5.forEach(q=>pane.appendChild(renderQuestion(q)));
+
+  // PART 6 — group by passage
+  const h6 = document.createElement('div');
+  h6.className = 'part-title';
+  h6.innerHTML = '<span class="tag">PART 6</span> Text Completion';
+  pane.appendChild(h6);
+  const s6 = document.createElement('p');
+  s6.className = 'part-sub';
+  s6.textContent = 'Đọc đoạn văn bên dưới và chọn đáp án phù hợp nhất cho mỗi chỗ trống.';
+  pane.appendChild(s6);
+
+  let currentPassage = null;
+  p6.forEach(q=>{
+    if(q.passage !== currentPassage){
+      currentPassage = q.passage;
+      const box = document.createElement('div');
+      box.className = 'passage-box';
+      box.textContent = currentPassage;
+      pane.appendChild(box);
+    }
+    pane.appendChild(renderQuestion(q));
+  });
+}
+
+function renderQuestion(q){
+  const block = document.createElement('div');
+  block.className = 'q-block';
+  block.id = 'q-' + q.id;
+
+  const num = document.createElement('div');
+  num.className = 'q-num';
+  num.textContent = 'Câu ' + q.id;
+  block.appendChild(num);
+
+  const stem = document.createElement('p');
+  stem.className = 'q-stem';
+  stem.textContent = q.stem;
+  block.appendChild(stem);
+
+  const opts = document.createElement('div');
+  opts.className = 'q-options';
+  const letters = ['A','B','C','D'];
+  q.options.forEach((optText, idx)=>{
+    const lbl = document.createElement('label');
+    lbl.className = 'opt';
+    lbl.innerHTML = `
+      <input type="radio" name="q${q.id}" value="${idx}">
+      <span class="bubble">${letters[idx]}</span>
+      <span class="otext"></span>
+    `;
+    lbl.querySelector('.otext').textContent = optText;
+    lbl.addEventListener('click', ()=>{
+      answers[q.id] = idx;
+      block.classList.add('answered');
+      $all(`input[name="q${q.id}"]`).forEach(inp=>{
+        inp.closest('.opt').classList.toggle('selected', inp.value == idx);
+      });
+      updateProgress();
+      updateNavCell(q.id);
+    });
+    opts.appendChild(lbl);
+  });
+  block.appendChild(opts);
+  return block;
+}
+
+/* ================= NAV GRID ================= */
+function buildNavGrid(){
+  const grid = $('#nav-grid');
+  grid.innerHTML = '';
+  QUESTIONS.forEach(q=>{
+    const cell = document.createElement('div');
+    cell.className = 'nav-cell';
+    cell.id = 'nav-' + q.id;
+    cell.textContent = q.id;
+    cell.addEventListener('click', ()=>{
+      document.getElementById('q-'+q.id).scrollIntoView({behavior:'smooth', block:'center'});
+      if(window.innerWidth <= 880){ switchMobileTab('exam'); }
+    });
+    grid.appendChild(cell);
+  });
+}
+function updateNavCell(qid){
+  const cell = $('#nav-'+qid);
+  if(cell) cell.classList.toggle('done', answers[qid] !== undefined);
+}
+
+function updateProgress(){
+  const count = Object.keys(answers).length;
+  $('#progress-fill').style.width = (count/50*100) + '%';
+  $('#progress-label').textContent = count + '/50 đã trả lời';
+}
+
+/* ================= MOBILE TABS ================= */
+function switchMobileTab(which){
+  const toolPane = $('#tool-pane');
+  if(which==='exam'){
+    toolPane.classList.remove('open');
+    $('#tab-exam').classList.add('active'); $('#tab-tools').classList.remove('active');
+  } else {
+    toolPane.classList.add('open');
+    $('#tab-tools').classList.add('active'); $('#tab-exam').classList.remove('active');
+  }
+}
+$('#tab-exam').addEventListener('click', ()=>switchMobileTab('exam'));
+$('#tab-tools').addEventListener('click', ()=>switchMobileTab('tools'));
+
+/* ================= HIGHLIGHT / UNDERLINE TOOL ================= */
+document.addEventListener('selectionchange', ()=>{
+  const sel = window.getSelection();
+  if(!sel.rangeCount || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+  const examPane = $('#exam-pane');
+  if(examPane.contains(range.commonAncestorContainer)){
+    lastSavedRange = range.cloneRange();
+  }
+});
+
+function applyMark(tag, className){
+  if(!lastSavedRange){ toast('Hãy chọn (bôi đen) một đoạn văn bản trong đề thi trước.'); return; }
+  const range = lastSavedRange;
+  if(range.collapsed) return;
+  const wrapper = document.createElement(tag);
+  if(className) wrapper.className = className;
+  try{
+    range.surroundContents(wrapper);
+  }catch(e){
+    try{
+      const frag = range.extractContents();
+      wrapper.appendChild(frag);
+      range.insertNode(wrapper);
+    }catch(e2){ toast('Không thể đánh dấu đoạn này, hãy thử chọn lại.'); return; }
+  }
+  window.getSelection().removeAllRanges();
+  lastSavedRange = null;
+}
+$('#btn-highlight').addEventListener('mousedown', e=>e.preventDefault());
+$('#btn-underline').addEventListener('mousedown', e=>e.preventDefault());
+$('#btn-highlight').addEventListener('click', ()=>applyMark('mark','user-mark'));
+$('#btn-underline').addEventListener('click', ()=>applyMark('u','user-underline'));
+$('#btn-clear-marks').addEventListener('click', ()=>{
+  $all('#exam-pane mark.user-mark, #exam-pane u.user-underline').forEach(el=>{
+    const parent = el.parentNode;
+    while(el.firstChild) parent.insertBefore(el.firstChild, el);
+    parent.removeChild(el);
+  });
+  toast('Đã xoá toàn bộ đánh dấu.');
+});
+
+/* ================= TIMER ================= */
+function formatTime(sec){
+  const m = Math.floor(sec/60).toString().padStart(2,'0');
+  const s = Math.floor(sec%60).toString().padStart(2,'0');
+  return m+':'+s;
+}
+function startTimer(){
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    $('#timer-text').textContent = formatTime(Math.max(timeLeft,0));
+    const chip = $('#timer-chip');
+    if(timeLeft <= 300) chip.classList.add('warn');
+    if(timeLeft <= 0){
+      clearInterval(timerInterval);
+      autoTimeUp = true;
+      toast('Đã hết giờ! Bài thi được tự động nộp.', 4000);
+      doSubmit();
+    }
+  }, 1000);
+}
+
+/* ================= BEGIN EXAM ================= */
+function beginExam(){
+  answers = {};
+  timeLeft = EXAM_SECONDS;
+  submitted = false;
+  autoTimeUp = false;
+  examStartTime = Date.now();
+
+  $('#screen-start').style.display = 'none';
+  $('#screen-result').style.display = 'none';
+  $('#screen-history').style.display = 'none';
+  $('#screen-exam').style.display = 'flex';
+
+  $('#header-student-name').textContent = '👤 ' + studentName;
+  $('#timer-text').textContent = formatTime(timeLeft);
+  $('#timer-chip').classList.remove('warn');
+
+  buildExamPane();
+  buildNavGrid();
+  updateProgress();
+  switchMobileTab('exam');
+  startTimer();
+  syncTopbarHeight();
+}
+
+/* ================= STICKY TOPBAR HEIGHT SYNC ================= */
+function syncTopbarHeight(){
+  const bar = $('.exam-topbar');
+  if(!bar) return;
+  document.documentElement.style.setProperty('--topbar-h', bar.offsetHeight + 'px');
+}
+window.addEventListener('resize', syncTopbarHeight);
+window.addEventListener('load', syncTopbarHeight);
+
+/* ================= SUBMIT / GRADING ================= */
+function confirmSubmit(){
+  const answered = Object.keys(answers).length;
+  const msg = answered < 50
+    ? `Bạn mới trả lời ${answered}/50 câu. Bạn có chắc chắn muốn nộp bài không?`
+    : 'Bạn có chắc chắn muốn nộp bài không? Sau khi nộp sẽ không thể chỉnh sửa.';
+  if(confirm(msg)) doSubmit();
+}
+$('#btn-submit-top').addEventListener('click', confirmSubmit);
+
+function doSubmit(){
+  if(submitted) return;
+  submitted = true;
+  clearInterval(timerInterval);
+
+  $all('#screen-exam input[type=radio]').forEach(i=>i.disabled = true);
+  $all('.mark-btn').forEach(b=>b.disabled = true);
+  $('#notes').disabled = true;
+
+  const durationSec = Math.min(EXAM_SECONDS, Math.round((Date.now()-examStartTime)/1000));
+  let correctCount = 0, wrongCount = 0, blankCount = 0;
+  const detail = {};
+
+  QUESTIONS.forEach(q=>{
+    const chosen = answers[q.id];
+    if(chosen === undefined){ blankCount++; detail[q.id] = {chosen:null, correct:chosen===q.correct}; return; }
+    if(chosen === q.correct) correctCount++; else wrongCount++;
+    detail[q.id] = {chosen, correct: chosen === q.correct};
+  });
+
+  const percent = Math.round(correctCount/50*100);
+
+  renderResult({
+    name: studentName, correctCount, wrongCount, blankCount, percent,
+    durationSec, timeUp: autoTimeUp, answers: {...answers}
+  });
+
+  saveSessionToFirebase({
+    name: studentName,
+    score: correctCount,
+    total: 50,
+    percent,
+    wrongCount,
+    blankCount,
+    durationSec,
+    timeUp: autoTimeUp,
+    answers: {...answers},
+    submittedAt: new Date().toISOString()
+  });
+}
+
+function renderResult(r){
+  $('#screen-exam').style.display = 'none';
+  $('#screen-history').style.display = 'none';
+  $('#screen-result').style.display = 'block';
+
+  $('#result-score').innerHTML = r.correctCount + '<span>/50</span>';
+  $('#result-name').textContent = r.name;
+  $('#result-percent').textContent = 'Kết quả: ' + r.percent + '%';
+  $('#result-time').textContent = 'Thời gian làm bài: ' + formatTime(r.durationSec);
+  $('#result-flag').style.display = r.timeUp ? 'block' : 'none';
+  $('#stat-correct').textContent = r.correctCount;
+  $('#stat-wrong').textContent = r.wrongCount;
+  $('#stat-blank').textContent = r.blankCount;
+
+  const wrap = $('#review-all');
+  wrap.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  QUESTIONS.forEach(q=>{
+    const chosen = r.answers[q.id];
+    const isCorrect = chosen === q.correct;
+    const item = document.createElement('div');
+    item.className = 'review-item ' + (chosen===undefined ? 'wrong' : (isCorrect ? 'correct':'wrong'));
+    const yourAnsText = chosen===undefined ? 'Bỏ trống' : letters[chosen] + '. ' + q.options[chosen];
+    const correctAnsText = letters[q.correct] + '. ' + q.options[q.correct];
+    item.innerHTML = `
+      <div class="rh">
+        <span class="qn">Câu ${q.id}${q.part===6 ? ' (Part 6)' : ''}</span>
+        <span class="badge ${isCorrect ? 'correct':'wrong'}">${isCorrect ? 'ĐÚNG' : 'SAI'}</span>
+      </div>
+      ${q.part===6 ? `<p class="stem" style="font-size:13px;color:var(--ink-soft);white-space:pre-wrap;">${escapeHtml(q.passage)}</p>` : ''}
+      <p class="stem">Chỗ trống ${escapeHtml(q.stem)}</p>
+      <div class="ans-line your ${isCorrect?'good':'bad'}">Bạn chọn: <b>${escapeHtml(yourAnsText)}</b></div>
+      ${!isCorrect ? `<div class="ans-line correctans">Đáp án đúng: <b>${escapeHtml(correctAnsText)}</b></div>` : ''}
+      <div class="explain-box">${escapeHtml(q.explain)}</div>
+    `;
+    wrap.appendChild(item);
+  });
+
+  window.scrollTo(0,0);
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ================= FIREBASE (REST API) ================= */
+async function saveSessionToFirebase(session){
+  try{
+    const res = await fetch(DB_URL + '/sessions.json', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(session)
+    });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    toast('Đã lưu kết quả vào hệ thống.');
+  }catch(err){
+    console.error(err);
+    toast('Không thể lưu kết quả lên máy chủ (kiểm tra kết nối mạng).', 4000);
+  }
+}
+
+async function fetchAllSessions(){
+  const res = await fetch(DB_URL + '/sessions.json');
+  if(!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  if(!data) return [];
+  return Object.entries(data).map(([id, v])=>({id, ...v}));
+}
+
+/* ================= HISTORY SCREEN ================= */
+async function showHistory(){
+  $('#screen-start').style.display = 'none';
+  $('#screen-exam').style.display = 'none';
+  $('#screen-result').style.display = 'none';
+  $('#screen-history').style.display = 'block';
+  $('#history-content').innerHTML = '<div class="loading-note">Đang tải dữ liệu...</div>';
+  await loadHistory();
+}
+$('#history-back').addEventListener('click', ()=>{
+  $('#screen-history').style.display = 'none';
+  if(submitted){ $('#screen-result').style.display = 'block'; }
+  else { $('#screen-start').style.display = 'flex'; }
+});
+$('#history-refresh').addEventListener('click', loadHistory);
+$('#filter-mine').addEventListener('change', loadHistory);
+$('#result-view-history').addEventListener('click', showHistory);
+$('#result-retake').addEventListener('click', ()=>{
+  $('#screen-result').style.display = 'none';
+  $('#screen-start').style.display = 'flex';
+  nameInput.value = '';
+  confirmCb.checked = false;
+  refreshStartBtn();
+});
+
+let cachedSessions = null;
+async function loadHistory(){
+  const content = $('#history-content');
+  try{
+    cachedSessions = await fetchAllSessions();
+  }catch(err){
+    content.innerHTML = '<div class="empty-note">Không thể tải lịch sử. Vui lòng kiểm tra kết nối mạng và thử lại.</div>';
+    return;
+  }
+  let list = cachedSessions.slice();
+  const onlyMine = $('#filter-mine').checked;
+  if(onlyMine && studentName){
+    list = list.filter(s => (s.name||'').trim().toLowerCase() === studentName.trim().toLowerCase());
+  }
+  list.sort((a,b)=> new Date(b.submittedAt||0) - new Date(a.submittedAt||0));
+
+  if(list.length === 0){
+    content.innerHTML = '<div class="empty-note">Chưa có dữ liệu bài thi nào.</div>';
+    return;
+  }
+
+  let rows = '';
+  list.forEach(s=>{
+    const isMe = studentName && (s.name||'').trim().toLowerCase() === studentName.trim().toLowerCase();
+    const date = s.submittedAt ? new Date(s.submittedAt) : null;
+    const dateStr = date ? date.toLocaleString('vi-VN') : '—';
+    rows += `<tr class="${isMe?'rank-me':''}">
+      <td>${escapeHtml(s.name||'—')}</td>
+      <td class="mono">${s.score ?? '—'}/${s.total ?? 50}</td>
+      <td class="mono">${s.percent ?? '—'}%</td>
+      <td class="mono">${s.durationSec ? formatTime(s.durationSec) : '—'}</td>
+      <td>${s.timeUp ? '⏰ Hết giờ' : '✓'}</td>
+      <td class="mono">${dateStr}</td>
+    </tr>`;
+  });
+
+  content.innerHTML = `
+    <table class="history">
+      <thead><tr><th>Học sinh</th><th>Điểm</th><th>%</th><th>Thời gian</th><th>Trạng thái</th><th>Ngày nộp</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+/* Prevent leaving mid-exam accidentally */
+window.addEventListener('beforeunload', (e)=>{
+  if($('#screen-exam').style.display !== 'none' && !submitted){
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+</body>
+</html>
