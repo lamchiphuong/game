@@ -346,24 +346,6 @@ const DATA = [
   ]
 },
 {
-  id:"IVA", title:"Rewrite — using Present Perfect", note:"Viết lại câu sử dụng Present Perfect.", type:"free",
-  items:[
-{q:"I started learning English three years ago.", accept:["I have learned English for three years.","I have studied English for three years.","I have been learning English for three years."], ex:"<b>I have learned/studied English for three years.</b> — bắt đầu trong quá khứ, kéo dài đến hiện tại → dùng “for”."},
-{q:"She started working here in 2022.", accept:["She has worked here since 2022.","She has been working here since 2022."], ex:"<b>She has worked here since 2022.</b> — mốc bắt đầu → dùng “since”."},
-{q:"We moved to this house five years ago.", accept:["We have lived in this house for five years."], ex:"<b>We have lived in this house for five years.</b>"},
-{q:"He started playing football when he was ten.", accept:["He has played football since he was ten."], ex:"<b>He has played football since he was ten.</b>"},
-{q:"They got married in 2020.", accept:["They have been married since 2020."], ex:"<b>They have been married since 2020.</b>"}
-  ]
-},
-{
-  id:"IVB", title:"Rewrite — using for / since", note:"Viết lại câu, bắt đầu bằng “started”.", type:"free",
-  items:[
-{q:"I have studied English for five years. → I started ___", accept:["I started studying English five years ago.","I started learning English five years ago."], ex:"<b>I started studying English five years ago.</b>"},
-{q:"She has lived here since 2021. → She started ___", accept:["She started living here in 2021."], ex:"<b>She started living here in 2021.</b>"},
-{q:"We have known each other for ten years. → We first ___", accept:["We first met ten years ago.","We first met each other ten years ago."], ex:"<b>We first met (each other) ten years ago.</b>"}
-  ]
-},
-{
   id:"V", title:"Find and correct the mistakes", note:"Tìm và sửa lỗi sai trong câu.", type:"free",
   items:[
 {q:"I have seen him yesterday.", accept:["I saw him yesterday."], ex:"Có mốc thời gian cụ thể “yesterday” nên không dùng Present Perfect → <b>I saw him yesterday.</b>"},
@@ -388,19 +370,6 @@ const DATA = [
 {q:"I / not see / Mary / since June", accept:["I haven't seen Mary since June.","I have not seen Mary since June."], ex:"<b>I haven't seen Mary since June.</b>"},
 {q:"Tom / lose / his phone / yesterday", accept:["Tom lost his phone yesterday."], ex:"<b>Tom lost his phone yesterday.</b>"}
   ]
-},
-{
-  id:"VII", title:"Challenge — Present Perfect or Past Simple?", note:"Điền dạng đúng của động từ trong ngoặc.", type:"fill",
-  items:[
-{tmpl:"I ___ David for ten years, but I ___ him for the first time in 2016.", hints:["(know)","(meet)"], accept:["have known","met"], multi:2, ex:"“for ten years” → <b>have known</b>; “in 2016” mốc cụ thể → <b>met</b>."},
-{tmpl:"Sarah ___ London three times. She ___ there last summer.", hints:["(visit)","(go)"], accept:["has visited","went"], multi:2, ex:"Kinh nghiệm/số lần → <b>has visited</b>; “last summer” → <b>went</b>."},
-{tmpl:"My parents ___ here since 2015. Before that, they ___ in Hanoi.", hints:["(live)","(live)"], accept:["have lived","lived"], multi:2, ex:"“since 2015” → <b>have lived</b>; giai đoạn quá khứ đã qua → <b>lived</b>."},
-{tmpl:"I ___ my phone yesterday, but fortunately, I ___ it already.", hints:["(lose)","(find)"], accept:["lost","have found"], multi:2, ex:"“yesterday” → <b>lost</b>; “already” → <b>have found</b>."},
-{tmpl:"___ you ever ___ snow? Yes, I ___ it when I ___ Korea in 2023.", hints:["(Have)","(see)","(see)","(visit)"], accept:["Have","seen","saw","visited"], multi:4, ex:"“ever” → <b>Have ... seen</b>; “in 2023” mốc cụ thể → <b>saw</b>, <b>visited</b>."},
-{tmpl:"He ___ his project yet. He ___ it last Monday.", hints:["(not finish)","(start)"], accept:["hasn't finished","started"], multi:2, ex:"“yet” → <b>hasn't finished</b>; “last Monday” → <b>started</b>."},
-{tmpl:"We ___ friends since primary school. We ___ for the first time when we were seven.", hints:["(be)","(meet)"], accept:["have been","met"], multi:2, ex:"“since primary school” → <b>have been</b>; mốc quá khứ cụ thể → <b>met</b>."},
-{tmpl:"She ___ Indian food before, but she ___ it last weekend.", hints:["(never try)","(try)"], accept:["has never tried","tried"], multi:2, ex:"“never ... before” → <b>has never tried</b>; “last weekend” → <b>tried</b>."}
-  ]
 }
 ];
 
@@ -419,7 +388,7 @@ function renderGate(){
     <div class="masthead">
       <div class="eyebrow"><span class="dot"></span>Bài tập ngữ pháp tiếng Anh</div>
       <h1>Present Perfect &amp; Past Simple</h1>
-      <p class="sub">7 phần, ${TOTAL_Q} câu hỏi luyện tập phân biệt hai thì. Làm xong sẽ được chấm điểm và giải thích chi tiết từng đáp án.</p>
+      <p class="sub">5 phần, ${TOTAL_Q} câu hỏi luyện tập phân biệt hai thì. Làm xong sẽ được chấm điểm và giải thích chi tiết từng đáp án.</p>
       <div class="tenses">
         <div class="tense-chip pp">${timelinePP}Present Perfect — nối quá khứ với hiện tại</div>
         <div class="tense-chip ps">${timelinePS}Past Simple — mốc thời gian đã kết thúc</div>
