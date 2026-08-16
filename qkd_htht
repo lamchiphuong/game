@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Present Perfect &amp; Past Simple — Bài tập tương tác</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16213E;
+  --ink-2:#1F2E52;
+  --paper:#FBF7EF;
+  --paper-2:#F3EDE0;
+  --line:#DAD2BE;
+  --pp:#C98A2E;
+  --pp-dark:#7A5119;
+  --pp-tint:#FAEEDA;
+  --ps:#B8532E;
+  --ps-dark:#6E2F19;
+  --ps-tint:#FBE7DE;
+  --ok:#3B7A4C;
+  --ok-tint:#E4F1E6;
+  --bad:#B8402E;
+  --bad-tint:#FBE5E1;
+  --muted:#7C7666;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',sans-serif;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #1c2b52 0%, var(--ink) 55%),
+    var(--ink);
+  color:var(--paper);
+  min-height:100vh;
+  padding:32px 16px 80px;
+}
+.wrap{max-width:820px;margin:0 auto;}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#9FB0D9;
+  margin-bottom:8px;
+  display:flex; align-items:center; gap:10px;
+}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--pp);}
+
+/* header */
+.masthead{padding:18px 4px 30px;position:relative;}
+.masthead h1{font-size:34px;color:#FBF7EF;line-height:1.15;}
+.masthead .sub{color:#B9C2DE;font-size:15px;margin-top:10px;max-width:520px;line-height:1.6;}
+.tenses{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
+.tense-chip{
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  padding:7px 12px;border-radius:100px;border:1px solid;
+  display:flex;align-items:center;gap:8px;
+}
+.tense-chip.pp{border-color:var(--pp);color:#F3D9A6;background:rgba(201,138,46,.12);}
+.tense-chip.ps{border-color:var(--ps);color:#F0BBA3;background:rgba(184,83,46,.12);}
+.timeline-mini{width:34px;height:10px;display:block;}
+
+/* name gate */
+.card{
+  background:var(--paper);
+  color:var(--ink);
+  border-radius:18px;
+  padding:34px 30px;
+  border:1px solid rgba(0,0,0,.06);
+  box-shadow:0 30px 60px -28px rgba(0,0,0,.55);
+}
+.gate{
+  display:flex;flex-direction:column;gap:18px;align-items:flex-start;
+  animation:rise .5s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.gate h2{font-size:24px;color:var(--ink);}
+.gate p{color:#5B5645;font-size:14.5px;line-height:1.6;margin:0;max-width:440px;}
+.gate input[type=text]{
+  width:100%;
+  font-family:'Fraunces',serif;
+  font-size:20px;
+  padding:14px 16px;
+  border-radius:10px;
+  border:1.5px solid var(--line);
+  background:#fff;
+  color:var(--ink);
+  outline:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+.gate input[type=text]:focus{border-color:var(--pp);box-shadow:0 0 0 4px var(--pp-tint);}
+.gate-err{color:var(--bad);font-size:13px;min-height:16px;}
+.btn{
+  font-family:'Inter',sans-serif;
+  font-weight:600;font-size:15px;
+  border:none;cursor:pointer;
+  padding:13px 26px;
+  border-radius:10px;
+  background:var(--ink);
+  color:var(--paper);
+  transition:transform .15s ease, background .2s ease, box-shadow .2s ease;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn:hover{background:var(--ink-2);transform:translateY(-1px);box-shadow:0 8px 18px -8px rgba(22,33,62,.55);}
+.btn:active{transform:translateY(0) scale(.98);}
+.btn.secondary{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
+.btn.secondary:hover{background:var(--paper-2);}
+.btn.wide{width:100%;justify-content:center;padding:16px;font-size:16px;}
+
+/* progress */
+.progress-shell{
+  position:sticky;top:0;z-index:20;
+  background:linear-gradient(180deg, var(--ink) 70%, transparent);
+  padding:10px 4px 16px;margin-bottom:6px;
+}
+.progress-bar{height:5px;background:rgba(255,255,255,.12);border-radius:100px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--ps),var(--pp));width:0%;transition:width .4s ease;border-radius:100px;}
+.progress-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:#9FB0D9;margin-top:8px;display:flex;justify-content:space-between;}
+
+/* sections */
+.section{
+  background:var(--paper);color:var(--ink);
+  border-radius:16px;padding:26px 24px 30px;margin-bottom:20px;
+  border:1px solid rgba(0,0,0,.06);
+  opacity:0;transform:translateY(16px);
+  animation:sectionIn .6s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes sectionIn{to{opacity:1;transform:translateY(0);}}
+.section-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+.section-num{
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--pp-dark);
+  background:var(--pp-tint);padding:3px 9px;border-radius:6px;letter-spacing:.05em;
+}
+.section h2{font-size:19px;color:var(--ink);}
+.section-note{color:var(--muted);font-size:13.5px;margin:6px 0 20px;line-height:1.6;}
+
+.q{
+  padding:16px 0;border-top:1px dashed var(--line);
+}
+.q:first-of-type{border-top:none;}
+.q-num{
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);
+  margin-right:6px;
+}
+.q-text{font-size:15.5px;line-height:1.85;color:var(--ink);}
+.hint{color:var(--muted);font-style:italic;}
+
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;}
+@media (max-width:520px){.opts{grid-template-columns:1fr;}}
+.opt{
+  display:flex;align-items:center;gap:10px;
+  border:1.5px solid var(--line);border-radius:10px;
+  padding:10px 13px;cursor:pointer;background:#fff;
+  transition:border-color .15s, background .15s, transform .1s;
+  font-size:14.5px;
+}
+.opt:hover{border-color:var(--pp);background:var(--pp-tint);transform:translateY(-1px);}
+.opt.selected{border-color:var(--ink);background:var(--ink);color:var(--paper);}
+.opt .letter{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  width:20px;height:20px;border-radius:5px;background:var(--paper-2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink);
+}
+.opt.selected .letter{background:rgba(255,255,255,.18);color:var(--paper);}
+
+.blank-in{
+  font-family:'JetBrains Mono',monospace;
+  font-size:14.5px;
+  border:none;border-bottom:2px solid var(--line);
+  background:transparent;
+  padding:4px 4px 5px;
+  min-width:120px;
+  color:var(--ink);
+  outline:none;
+  transition:border-color .2s;
+}
+.blank-in:focus{border-color:var(--pp);}
+.blank-in.wide{min-width:280px;width:100%;max-width:460px;display:block;margin-top:8px;}
+
+.result-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  padding:3px 9px;border-radius:6px;margin-left:6px;vertical-align:middle;
+}
+.result-tag.correct{background:var(--ok-tint);color:var(--ok);}
+.result-tag.wrong{background:var(--bad-tint);color:var(--bad);}
+
+.explain{
+  margin-top:10px;font-size:13.5px;line-height:1.7;
+  background:var(--paper-2);border-radius:10px;padding:12px 14px;
+  display:none;color:#4A4535;
+}
+.explain.show{display:block;animation:sectionIn .35s ease forwards;}
+.explain b{color:var(--ink);}
+.explain .yourans{color:var(--bad);}
+.explain .rightans{color:var(--ok);}
+
+.tl-tag{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:2px 7px;border-radius:5px;}
+.tl-tag.pp{background:var(--pp-tint);color:var(--pp-dark);}
+.tl-tag.ps{background:var(--ps-tint);color:var(--ps-dark);}
+
+/* submit bar */
+.submit-zone{
+  position:sticky;bottom:14px;z-index:30;
+  display:flex;justify-content:center;margin-top:8px;
+}
+.submit-inner{
+  background:var(--paper);border-radius:100px;
+  padding:10px 10px 10px 22px;
+  display:flex;align-items:center;gap:16px;
+  box-shadow:0 24px 50px -20px rgba(0,0,0,.6);
+  border:1px solid rgba(0,0,0,.06);
+}
+.submit-inner span{color:var(--ink);font-size:13.5px;font-weight:500;}
+
+/* result screen */
+.result-hero{
+  text-align:center;padding:10px 10px 26px;
+  animation:rise .6s cubic-bezier(.2,.8,.2,1);
+}
+.score-ring{
+  width:168px;height:168px;margin:0 auto 18px;position:relative;
+}
+.score-ring svg{transform:rotate(-90deg);width:100%;height:100%;}
+.score-ring .bg-ring{fill:none;stroke:var(--paper-2);stroke-width:10;}
+.score-ring .fg-ring{fill:none;stroke:var(--pp);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1);}
+.score-ring .score-num{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.score-ring .score-num .pct{font-family:'Fraunces',serif;font-size:36px;font-weight:600;color:var(--ink);}
+.score-ring .score-num .frac{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-top:2px;}
+.result-hero h2{font-size:24px;margin-top:6px;}
+.result-hero .verdict{color:var(--muted);font-size:14.5px;margin-top:6px;}
+.save-toast{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  margin-top:16px;padding:7px 14px;border-radius:100px;
+  background:var(--ok-tint);color:var(--ok);
+  opacity:0;transform:translateY(6px);transition:opacity .4s, transform .4s;
+}
+.save-toast.show{opacity:1;transform:translateY(0);}
+.save-toast.err{background:var(--bad-tint);color:var(--bad);}
+
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:24px 0;}
+.bd-card{background:var(--paper-2);border-radius:12px;padding:12px 14px;}
+.bd-card .lbl{font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.bd-card .val{font-family:'Fraunces',serif;font-size:20px;color:var(--ink);margin-top:4px;}
+
+.review-toggle{display:flex;justify-content:center;margin:8px 0 20px;}
+
+@media (max-width:600px){
+  .masthead h1{font-size:27px;}
+  .card{padding:24px 18px;}
+  .section{padding:20px 16px 24px;}
+  .q-text{font-size:14.5px;}
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const FIREBASE_URL = "https://gametienganh-9af04-default-rtdb.asia-southeast1.firebasedatabase.app";
+
+function norm(s){
+  return (s||"")
+    .toLowerCase()
+    .replace(/’/g,"'")
+    .replace(/[.,!?;:]/g,"")
+    .replace(/\s+/g," ")
+    .trim();
+}
+function eq(user, accepted){
+  const u = norm(user);
+  if(!u) return false;
+  return accepted.some(a => norm(a) === u);
+}
+
+const timelinePP = `<svg class="timeline-mini" viewBox="0 0 34 10"><line x1="2" y1="5" x2="30" y2="5" stroke="var(--pp)" stroke-width="2" stroke-dasharray="1,3.2" stroke-linecap="round"/><circle cx="30" cy="5" r="3.4" fill="var(--pp)"/></svg>`;
+const timelinePS = `<svg class="timeline-mini" viewBox="0 0 34 10"><line x1="2" y1="5" x2="30" y2="5" stroke="var(--ps)" stroke-width="1.4" stroke-dasharray="1,3.2" stroke-linecap="round" opacity=".4"/><circle cx="11" cy="5" r="3.4" fill="var(--ps)"/></svg>`;
+
+const DATA = [
+{
+  id:"I", title:"Multiple choice", note:"Chọn đáp án đúng cho mỗi câu.", type:"mc",
+  items:[
+{q:"I ___ my homework yesterday.", opts:["finished","have finished","finish","have finish"], a:0, ex:"Có mốc thời gian quá khứ cụ thể <b>“yesterday”</b> → dùng Past Simple: <b>finished</b>."},
+{q:"She ___ to Japan three times.", opts:["went","has gone","has been","was"], a:2, ex:"Diễn tả kinh nghiệm, không rõ thời điểm, còn liên quan hiện tại → Present Perfect: <b>has been</b> (to = đã từng đến và về)."},
+{q:"We ___ this movie last night.", opts:["have watched","watched","watch","have watch"], a:1, ex:"“last night” là mốc thời gian quá khứ cụ thể → Past Simple: <b>watched</b>."},
+{q:"Tom ___ his keys. He can't open the door.", opts:["lost","loses","was losing","has lost"], a:3, ex:"Hành động trong quá khứ có <b>kết quả ảnh hưởng đến hiện tại</b> (không mở được cửa) → Present Perfect: <b>has lost</b>."},
+{q:"My parents ___ in this house since 2010.", opts:["lived","have lived","live","are living"], a:1, ex:"“since + mốc thời gian” diễn tả hành động kéo dài đến hiện tại → Present Perfect: <b>have lived</b>."},
+{q:"___ you ever ___ sushi?", opts:["Did / eat","Have / ate","Have / eaten","Did / eaten"], a:2, ex:"Câu hỏi kinh nghiệm với “ever” dùng Present Perfect: <b>Have</b> + V3 <b>eaten</b>."},
+{q:"I ___ Sarah two days ago.", opts:["have seen","see","have saw","saw"], a:3, ex:"“two days ago” là mốc thời gian quá khứ cụ thể → Past Simple: <b>saw</b>."},
+{q:"He ___ his project yet.", opts:["didn't finish","hasn't finished","hasn't finish","wasn't finished"], a:1, ex:"“yet” trong câu phủ định/nghi vấn đi với Present Perfect: <b>hasn't finished</b>."},
+{q:"They ___ to the beach last Sunday.", opts:["went","have gone","have been","go"], a:0, ex:"“last Sunday” là mốc quá khứ cụ thể → Past Simple: <b>went</b>."},
+{q:"My brother ___ his new phone already.", opts:["bought","buys","has bought","did buy"], a:2, ex:"“already” thường đi với Present Perfect: <b>has bought</b>."},
+{q:"I ___ English for five years.", opts:["studied","study","am studying","have studied"], a:3, ex:"“for + khoảng thời gian” kéo dài đến hiện tại → Present Perfect: <b>have studied</b>."},
+{q:"She ___ her grandmother last weekend.", opts:["has visited","visited","visits","has visit"], a:1, ex:"“last weekend” là mốc quá khứ cụ thể → Past Simple: <b>visited</b>."},
+{q:"We ___ just ___ dinner.", opts:["have / had","did / have","have / have","did / had"], a:0, ex:"“just” (vừa mới) đi với Present Perfect: <b>have</b> + V3 <b>had</b>."},
+{q:"___ you ___ your homework yet?", opts:["Did / finish","Have / finish","Did / finished","Have / finished"], a:3, ex:"“yet” trong câu hỏi đi với Present Perfect: <b>Have</b> + V3 <b>finished</b>."},
+{q:"Jack ___ Paris in 2023.", opts:["has visited","has visit","visited","visits"], a:2, ex:"“in 2023” là mốc thời gian quá khứ cụ thể → Past Simple: <b>visited</b>."},
+{q:"I ___ never ___ a horse.", opts:["have / ridden","did / ride","have / rode","was / ridden"], a:0, ex:"“never” (kinh nghiệm) đi với Present Perfect: <b>have</b> + V3 <b>ridden</b>."},
+{q:"They ___ here two hours ago.", opts:["have arrived","arrive","arrived","have arrive"], a:2, ex:"“two hours ago” là mốc quá khứ cụ thể → Past Simple: <b>arrived</b>."},
+{q:"She ___ her room, so it looks very clean now.", opts:["cleaned","has cleaned","cleans","was cleaning"], a:1, ex:"Kết quả của hành động vẫn thấy rõ ở hiện tại (“looks clean now”) → Present Perfect: <b>has cleaned</b>."},
+{q:"We ___ each other since we were children.", opts:["knew","have known","know","are knowing"], a:1, ex:"“since we were children” kéo dài đến hiện tại → Present Perfect: <b>have known</b>."},
+{q:"___ he ___ his new teacher yesterday?", opts:["Did / meet","Has / met","Did / met","Has / meet"], a:0, ex:"“yesterday” là mốc quá khứ cụ thể → Past Simple: <b>Did</b> + V-inf <b>meet</b>."}
+  ]
+},
+{
+  id:"II", title:"Put the verbs into the correct tense", note:"Chia động từ trong ngoặc ở dạng đúng (Present Perfect hoặc Past Simple).", type:"fill",
+  items:[
+{tmpl:"I ___ my grandparents last Sunday.", hints:["(visit)"], accept:["visited"], ex:"“last Sunday” → Past Simple: <b>visited</b>."},
+{tmpl:"She ___ Korean food.", hints:["(never / eat)"], accept:["has never eaten","hasn't ever eaten","has not eaten"], ex:"“never” (kinh nghiệm) → Present Perfect: <b>has never eaten</b>."},
+{tmpl:"We ___ here since 2018.", hints:["(live)"], accept:["have lived"], ex:"“since 2018” → Present Perfect: <b>have lived</b>."},
+{tmpl:"Tom ___ a new laptop yesterday.", hints:["(buy)"], accept:["bought"], ex:"“yesterday” → Past Simple: <b>bought</b>."},
+{tmpl:"___ you ever ___ to Singapore?", hints:["(Have)","(be)"], accept:["Have","been"], multi:2, ex:"Câu hỏi kinh nghiệm với “ever” → Present Perfect: <b>Have</b> ... <b>been</b>."},
+{tmpl:"My father ___ just ___ home.", hints:["(has)","(come)"], accept:["has","come"], multi:2, ex:"“just” → Present Perfect: <b>has</b> ... <b>come</b>."},
+{tmpl:"They ___ their homework yet.", hints:["(not / finish)"], accept:["haven't finished","have not finished"], ex:"“yet” → Present Perfect phủ định: <b>haven't finished</b>."},
+{tmpl:"I ___ him at the supermarket two days ago.", hints:["(meet)"], accept:["met"], ex:"“two days ago” → Past Simple: <b>met</b>."},
+{tmpl:"Sarah ___ at this company for three years.", hints:["(work)"], accept:["has worked"], ex:"“for three years”, còn tiếp diễn → Present Perfect: <b>has worked</b>."},
+{tmpl:"He ___ his wallet last night.", hints:["(lose)"], accept:["lost"], ex:"“last night” → Past Simple: <b>lost</b>."},
+{tmpl:"We ___ already ___ this film.", hints:["(have)","(see)"], accept:["have","seen"], multi:2, ex:"“already” → Present Perfect: <b>have</b> ... <b>seen</b>."},
+{tmpl:"Anna ___ to Thailand in 2024.", hints:["(go)"], accept:["went"], ex:"“in 2024” → Past Simple: <b>went</b>."},
+{tmpl:"I ___ John since Monday.", hints:["(not / see)"], accept:["haven't seen","have not seen"], ex:"“since Monday” → Present Perfect phủ định: <b>haven't seen</b>."},
+{tmpl:"My sister ___ learning English when she was six.", hints:["(start)"], accept:["started"], ex:"“when she was six” → mốc quá khứ cụ thể → Past Simple: <b>started</b>."},
+{tmpl:"They ___ at the airport.", hints:["(just / arrive)"], accept:["have just arrived"], ex:"“just” → Present Perfect: <b>have just arrived</b>."}
+  ]
+},
+{
+  id:"III", title:"Choose the correct tense", note:"Điền Present Perfect hoặc Past Simple.", type:"fill",
+  items:[
+{tmpl:"I ___ Tom yesterday.", hints:["(not see)"], accept:["didn't see","did not see"], ex:"“yesterday” → Past Simple: <b>didn't see</b>."},
+{tmpl:"I ___ Tom since last week.", hints:["(not see)"], accept:["haven't seen","have not seen"], ex:"“since last week” → Present Perfect: <b>haven't seen</b>."},
+{tmpl:"She ___ her homework five minutes ago.", hints:["(finish)"], accept:["finished"], ex:"“five minutes ago” → Past Simple: <b>finished</b>."},
+{tmpl:"She ___ her homework already.", hints:["(finish)"], accept:["has finished"], ex:"“already” → Present Perfect: <b>has finished</b>."},
+{tmpl:"We ___ to Da Lat last summer.", hints:["(go)"], accept:["went"], ex:"“last summer” → Past Simple: <b>went</b>."},
+{tmpl:"We ___ to Da Lat three times.", hints:["(be)"], accept:["have been"], ex:"Kinh nghiệm, số lần → Present Perfect: <b>have been</b>."},
+{tmpl:"He ___ in Hanoi from 2015 to 2020.", hints:["(live)"], accept:["lived"], ex:"Khoảng thời gian đã kết thúc (2015–2020) → Past Simple: <b>lived</b>."},
+{tmpl:"He ___ in Hanoi since 2020.", hints:["(live)"], accept:["has lived"], ex:"“since 2020”, còn tiếp diễn → Present Perfect: <b>has lived</b>."},
+{tmpl:"They ___ a new car last month.", hints:["(buy)"], accept:["bought"], ex:"“last month” → Past Simple: <b>bought</b>."},
+{tmpl:"They ___ a new car, so they don't need to use the old one anymore.", hints:["(buy)"], accept:["have bought"], ex:"Kết quả ở hiện tại → Present Perfect: <b>have bought</b>."}
+  ]
+},
+{
+  id:"IVA", title:"Rewrite — using Present Perfect", note:"Viết lại câu sử dụng Present Perfect.", type:"free",
+  items:[
+{q:"I started learning English three years ago.", accept:["I have learned English for three years.","I have studied English for three years.","I have been learning English for three years."], ex:"<b>I have learned/studied English for three years.</b> — bắt đầu trong quá khứ, kéo dài đến hiện tại → dùng “for”."},
+{q:"She started working here in 2022.", accept:["She has worked here since 2022.","She has been working here since 2022."], ex:"<b>She has worked here since 2022.</b> — mốc bắt đầu → dùng “since”."},
+{q:"We moved to this house five years ago.", accept:["We have lived in this house for five years."], ex:"<b>We have lived in this house for five years.</b>"},
+{q:"He started playing football when he was ten.", accept:["He has played football since he was ten."], ex:"<b>He has played football since he was ten.</b>"},
+{q:"They got married in 2020.", accept:["They have been married since 2020."], ex:"<b>They have been married since 2020.</b>"}
+  ]
+},
+{
+  id:"IVB", title:"Rewrite — using for / since", note:"Viết lại câu, bắt đầu bằng “started”.", type:"free",
+  items:[
+{q:"I have studied English for five years. → I started ___", accept:["I started studying English five years ago.","I started learning English five years ago."], ex:"<b>I started studying English five years ago.</b>"},
+{q:"She has lived here since 2021. → She started ___", accept:["She started living here in 2021."], ex:"<b>She started living here in 2021.</b>"},
+{q:"We have known each other for ten years. → We first ___", accept:["We first met ten years ago.","We first met each other ten years ago."], ex:"<b>We first met (each other) ten years ago.</b>"}
+  ]
+},
+{
+  id:"V", title:"Find and correct the mistakes", note:"Tìm và sửa lỗi sai trong câu.", type:"free",
+  items:[
+{q:"I have seen him yesterday.", accept:["I saw him yesterday."], ex:"Có mốc thời gian cụ thể “yesterday” nên không dùng Present Perfect → <b>I saw him yesterday.</b>"},
+{q:"She has went to Japan twice.", accept:["She has gone to Japan twice."], ex:"Sau “has” phải là V3: went → gone → <b>She has gone to Japan twice.</b>"},
+{q:"We have visited Da Lat last year.", accept:["We visited Da Lat last year."], ex:"“last year” là mốc quá khứ cụ thể → <b>We visited Da Lat last year.</b>"},
+{q:"He didn't finished his homework.", accept:["He didn't finish his homework.","He did not finish his homework."], ex:"Sau trợ động từ “didn't” dùng động từ nguyên thể → <b>He didn't finish his homework.</b>"},
+{q:"Have you ever ate sushi?", accept:["Have you ever eaten sushi?"], ex:"Sau “have” phải là V3: ate → eaten → <b>Have you ever eaten sushi?</b>"},
+{q:"I know her since 2020.", accept:["I have known her since 2020."], ex:"“since” đòi hỏi Present Perfect → <b>I have known her since 2020.</b>"},
+{q:"They have arrived two hours ago.", accept:["They arrived two hours ago."], ex:"“two hours ago” là mốc quá khứ cụ thể → <b>They arrived two hours ago.</b>"},
+{q:"She hasn't saw this movie yet.", accept:["She hasn't seen this movie yet.","She has not seen this movie yet."], ex:"Sau “hasn't” phải là V3: saw → seen → <b>She hasn't seen this movie yet.</b>"}
+  ]
+},
+{
+  id:"VI", title:"Sentence completion", note:"Dùng từ gợi ý để viết câu hoàn chỉnh.", type:"free",
+  items:[
+{q:"I / never / visit / Australia", accept:["I have never visited Australia."], ex:"<b>I have never visited Australia.</b>"},
+{q:"She / go / to the supermarket / yesterday", accept:["She went to the supermarket yesterday."], ex:"<b>She went to the supermarket yesterday.</b>"},
+{q:"We / live / here / since 2019", accept:["We have lived here since 2019."], ex:"<b>We have lived here since 2019.</b>"},
+{q:"He / already / finish / his work", accept:["He has already finished his work."], ex:"<b>He has already finished his work.</b>"},
+{q:"They / meet / their teacher / last Monday", accept:["They met their teacher last Monday."], ex:"<b>They met their teacher last Monday.</b>"},
+{q:"you / ever / ride / a horse?", accept:["Have you ever ridden a horse?"], ex:"<b>Have you ever ridden a horse?</b>"},
+{q:"I / not see / Mary / since June", accept:["I haven't seen Mary since June.","I have not seen Mary since June."], ex:"<b>I haven't seen Mary since June.</b>"},
+{q:"Tom / lose / his phone / yesterday", accept:["Tom lost his phone yesterday."], ex:"<b>Tom lost his phone yesterday.</b>"}
+  ]
+},
+{
+  id:"VII", title:"Challenge — Present Perfect or Past Simple?", note:"Điền dạng đúng của động từ trong ngoặc.", type:"fill",
+  items:[
+{tmpl:"I ___ David for ten years, but I ___ him for the first time in 2016.", hints:["(know)","(meet)"], accept:["have known","met"], multi:2, ex:"“for ten years” → <b>have known</b>; “in 2016” mốc cụ thể → <b>met</b>."},
+{tmpl:"Sarah ___ London three times. She ___ there last summer.", hints:["(visit)","(go)"], accept:["has visited","went"], multi:2, ex:"Kinh nghiệm/số lần → <b>has visited</b>; “last summer” → <b>went</b>."},
+{tmpl:"My parents ___ here since 2015. Before that, they ___ in Hanoi.", hints:["(live)","(live)"], accept:["have lived","lived"], multi:2, ex:"“since 2015” → <b>have lived</b>; giai đoạn quá khứ đã qua → <b>lived</b>."},
+{tmpl:"I ___ my phone yesterday, but fortunately, I ___ it already.", hints:["(lose)","(find)"], accept:["lost","have found"], multi:2, ex:"“yesterday” → <b>lost</b>; “already” → <b>have found</b>."},
+{tmpl:"___ you ever ___ snow? Yes, I ___ it when I ___ Korea in 2023.", hints:["(Have)","(see)","(see)","(visit)"], accept:["Have","seen","saw","visited"], multi:4, ex:"“ever” → <b>Have ... seen</b>; “in 2023” mốc cụ thể → <b>saw</b>, <b>visited</b>."},
+{tmpl:"He ___ his project yet. He ___ it last Monday.", hints:["(not finish)","(start)"], accept:["hasn't finished","started"], multi:2, ex:"“yet” → <b>hasn't finished</b>; “last Monday” → <b>started</b>."},
+{tmpl:"We ___ friends since primary school. We ___ for the first time when we were seven.", hints:["(be)","(meet)"], accept:["have been","met"], multi:2, ex:"“since primary school” → <b>have been</b>; mốc quá khứ cụ thể → <b>met</b>."},
+{tmpl:"She ___ Indian food before, but she ___ it last weekend.", hints:["(never try)","(try)"], accept:["has never tried","tried"], multi:2, ex:"“never ... before” → <b>has never tried</b>; “last weekend” → <b>tried</b>."}
+  ]
+}
+];
+
+const state = { name:"", answers:{}, submitted:false };
+
+function totalQuestions(){
+  let n=0;
+  DATA.forEach(sec=>{ sec.items.forEach(it=>{ n += (it.multi||1); }); });
+  return n;
+}
+const TOTAL_Q = totalQuestions();
+
+function renderGate(){
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="masthead">
+      <div class="eyebrow"><span class="dot"></span>Bài tập ngữ pháp tiếng Anh</div>
+      <h1>Present Perfect &amp; Past Simple</h1>
+      <p class="sub">7 phần, ${TOTAL_Q} câu hỏi luyện tập phân biệt hai thì. Làm xong sẽ được chấm điểm và giải thích chi tiết từng đáp án.</p>
+      <div class="tenses">
+        <div class="tense-chip pp">${timelinePP}Present Perfect — nối quá khứ với hiện tại</div>
+        <div class="tense-chip ps">${timelinePS}Past Simple — mốc thời gian đã kết thúc</div>
+      </div>
+    </div>
+    <div class="card gate">
+      <h2>Bắt đầu làm bài</h2>
+      <p>Nhập họ tên của em để bắt đầu. Kết quả sẽ được lưu lại sau khi nộp bài.</p>
+      <input type="text" id="nameInput" placeholder="Nguyễn Văn A" autocomplete="off">
+      <div class="gate-err" id="nameErr"></div>
+      <button class="btn" id="startBtn">Bắt đầu làm bài <i>&rarr;</i></button>
+    </div>
+  `;
+  const inp = document.getElementById('nameInput');
+  const err = document.getElementById('nameErr');
+  inp.focus();
+  function tryStart(){
+    const v = inp.value.trim();
+    if(!v){ err.textContent = "Vui lòng nhập tên trước khi bắt đầu."; inp.focus(); return; }
+    err.textContent = "";
+    state.name = v;
+    renderQuiz();
+  }
+  document.getElementById('startBtn').addEventListener('click', tryStart);
+  inp.addEventListener('keydown', e=>{ if(e.key==="Enter") tryStart(); });
+  inp.addEventListener('input', ()=>{ if(inp.value.trim()) err.textContent=""; });
+}
+
+function answeredCount(){
+  let c=0;
+  DATA.forEach(sec=>{
+    sec.items.forEach((it,i)=>{
+      const key = sec.id+"_"+i;
+      if(sec.type==="mc"){
+        if(state.answers[key]!==undefined) c++;
+      } else if(sec.type==="free"){
+        if(state.answers[key] && state.answers[key].trim()) c++;
+      } else {
+        const m = it.multi||1;
+        for(let b=0;b<m;b++){
+          const v = state.answers[key+"_"+b];
+          if(v && v.trim()) c++;
+        }
+      }
+    });
+  });
+  return c;
+}
+
+function updateProgress(){
+  const bar = document.getElementById('progressFill');
+  const lbl = document.getElementById('progressLabel');
+  if(!bar) return;
+  const done = answeredCount();
+  const pct = Math.round((done/TOTAL_Q)*100);
+  bar.style.width = pct+"%";
+  if(lbl) lbl.innerHTML = `<span>${state.name}</span><span>${done} / ${TOTAL_Q} câu đã trả lời</span>`;
+}
+
+function renderQuiz(){
+  const app = document.getElementById('app');
+  let html = `
+    <div class="progress-shell">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel"></div>
+    </div>
+  `;
+  DATA.forEach((sec,si)=>{
+    html += `<div class="section" style="animation-delay:${si*0.05}s">
+      <div class="section-head"><span class="section-num">${sec.id}</span><h2>${sec.title}</h2></div>
+      <p class="section-note">${sec.note}</p>`;
+    sec.items.forEach((it,i)=>{
+      const key = sec.id+"_"+i;
+      html += `<div class="q" data-key="${key}">`;
+      if(sec.type==="mc"){
+        html += `<div class="q-text"><span class="q-num">${i+1}.</span>${it.q}</div>
+          <div class="opts">`;
+        it.opts.forEach((o,oi)=>{
+          html += `<div class="opt" data-key="${key}" data-val="${oi}">
+            <span class="letter">${String.fromCharCode(65+oi)}</span><span>${o}</span></div>`;
+        });
+        html += `</div>`;
+      } else if(sec.type==="free"){
+        html += `<div class="q-text"><span class="q-num">${i+1}.</span>${it.q}</div>
+          <input type="text" class="blank-in wide" data-key="${key}" placeholder="Nhập câu trả lời...">`;
+      } else {
+        const segs = it.tmpl.split("___");
+        let textHtml = `<span class="q-num">${i+1}.</span>`;
+        segs.forEach((seg,si)=>{
+          textHtml += seg;
+          if(si < segs.length-1){
+            const hint = (it.hints && it.hints[si]) || "";
+            textHtml += `<input type="text" class="blank-in" data-key="${key}_${si}" placeholder="${hint}" style="width:${Math.max(90,hint.length*10)}px">`;
+          }
+        });
+        html += `<div class="q-text">${textHtml}</div>`;
+      }
+      html += `<div class="explain" id="ex_${key}"></div></div>`;
+    });
+    html += `</div>`;
+  });
+  html += `
+    <div class="submit-zone">
+      <div class="submit-inner">
+        <span id="submitLabel">Sẵn sàng nộp bài</span>
+        <button class="btn" id="submitBtn">Nộp bài <i class="ti">&check;</i></button>
+      </div>
+    </div>
+  `;
+  app.innerHTML = html;
+  updateProgress();
+
+  app.querySelectorAll('.opt').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const key = el.dataset.key;
+      document.querySelectorAll(`.opt[data-key="${key}"]`).forEach(o=>o.classList.remove('selected'));
+      el.classList.add('selected');
+      state.answers[key] = parseInt(el.dataset.val,10);
+      updateProgress();
+    });
+  });
+  app.querySelectorAll('.blank-in').forEach(el=>{
+    el.addEventListener('input', ()=>{
+      state.answers[el.dataset.key] = el.value;
+      if(!el.classList.contains('wide')){
+        const need = Math.max(el.value.length, el.placeholder.length);
+        el.style.width = Math.max(90, need*10+24)+"px";
+      }
+      updateProgress();
+    });
+  });
+  document.getElementById('submitBtn').addEventListener('click', onSubmit);
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function gradeAll(){
+  let correct=0;
+  const sectionScores = {};
+  DATA.forEach(sec=>{
+    let secCorrect=0, secTotal=0;
+    sec.items.forEach((it,i)=>{
+      const key = sec.id+"_"+i;
+      if(sec.type==="mc"){
+        secTotal++;
+        const chosen = state.answers[key];
+        const ok = chosen===it.a;
+        if(ok){correct++; secCorrect++;}
+        markMC(key, chosen, it);
+      } else if(sec.type==="free"){
+        secTotal++;
+        const val = state.answers[key]||"";
+        const ok = eq(val, it.accept);
+        if(ok){correct++; secCorrect++;}
+        markFree(key, val, ok, it);
+      } else {
+        const m = it.multi||1;
+        for(let b=0;b<m;b++){
+          secTotal++;
+          const bk = key+"_"+b;
+          const val = state.answers[bk]||"";
+          const ok = eq(val, [it.accept[b]]);
+          if(ok){correct++; secCorrect++;}
+          markBlank(bk, val, ok, it.accept[b]);
+        }
+        showExplain(key, it.ex);
+      }
+    });
+    sectionScores[sec.id] = {correct:secCorrect, total:secTotal, title:sec.title};
+  });
+  return {correct, total:TOTAL_Q, sectionScores};
+}
+
+function markMC(key, chosen, it){
+  document.querySelectorAll(`.opt[data-key="${key}"]`).forEach((el,oi)=>{
+    el.style.pointerEvents="none";
+    if(oi===it.a) el.style.borderColor="var(--ok)", el.style.background="var(--ok-tint)";
+    if(chosen!==undefined && oi===chosen && chosen!==it.a){
+      el.style.borderColor="var(--bad)"; el.style.background="var(--bad-tint)"; el.classList.remove('selected');
+    }
+  });
+  const wrap = document.querySelector(`.q[data-key="${key}"] .q-text`);
+  const ok = chosen===it.a;
+  const tag = document.createElement('span');
+  tag.className = "result-tag "+(ok?"correct":"wrong");
+  tag.textContent = ok ? "Đúng" : "Sai";
+  wrap.appendChild(tag);
+  showExplain(key, it.ex);
+}
+
+function markFree(key, val, ok, it){
+  const inp = document.querySelector(`input[data-key="${key}"]`);
+  if(inp){ inp.disabled=true; inp.style.borderColor = ok?"var(--ok)":"var(--bad)"; inp.style.color = ok?"var(--ok)":"var(--bad)"; }
+  const wrap = document.querySelector(`.q[data-key="${key}"] .q-text`);
+  const tag = document.createElement('span');
+  tag.className = "result-tag "+(ok?"correct":"wrong");
+  tag.textContent = ok ? "Đúng" : "Sai";
+  wrap.appendChild(tag);
+  const exDiv = document.getElementById('ex_'+key);
+  exDiv.innerHTML = (ok?"":`<div><span class="yourans">Bạn viết: “${val||"(để trống)"}”</span></div>`) + `<div>${it.ex}</div>`;
+  exDiv.classList.add('show');
+}
+
+function markBlank(bk, val, ok, correctVal){
+  const inp = document.querySelector(`input[data-key="${bk}"]`);
+  if(inp){ inp.disabled=true; inp.style.borderColor = ok?"var(--ok)":"var(--bad)"; inp.style.color = ok?"var(--ok)":"var(--bad)"; inp.title = ok?"Đúng":("Sai — đáp án: "+correctVal); }
+}
+
+function showExplain(key, ex){
+  const exDiv = document.getElementById('ex_'+key);
+  if(!exDiv) return;
+  exDiv.innerHTML = `<div>${ex}</div>`;
+  exDiv.classList.add('show');
+}
+
+function onSubmit(){
+  if(state.submitted) return;
+  const missing = TOTAL_Q - answeredCount();
+  if(missing>0){
+    const lbl = document.getElementById('submitLabel');
+    lbl.style.color = "var(--bad)";
+    lbl.textContent = `Còn ${missing} câu chưa trả lời — vẫn có thể nộp bài`;
+    setTimeout(()=>{ lbl.style.color=""; lbl.textContent="Sẵn sàng nộp bài"; }, 2600);
+  }
+  state.submitted = true;
+  const result = gradeAll();
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').style.opacity = ".5";
+  document.getElementById('submitBtn').style.cursor = "default";
+  saveResult(result);
+  setTimeout(()=>renderResult(result), 350);
+}
+
+async function saveResult(result){
+  const payload = {
+    name: state.name,
+    score: result.correct,
+    total: result.total,
+    percent: Math.round((result.correct/result.total)*100),
+    timestamp: new Date().toISOString()
+  };
+  try{
+    const res = await fetch(FIREBASE_URL + "/scores.json", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
+    });
+    state.saveOk = res.ok;
+  }catch(e){
+    state.saveOk = false;
+  }
+  const toast = document.getElementById('saveToast');
+  if(toast){
+    toast.classList.toggle('err', !state.saveOk);
+    toast.innerHTML = state.saveOk ? "Đã lưu kết quả" : "Không thể lưu kết quả — kiểm tra kết nối mạng";
+    toast.classList.add('show');
+  }
+}
+
+function renderResult(result){
+  const app = document.getElementById('app');
+  const pct = Math.round((result.correct/result.total)*100);
+  const r = 74, c = 2*Math.PI*r;
+  const offset = c - (pct/100)*c;
+  let verdict = "Cần luyện tập thêm — xem lại phần giải thích bên dưới nhé.";
+  if(pct>=90) verdict = "Xuất sắc! Em nắm rất chắc hai thì này.";
+  else if(pct>=75) verdict = "Rất tốt! Chỉ còn vài lỗi nhỏ cần chú ý.";
+  else if(pct>=50) verdict = "Khá ổn — hãy xem lại các câu sai để hiểu rõ hơn.";
+
+  let bdHtml = "";
+  DATA.forEach(sec=>{
+    const s = result.sectionScores[sec.id];
+    bdHtml += `<div class="bd-card"><div class="lbl">${sec.id} · ${s.total} câu</div><div class="val">${s.correct}/${s.total}</div></div>`;
+  });
+
+  const app2 = document.createElement('div');
+  app2.className = "card result-hero";
+  app2.innerHTML = `
+    <div class="eyebrow" style="color:var(--muted);justify-content:center;"><span class="dot" style="background:var(--pp)"></span>Kết quả bài làm</div>
+    <div class="score-ring">
+      <svg viewBox="0 0 168 168">
+        <circle class="bg-ring" cx="84" cy="84" r="${r}"></circle>
+        <circle class="fg-ring" cx="84" cy="84" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="${c}" id="fgRing"></circle>
+      </svg>
+      <div class="score-num"><div class="pct">${pct}%</div><div class="frac">${result.correct} / ${result.total} câu đúng</div></div>
+    </div>
+    <h2>Chào ${state.name}!</h2>
+    <p class="verdict">${verdict}</p>
+    <div class="breakdown">${bdHtml}</div>
+    <div class="save-toast" id="saveToast">Đang lưu kết quả...</div>
+    <div style="margin-top:22px;"><button class="btn secondary" id="reviewBtn">Xem lại chi tiết bài làm &darr;</button></div>
+  `;
+  app.prepend(app2);
+  requestAnimationFrame(()=>{
+    setTimeout(()=>{ document.getElementById('fgRing').style.strokeDashoffset = offset; }, 100);
+  });
+  const toast = document.getElementById('saveToast');
+  toast.classList.toggle('err', state.saveOk===false);
+  if(state.saveOk!==undefined){
+    toast.innerHTML = state.saveOk ? "Đã lưu kết quả" : "Không thể lưu kết quả — kiểm tra kết nối mạng";
+    toast.classList.add('show');
+  }
+  document.getElementById('reviewBtn').addEventListener('click', ()=>{
+    document.querySelector('.progress-shell').scrollIntoView({behavior:'smooth'});
+  });
+  document.getElementById('submitLabel') && (document.getElementById('submitLabel').textContent = "Đã nộp bài");
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+renderGate();
+</script>
+</body>
+</html>
