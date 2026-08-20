@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOEIC Listening Part 2 — Question &amp; Response</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c1424;
+  --bg-alt:#101b30;
+  --paper:#ecefe9;
+  --paper-2:#e2e6dd;
+  --ink:#0f1a2e;
+  --ink-soft:#4b5568;
+  --gold:#e3a836;
+  --gold-soft:#f3d79a;
+  --red:#d6483f;
+  --red-soft:#f6c9c5;
+  --green:#3fa66b;
+  --green-soft:#c9e9d5;
+  --line:rgba(15,26,46,0.12);
+  --line-dark:rgba(236,239,233,0.14);
+  --shadow:0 18px 40px -18px rgba(0,0,0,0.55);
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, #182842 0%, transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, #1a2036 0%, transparent 55%),
+    var(--bg);
+  color:var(--paper);
+  font-family:'IBM Plex Sans', sans-serif;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+}
+h1,h2,h3,.display{font-family:'Fraunces', serif;}
+.mono{font-family:'IBM Plex Mono', monospace;}
+a{color:inherit;}
+::selection{background:var(--gold-soft); color:var(--ink);}
+
+/* ---------- layout shells ---------- */
+.wrap{max-width:980px; margin:0 auto; padding:0 28px;}
+section{padding:88px 0;}
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12.5px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--gold);
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:18px;
+}
+.eyebrow::before{content:""; width:26px; height:1px; background:var(--gold);}
+h2.section-title{font-size:clamp(28px,4vw,40px); font-weight:600; margin:0 0 14px; color:var(--paper);}
+.section-sub{color:#aeb8cc; max-width:620px; font-size:16px; margin-bottom:44px;}
+
+/* ---------- hero ---------- */
+.hero{
+  min-height:92vh;
+  display:flex; flex-direction:column; justify-content:center;
+  position:relative;
+  overflow:hidden;
+  padding-top:60px;
+}
+.hero-tag{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:13px; letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--gold-soft);
+  border:1px solid rgba(227,168,54,0.35);
+  padding:7px 14px; border-radius:999px;
+  width:max-content;
+  margin-bottom:28px;
+  background:rgba(227,168,54,0.07);
+  animation:fadeUp 0.8s ease both;
+}
+.hero h1{
+  font-size:clamp(40px,7vw,78px);
+  font-weight:700;
+  line-height:1.02;
+  margin:0 0 22px;
+  letter-spacing:-0.01em;
+  animation:fadeUp 0.9s ease both 0.08s;
+}
+.hero h1 em{font-style:italic; font-weight:500; color:var(--gold-soft);}
+.hero p{
+  max-width:560px; font-size:18px; color:#b7c0d4;
+  animation:fadeUp 0.9s ease both 0.16s;
+  margin-bottom:40px;
+}
+.hero-actions{display:flex; gap:14px; flex-wrap:wrap; animation:fadeUp 0.9s ease both 0.24s;}
+@keyframes fadeUp{from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:translateY(0);}}
+
+.btn{
+  font-family:'IBM Plex Sans', sans-serif;
+  font-weight:600; font-size:14.5px;
+  border:none; cursor:pointer;
+  padding:14px 24px; border-radius:999px;
+  display:inline-flex; align-items:center; gap:9px;
+  transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.btn:active{transform:translateY(1px) scale(0.98);}
+.btn-gold{background:var(--gold); color:#1b1204;}
+.btn-gold:hover{box-shadow:0 10px 26px -8px rgba(227,168,54,0.55); transform:translateY(-2px);}
+.btn-ghost{background:transparent; color:var(--paper); border:1px solid var(--line-dark);}
+.btn-ghost:hover{background:rgba(236,239,233,0.06); transform:translateY(-2px);}
+
+/* waveform signature */
+.wave-hero{
+  position:absolute; right:-40px; bottom:-10px; top:0;
+  width:46%;
+  display:flex; align-items:flex-end; justify-content:center; gap:6px;
+  opacity:0.9;
+  pointer-events:none;
+  mask-image:linear-gradient(to top, black 55%, transparent 96%);
+}
+.wave-hero .bar{
+  width:9px; border-radius:6px;
+  background:linear-gradient(180deg, var(--gold) 0%, rgba(227,168,54,0.15) 100%);
+  animation:idlewave 2.6s ease-in-out infinite;
+}
+@keyframes idlewave{
+  0%,100%{transform:scaleY(0.35);}
+  50%{transform:scaleY(1);}
+}
+
+/* ---------- info / trap cards ---------- */
+.grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+@media (max-width:820px){.grid-3{grid-template-columns:1fr;} .grid-2{grid-template-columns:1fr;}}
+
+.card{
+  background:var(--bg-alt);
+  border:1px solid var(--line-dark);
+  border-radius:var(--radius);
+  padding:26px 24px;
+  position:relative;
+  overflow:hidden;
+  transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.card:hover{transform:translateY(-4px); border-color:rgba(227,168,54,0.4); box-shadow:var(--shadow);}
+.card .num{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px; color:var(--gold);
+  letter-spacing:0.1em;
+  margin-bottom:12px;
+  display:block;
+}
+.card h3{margin:0 0 10px; font-size:19px; color:var(--paper); font-weight:600;}
+.card p{margin:0; color:#aab4c9; font-size:14.5px;}
+.trap-example{
+  margin-top:16px; padding-top:16px;
+  border-top:1px dashed var(--line-dark);
+  font-size:13.5px;
+  color:#8f9ab0;
+}
+.trap-example b{color:var(--red-soft); font-weight:600;}
+
+/* strategy split */
+.strategy-box{
+  border-radius:var(--radius);
+  padding:26px;
+  border:1px solid var(--line-dark);
+  background:var(--bg-alt);
+}
+.strategy-box.wh{border-left:3px solid var(--gold);}
+.strategy-box.aux{border-left:3px solid var(--green);}
+.strategy-box h4{margin:0 0 8px; font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:.08em; text-transform:uppercase;}
+.strategy-box.wh h4{color:var(--gold);}
+.strategy-box.aux h4{color:var(--green);}
+.strategy-box .chips{display:flex; flex-wrap:wrap; gap:8px; margin:14px 0;}
+.chip{
+  font-family:'IBM Plex Mono', monospace; font-size:12.5px;
+  padding:5px 11px; border-radius:7px;
+  background:rgba(236,239,233,0.06);
+  border:1px solid var(--line-dark);
+}
+.rule-yes-no{
+  margin-top:14px; font-size:14px; color:#c7cfe0;
+  padding:12px 14px; border-radius:9px;
+  background:rgba(214,72,63,0.08);
+  border:1px solid rgba(214,72,63,0.25);
+}
+
+/* vocab tags */
+.tag-cloud{display:flex; flex-wrap:wrap; gap:10px;}
+.tag{
+  padding:9px 16px; border-radius:999px;
+  background:var(--bg-alt); border:1px solid var(--line-dark);
+  font-size:14px; color:#c7cfe0;
+  transition:all .2s ease;
+}
+.tag:hover{background:rgba(227,168,54,0.12); border-color:var(--gold); color:var(--gold-soft); transform:translateY(-2px);}
+
+/* ---------- practice question cards (paper on dark) ---------- */
+.practice-intro{
+  background:rgba(227,168,54,0.08);
+  border:1px solid rgba(227,168,54,0.3);
+  border-radius:12px;
+  padding:16px 20px;
+  font-size:14px;
+  color:var(--gold-soft);
+  margin-bottom:36px;
+  display:flex; gap:12px; align-items:flex-start;
+}
+.qcard{
+  background:var(--paper);
+  color:var(--ink);
+  border-radius:16px;
+  padding:0;
+  margin-bottom:26px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  transform:translateY(18px);
+  opacity:0;
+  transition:transform .6s cubic-bezier(.2,.7,.2,1), opacity .6s ease;
+}
+.qcard.in-view{transform:translateY(0); opacity:1;}
+.qhead{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px;
+  padding:20px 26px;
+  border-bottom:1px solid var(--line);
+  background:var(--paper-2);
+}
+.qhead-left{display:flex; align-items:center; gap:16px;}
+.qnum{
+  font-family:'IBM Plex Mono', monospace;
+  font-weight:600; font-size:15px;
+  width:38px; height:38px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--ink); color:var(--gold-soft);
+  flex-shrink:0;
+}
+.qhead-title{font-size:13px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace;}
+
+.qcontrols{display:flex; gap:8px; flex-wrap:wrap;}
+.pill-btn{
+  font-family:'IBM Plex Sans', sans-serif;
+  font-size:13px; font-weight:600;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--ink);
+  padding:9px 15px;
+  border-radius:999px;
+  cursor:pointer;
+  display:inline-flex; align-items:center; gap:7px;
+  transition:all .18s ease;
+}
+.pill-btn:hover{border-color:var(--ink); background:var(--ink); color:var(--paper);}
+.pill-btn.playing{background:var(--gold); border-color:var(--gold); color:#1b1204;}
+.pill-btn svg{width:14px; height:14px;}
+
+.qbody{padding:26px;}
+
+/* mini waveform inside card, animates while speaking */
+.mini-wave{
+  display:flex; align-items:flex-end; gap:3px; height:26px; margin-bottom:4px;
+}
+.mini-wave span{
+  width:3px; border-radius:2px; background:var(--ink-soft);
+  height:20%;
+  transition:background .2s ease;
+}
+.qcard.speaking .mini-wave span{
+  background:var(--gold);
+  animation:speak 0.9s ease-in-out infinite;
+}
+.qcard.speaking .mini-wave span:nth-child(1){animation-delay:0s;}
+.qcard.speaking .mini-wave span:nth-child(2){animation-delay:.1s;}
+.qcard.speaking .mini-wave span:nth-child(3){animation-delay:.2s;}
+.qcard.speaking .mini-wave span:nth-child(4){animation-delay:.3s;}
+.qcard.speaking .mini-wave span:nth-child(5){animation-delay:.15s;}
+.qcard.speaking .mini-wave span:nth-child(6){animation-delay:.25s;}
+.qcard.speaking .mini-wave span:nth-child(7){animation-delay:.05s;}
+@keyframes speak{
+  0%,100%{height:20%;}
+  50%{height:100%;}
+}
+
+.reveal-panel{
+  max-height:0; overflow:hidden;
+  transition:max-height .5s cubic-bezier(.2,.7,.2,1);
+}
+.reveal-panel.open{max-height:900px;}
+.reveal-inner{padding-top:18px;}
+.qtext{
+  font-family:'Fraunces', serif; font-weight:500; font-size:20px;
+  line-height:1.4;
+  margin:0 0 20px;
+  padding:16px 18px;
+  background:#fff;
+  border-left:3px solid var(--gold);
+  border-radius:0 8px 8px 0;
+  position:relative;
+}
+
+/* text masking — bubbles/choices stay visible & clickable, only the
+   words are blurred out until "Hiện tất cả" is pressed */
+.ctext{
+  display:inline-block;
+  transition:filter .4s ease, opacity .4s ease;
+  filter:blur(7px);
+  opacity:.5;
+  user-select:none;
+}
+.qcard.text-revealed .ctext{
+  filter:blur(0);
+  opacity:1;
+  user-select:auto;
+}
+.mask-hint{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ink-soft);
+  margin-bottom:8px;
+  display:flex; align-items:center; gap:6px;
+}
+.qcard.text-revealed .mask-hint{display:none;}
+
+/* scantron bubbles */
+.choices{display:flex; flex-direction:column; gap:10px;}
+.choice{
+  display:flex; align-items:center; gap:14px;
+  padding:13px 16px;
+  border:1.5px solid var(--line);
+  border-radius:11px;
+  background:#fff;
+  cursor:pointer;
+  transition:border-color .2s ease, background .2s ease, transform .15s ease;
+  text-align:left;
+}
+.choice:hover{border-color:var(--ink); transform:translateX(3px);}
+.bubble{
+  width:26px; height:26px; border-radius:50%;
+  border:2px solid var(--ink-soft);
+  flex-shrink:0;
+  position:relative;
+  transition:all .25s cubic-bezier(.2,.7,.2,1);
+}
+.bubble::after{
+  content:"";
+  position:absolute; inset:4px;
+  border-radius:50%;
+  background:var(--ink);
+  transform:scale(0);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+}
+.choice-letter{font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:12px; color:var(--ink-soft); width:14px;}
+.choice-text{font-size:15px; flex:1;}
+.choice-icon{font-size:15px; opacity:0; transition:opacity .2s ease; width:18px; text-align:center;}
+
+.choice.picked .bubble::after{transform:scale(1);}
+.choice.picked.correct{border-color:var(--green); background:var(--green-soft);}
+.choice.picked.correct .bubble{border-color:var(--green);}
+.choice.picked.correct .bubble::after{background:var(--green);}
+.choice.picked.correct .choice-icon{opacity:1; color:#1c6a41;}
+.choice.picked.wrong{border-color:var(--red); background:var(--red-soft);}
+.choice.picked.wrong .bubble{border-color:var(--red);}
+.choice.picked.wrong .bubble::after{background:var(--red);}
+.choice.picked.wrong .choice-icon{opacity:1; color:#8a2e28;}
+.choice.reveal-correct:not(.picked){border-color:var(--green); background:var(--green-soft);}
+.choice.locked{cursor:default;}
+.choice.locked:hover{transform:none;}
+
+.explain{
+  font-size:14px; color:var(--ink-soft);
+  margin-top:6px; padding-left:40px;
+  max-height:0; overflow:hidden;
+  transition:max-height .35s ease;
+}
+.choice.picked .explain, .choice.reveal-correct .explain{max-height:120px; margin-top:8px;}
+
+.answer-block{
+  margin-top:20px; padding-top:18px;
+  border-top:1px dashed var(--line);
+}
+.answer-block .tag-correct{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px;
+  color:#1c6a41; background:var(--green-soft);
+  padding:6px 14px; border-radius:999px; margin-bottom:12px;
+}
+.answer-block ul{margin:0; padding-left:18px; font-size:14.5px; color:#3a4356;}
+.answer-block li{margin-bottom:6px;}
+
+/* footer */
+footer{
+  padding:60px 0 90px;
+  text-align:center;
+  color:#6b7690;
+  font-size:13.5px;
+}
+footer .mono{color:#8f9ab0;}
+
+/* voice selector bar */
+.voice-bar{
+  position:sticky; top:0; z-index:50;
+  backdrop-filter:blur(14px);
+  background:rgba(12,20,36,0.82);
+  border-bottom:1px solid var(--line-dark);
+}
+.voice-bar .wrap{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 28px;
+  gap:16px; flex-wrap:wrap;
+}
+.voice-bar .brand{font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:.08em; color:var(--gold-soft);}
+.voice-bar select{
+  background:var(--bg-alt); color:var(--paper);
+  border:1px solid var(--line-dark);
+  border-radius:8px; padding:7px 10px; font-size:13px;
+  font-family:'IBM Plex Sans', sans-serif;
+  max-width:220px;
+}
+.voice-bar .rate-group{display:flex; align-items:center; gap:8px; font-size:13px; color:#aab4c9;}
+.voice-bar input[type=range]{width:90px;}
+</style>
+</head>
+<body>
+
+<div class="voice-bar">
+  <div class="wrap">
+    <span class="brand">◆ TOEIC · LISTENING PART 2</span>
+    <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
+      <div class="rate-group">
+        <span>Tốc độ đọc</span>
+        <input type="range" id="rateSlider" min="0.6" max="1.3" step="0.05" value="0.92">
+      </div>
+      <select id="voiceSelect" title="Chọn giọng đọc"></select>
+    </div>
+  </div>
+</div>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="wave-hero" id="heroWave" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero-tag">Question &amp; Response · Questions 7–31</div>
+    <h1>Nghe đúng <em>3 giây đầu.</em><br>Chọn đúng cả câu.</h1>
+    <p>Không hình ảnh, không văn bản in sẵn — chỉ có tai bạn và trí nhớ ngắn hạn. Đây là bài học chiến thuật cho Part 2, kèm 10 câu luyện nghe.</p>
+    <div class="hero-actions">
+      <button class="btn btn-gold" onclick="document.getElementById('practice').scrollIntoView({behavior:'smooth'})">Bắt đầu luyện nghe ↓</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('strategy').scrollIntoView({behavior:'smooth'})">Xem chiến thuật</button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= OVERVIEW ================= -->
+<section id="overview">
+  <div class="wrap">
+    <div class="eyebrow">Tổng quan</div>
+    <h2 class="section-title">Part 2 là gì?</h2>
+    <div class="section-sub">Cấu trúc đề thi và điều bạn sẽ đối mặt trong 25 câu hỏi này.</div>
+    <div class="grid-3">
+      <div class="card">
+        <span class="num">01</span>
+        <h3>25 câu hỏi</h3>
+        <p>Từ câu 7 đến câu 31. Không có hình ảnh, không có câu hỏi hay lựa chọn in trong sách đề.</p>
+      </div>
+      <div class="card">
+        <span class="num">02</span>
+        <h3>1 câu · 3 đáp án</h3>
+        <p>Bạn nghe một câu phát biểu hoặc câu hỏi, sau đó nghe ba phản hồi (A), (B), (C).</p>
+      </div>
+      <div class="card">
+        <span class="num">03</span>
+        <h3>Chọn phản hồi đúng nhất</h3>
+        <p>Nhiệm vụ duy nhất: chọn phản hồi phù hợp nhất với câu gốc — chỉ nghe một lần duy nhất.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRAPS ================= -->
+<section id="traps" style="background:var(--bg-alt); border-top:1px solid var(--line-dark); border-bottom:1px solid var(--line-dark);">
+  <div class="wrap">
+    <div class="eyebrow">Cẩn thận</div>
+    <h2 class="section-title">Bẫy thường gặp</h2>
+    <div class="section-sub">Ba kiểu bẫy ETS dùng đi dùng lại để đánh lừa người không hiểu trọn vẹn câu nói.</div>
+    <div class="grid-3">
+      <div class="card">
+        <span class="num">BẪY 01</span>
+        <h3>Từ giống / âm giống nhau</h3>
+        <p>Bẫy yêu thích của ETS! Một từ nổi bật trong câu hỏi được lặp lại — hoặc thay bằng từ nghe gần giống — trong đáp án sai.</p>
+        <div class="trap-example">Q: <i>Where is the copy machine?</i><br><b>Trap:</b> I prefer coffee, thanks.</div>
+      </div>
+      <div class="card">
+        <span class="num">BẪY 02</span>
+        <h3>Từ liên tưởng</h3>
+        <p>Dùng một từ liên quan chặt đến chủ đề câu hỏi, nhưng theo cách không hề trả lời câu hỏi đó.</p>
+        <div class="trap-example">Q: <i>When did the train arrive?</i><br><b>Trap:</b> The ticket was expensive.</div>
+      </div>
+      <div class="card">
+        <span class="num">BẪY 03</span>
+        <h3>Trả lời sai loại Wh-</h3>
+        <p>Đưa ra câu trả lời về thời gian cho câu hỏi "Where", hoặc về địa điểm cho câu hỏi "Who".</p>
+        <div class="trap-example">Kiểm tra: loại từ để hỏi trước — rồi mới nghe nội dung đáp án có khớp loại đó không.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STRATEGY ================= -->
+<section id="strategy">
+  <div class="wrap">
+    <div class="eyebrow">Chiến thuật</div>
+    <h2 class="section-title">First-Word Focus</h2>
+    <div class="section-sub">Vì không có chữ để đọc, trí nhớ của bạn phải thật sắc. Phần quan trọng nhất của đoạn audio là <b style="color:var(--gold-soft)">1–2 giây đầu tiên</b>.</div>
+    <div class="grid-2">
+      <div class="strategy-box wh">
+        <h4>Wh- Question</h4>
+        <p style="margin:0 0 6px; font-size:15px;">Who · What · Where · When · Why · How</p>
+        <div class="chips">
+          <span class="chip">Who → người</span>
+          <span class="chip">Where → địa điểm</span>
+          <span class="chip">When → thời gian</span>
+          <span class="chip">Why → lý do</span>
+        </div>
+        <div class="rule-yes-no">⚠ Bạn <b>KHÔNG THỂ</b> trả lời bằng "Yes" hoặc "No". Nếu một lựa chọn bắt đầu bằng Yes/No → loại ngay lập tức!</div>
+      </div>
+      <div class="strategy-box aux">
+        <h4>Trợ động từ</h4>
+        <p style="margin:0 0 6px; font-size:15px;">Do · Did · Are · Is · Was · Have</p>
+        <div class="chips">
+          <span class="chip">Do you...?</span>
+          <span class="chip">Did they...?</span>
+          <span class="chip">Is it...?</span>
+          <span class="chip">Have you...?</span>
+        </div>
+        <div class="rule-yes-no" style="background:rgba(63,166,107,0.08); border-color:rgba(63,166,107,0.25);">✓ Đây là câu hỏi Yes/No. Đáp án thường (nhưng không luôn luôn) bắt đầu bằng Yes/No, hoặc xác nhận/phủ nhận trực tiếp.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VOCAB ================= -->
+<section id="vocab" style="background:var(--bg-alt); border-top:1px solid var(--line-dark); border-bottom:1px solid var(--line-dark);">
+  <div class="wrap">
+    <div class="eyebrow">Từ vựng</div>
+    <h2 class="section-title">Thường xuất hiện trong Part 2</h2>
+    <div class="section-sub">Part 2 xoay quanh giao tiếp văn phòng hằng ngày: hỏi đường, lịch trình, ý kiến, và phân công công việc.</div>
+    <div class="tag-cloud">
+      <span class="tag">Who has the folder?</span>
+      <span class="tag">When is the meeting?</span>
+      <span class="tag">Did you call the vendor?</span>
+      <span class="tag">directions</span>
+      <span class="tag">schedules</span>
+      <span class="tag">opinions</span>
+      <span class="tag">assigning tasks</span>
+      <span class="tag">deadlines</span>
+      <span class="tag">office supplies</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRACTICE ================= -->
+<section id="practice">
+  <div class="wrap">
+    <div class="eyebrow">Luyện tập</div>
+    <h2 class="section-title">10 câu hỏi thực hành</h2>
+    <div class="section-sub">Định dạng TOEIC Part 2. Bấm ▶ để nghe câu hỏi và 3 lựa chọn, đoán trước khi bấm "Hiện văn bản".</div>
+
+    <div class="practice-intro">
+      💡 <div><b>Ghi chú cho giáo viên:</b> Đọc câu hỏi và 3 lựa chọn cho học sinh nghe trước (dùng nút Play). Đừng để học sinh xem văn bản bên dưới cho đến khi họ đã đoán xong.</div>
+    </div>
+
+    <div id="qlist"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="mono">TOEIC LISTENING · PART 2 — QUESTION &amp; RESPONSE</div>
+  <div style="margin-top:6px;">Giọng đọc sử dụng Web Speech API của trình duyệt — ưu tiên giọng Google nếu có sẵn.</div>
+</footer>
+
+<script>
+/* ---------------- data ---------------- */
+const questions = [
+  {
+    q: "Where did you put the marketing report?",
+    choices: [
+      {t:"Yes, it's very informative.", correct:false, note:"Bẫy: \"Where\" không thể trả lời bằng Yes."},
+      {t:"I left it on your desk.", correct:true, note:"Đúng: trả lời địa điểm cụ thể (\"on your desk\")."},
+      {t:"At the supermarket.", correct:false, note:"Bẫy âm giống nhau: marketing ↔ supermarket."}
+    ],
+    explain:["\"Where\" hỏi về địa điểm. (B) trả lời đúng địa điểm.","(A) là bẫy vì không thể trả lời \"Where\" bằng \"Yes\".","(C) dùng bẫy âm giống nhau (marketing ~ supermarket)."]
+  },
+  {
+    q: "When did the IT technician fix the server?",
+    choices: [
+      {t:"Sometime yesterday afternoon.", correct:true, note:"Đúng: cụm chỉ thời gian trong quá khứ."},
+      {t:"He is a new technician.", correct:false, note:"Bẫy: lặp từ \"technician\" nhưng không trả lời When."},
+      {t:"Six network servers.", correct:false, note:"Bẫy: lặp từ \"servers\", trả lời cho \"How many\", không phải \"When\"."}
+    ],
+    explain:["\"When\" hỏi về thời gian. (A) đưa ra mốc thời gian quá khứ.","(B) lặp từ \"technician\" nhưng không trả lời câu hỏi.","(C) lặp từ \"servers\" và trả lời \"How many\", không phải \"When\"."]
+  },
+  {
+    q: "Who approved the budget for the new R&D project?",
+    choices: [
+      {t:"The board of directors did.", correct:true, note:"Đúng: trả lời bằng người/nhóm người."},
+      {t:"It proved to be successful.", correct:false, note:"Bẫy âm giống nhau: approved ~ proved."},
+      {t:"Around five thousand dollars.", correct:false, note:"Trả lời cho \"How much\", không phải \"Who\"."}
+    ],
+    explain:["\"Who\" cần một người hoặc nhóm người. \"The board of directors\" trả lời hoàn hảo.","(B) dùng bẫy âm giống nhau (approved ~ proved).","(C) trả lời \"How much\", không phải \"Who\"."]
+  },
+  {
+    q: "Did the HR department hire a new administrative assistant?",
+    choices: [
+      {t:"No, the position is still open.", correct:true, note:"Đúng: trả lời Yes/No trực tiếp kèm giải thích."},
+      {t:"Higher than the top shelf.", correct:false, note:"Bẫy âm giống hệt: hire ~ higher."},
+      {t:"She assisted me yesterday.", correct:false, note:"Lặp gốc từ \"assist\" nhưng không trả lời câu hỏi Yes/No."}
+    ],
+    explain:["\"Did\" là câu hỏi Yes/No. (A) trả lời phủ định trực tiếp và giải thích lý do.","(B) dùng bẫy âm giống hệt (hire nghe giống hệt higher).","(C) lặp gốc từ \"assist\" nhưng không trả lời câu hỏi Yes/No."]
+  },
+  {
+    q: "Why was the accounting meeting canceled?",
+    choices: [
+      {t:"Because the manager was sick.", correct:true, note:"Đúng: \"Because\" là dấu hiệu chuẩn cho câu trả lời lý do."},
+      {t:"It's in conference room B.", correct:false, note:"Trả lời cho câu hỏi \"Where\"."},
+      {t:"I opened a bank account.", correct:false, note:"Bẫy lặp gốc từ: accounting ↔ account."}
+    ],
+    explain:["\"Why\" hỏi lý do. \"Because\" là dấu hiệu trả lời chuẩn.","(B) trả lời câu hỏi \"Where\".","(C) dùng bẫy lặp gốc từ (accounting → account)."]
+  },
+  {
+    q: "How long ago did the purchasing manager leave?",
+    choices: [
+      {t:"She bought some new shoes.", correct:false, note:"Bẫy liên tưởng: purchasing ~ bought."},
+      {t:"It is about five meters long.", correct:false, note:"Bẫy từ giống hệt \"long\" nhưng mô tả độ dài vật lý, không phải thời gian."},
+      {t:"Just ten minutes ago.", correct:true, note:"Đúng: mốc thời gian cụ thể."}
+    ],
+    explain:["\"How long ago\" hỏi khoảng thời gian đã trôi qua. (C) cho khung thời gian chính xác.","(A) liên tưởng \"purchasing\" với \"bought\" — đây là bẫy.","(B) dùng đúng từ \"long\" nhưng mô tả độ dài vật lý, không phải thời gian."]
+  },
+  {
+    q: "What time did the corporate client arrive yesterday?",
+    choices: [
+      {t:"Right after the lunch break.", correct:true, note:"Đúng: chỉ ra mốc thời gian."},
+      {t:"Yes, they drove a rental car.", correct:false, note:"Bẫy: không thể trả lời \"What time\" bằng Yes."},
+      {t:"The clock is on the wall.", correct:false, note:"Bẫy liên tưởng: time ↔ clock."}
+    ],
+    explain:["\"What time\" cần câu trả lời về thời điểm. \"Right after the lunch break\" chỉ ra thời gian.","(B) sai vì không thể trả lời \"What time\" bằng \"Yes\".","(C) liên tưởng từ \"time\" với \"clock\", không trả lời đúng câu hỏi."]
+  },
+  {
+    q: "Didn't the maintenance team repair the elevator this morning?",
+    choices: [
+      {t:"To get to the fifth floor.", correct:false, note:"Trả lời cho \"Why\" hoặc \"Where\"."},
+      {t:"Actually, they are coming tomorrow.", correct:true, note:"Đúng: phản bác lịch sự giả định trong câu hỏi phủ định."},
+      {t:"I work in pairs.", correct:false, note:"Bẫy âm giống nhau: repair ~ pair."}
+    ],
+    explain:["Đây là câu hỏi Yes/No dạng phủ định. (B) phản bác lịch sự giả định bằng cách nói việc đó chưa xảy ra.","(A) trả lời cho câu hỏi \"Why\" hoặc \"Where\".","(C) dùng bẫy âm giống nhau (repair ~ pair)."]
+  },
+  {
+    q: "Whose sales presentation did you watch last week?",
+    choices: [
+      {t:"I watched Mr. Peterson's.", correct:true, note:"Đúng: chỉ rõ quyền sở hữu."},
+      {t:"It is a nice present.", correct:false, note:"Bẫy âm giống nhau: presentation ~ present."},
+      {t:"We sold thirty units.", correct:false, note:"Bẫy liên tưởng: sales ~ sold."}
+    ],
+    explain:["\"Whose\" hỏi về quyền sở hữu (của ai?). \"Mr. Peterson's\" thể hiện quyền sở hữu.","(B) dùng bẫy âm giống nhau (presentation → present).","(C) dùng bẫy từ liên tưởng (sales → sold)."]
+  },
+  {
+    q: "Did you send the contractor's invoice to payroll?",
+    choices: [
+      {t:"Her voice is very loud.", correct:false, note:"Bẫy âm giống nhau: invoice ~ voice."},
+      {t:"Yes, I emailed it an hour ago.", correct:true, note:"Đúng: trả lời Yes và xác nhận hành động."},
+      {t:"The construction contract.", correct:false, note:"Bẫy liên tưởng: contractor ~ contract, không trả lời hành động."}
+    ],
+    explain:["Câu hỏi trực tiếp dạng \"Did you\". (B) trả lời \"Yes\" và xác nhận hành động đã xảy ra.","(A) dùng bẫy âm giống nhau (invoice ~ voice).","(C) dùng từ liên tưởng (contractor → contract) nhưng không trả lời hành động."]
+  }
+];
+
+/* ---------------- render ---------------- */
+const qlist = document.getElementById('qlist');
+
+questions.forEach((item, idx) => {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.innerHTML = `
+    <div class="qhead">
+      <div class="qhead-left">
+        <div class="qnum">${idx+1}</div>
+        <div>
+          <div class="qhead-title">Question ${idx+1}</div>
+          <div class="mini-wave">${'<span></span>'.repeat(7)}</div>
+        </div>
+      </div>
+      <div class="qcontrols">
+        <button class="pill-btn play-btn" data-idx="${idx}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Nghe
+        </button>
+        <button class="pill-btn toggle-q" data-idx="${idx}">Hiện tất cả</button>
+        <button class="pill-btn toggle-a" data-idx="${idx}">Hiện đáp án</button>
+      </div>
+    </div>
+    <div class="qbody">
+      <div class="mask-hint">🔒 Nghe rồi đoán — chữ đang được che, bấm "Hiện tất cả" để xem</div>
+      <p class="qtext"><span class="ctext">${item.q}</span></p>
+      <div class="choices">
+        ${item.choices.map((c,ci)=>`
+          <div class="choice" data-idx="${idx}" data-ci="${ci}" data-correct="${c.correct}">
+            <span class="choice-letter">${String.fromCharCode(65+ci)}</span>
+            <span class="bubble"></span>
+            <span class="choice-text">
+              <span class="ctext">${c.t}</span>
+              <div class="explain"><span class="ctext">${c.note}</span></div>
+            </span>
+            <span class="choice-icon">${c.correct ? '✓' : '✕'}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="reveal-panel a-panel">
+        <div class="reveal-inner">
+          <div class="answer-block">
+            <span class="tag-correct">✓ Đáp án đúng: ${String.fromCharCode(65 + item.choices.findIndex(c=>c.correct))}</span>
+            <ul>${item.explain.map(e=>`<li>${e}</li>`).join('')}</ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  qlist.appendChild(card);
+});
+
+/* reveal on scroll */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); } });
+}, {threshold:0.12});
+document.querySelectorAll('.qcard').forEach(c=>io.observe(c));
+
+/* hero waveform bars */
+const heroWave = document.getElementById('heroWave');
+for(let i=0;i<34;i++){
+  const b = document.createElement('div');
+  b.className = 'bar';
+  b.style.height = (30 + Math.random()*160) + 'px';
+  b.style.animationDelay = (Math.random()*2) + 's';
+  b.style.animationDuration = (1.8 + Math.random()*1.6) + 's';
+  heroWave.appendChild(b);
+}
+
+/* toggle question / answer panels */
+document.addEventListener('click', (e)=>{
+  const qBtn = e.target.closest('.toggle-q');
+  const aBtn = e.target.closest('.toggle-a');
+  if(qBtn){
+    const card = qBtn.closest('.qcard');
+    const revealed = card.classList.toggle('text-revealed');
+    qBtn.textContent = revealed ? 'Ẩn chữ' : 'Hiện tất cả';
+  }
+  if(aBtn){
+    const card = aBtn.closest('.qcard');
+    const panel = card.querySelector('.a-panel');
+    panel.classList.toggle('open');
+    aBtn.textContent = panel.classList.contains('open') ? 'Ẩn đáp án' : 'Hiện đáp án';
+    // seeing the explanation only makes sense once the text is visible too
+    if(panel.classList.contains('open') && !card.classList.contains('text-revealed')){
+      card.classList.add('text-revealed');
+      card.querySelector('.toggle-q').textContent = 'Ẩn chữ';
+    }
+  }
+  const choice = e.target.closest('.choice');
+  if(choice && !choice.classList.contains('locked')){
+    const group = choice.closest('.choices');
+    const isCorrect = choice.dataset.correct === 'true';
+    group.querySelectorAll('.choice').forEach(c=>{
+      c.classList.add('locked');
+      if(c.dataset.correct === 'true') c.classList.add('reveal-correct');
+    });
+    choice.classList.add('picked', isCorrect ? 'correct' : 'wrong');
+  }
+});
+
+/* ---------------- Text-to-Speech ---------------- */
+let voices = [];
+const voiceSelect = document.getElementById('voiceSelect');
+const rateSlider = document.getElementById('rateSlider');
+
+function loadVoices(){
+  voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
+  if(!voices.length) voices = speechSynthesis.getVoices();
+  voiceSelect.innerHTML = '';
+  voices.forEach((v,i)=>{
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${v.name} (${v.lang})`;
+    voiceSelect.appendChild(opt);
+  });
+  // prefer a Google English voice by default
+  const googleIdx = voices.findIndex(v => /Google/i.test(v.name) && v.lang.startsWith('en'));
+  if(googleIdx >= 0) voiceSelect.value = googleIdx;
+}
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+let currentCard = null;
+
+function speakQueue(lines, card){
+  speechSynthesis.cancel();
+  const chosen = voices[voiceSelect.value] || voices[0];
+  const rate = parseFloat(rateSlider.value);
+  let i = 0;
+  currentCard = card;
+  card.classList.add('speaking');
+
+  function next(){
+    if(i >= lines.length){
+      card.classList.remove('speaking');
+      document.querySelectorAll('.play-btn.playing').forEach(b=>{
+        b.classList.remove('playing');
+        b.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Nghe';
+      });
+      return;
+    }
+    const u = new SpeechSynthesisUtterance(lines[i]);
+    if(chosen) u.voice = chosen;
+    u.rate = rate;
+    u.pitch = 1;
+    u.lang = 'en-US';
+    u.onend = ()=>{ i++; setTimeout(next, 380); };
+    speechSynthesis.speak(u);
+  }
+  next();
+}
+
+document.querySelectorAll('.play-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const idx = btn.dataset.idx;
+    const item = questions[idx];
+    const card = btn.closest('.qcard');
+
+    document.querySelectorAll('.play-btn.playing').forEach(b=>{
+      b.classList.remove('playing');
+      b.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Nghe';
+    });
+
+    if(speechSynthesis.speaking && currentCard === card){
+      speechSynthesis.cancel();
+      card.classList.remove('speaking');
+      return;
+    }
+
+    btn.classList.add('playing');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg> Dừng';
+
+    const lines = [item.q, ...item.choices.map((c,ci)=>`${String.fromCharCode(65+ci)}. ${c.t}`)];
+    speakQueue(lines, card);
+  });
+});
+</script>
+</body>
+</html>
