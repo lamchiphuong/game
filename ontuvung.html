@@ -327,14 +327,14 @@ details#answerkey[open] summary{ border-color:var(--navy); background:var(--navy
 /* -------- floating presence / typing bubbles -------- */
 .name-bubble{
   position:absolute; z-index:60; pointer-events:none;
-  transform: translate(-50%,-8px) scale(.6); opacity:0;
+  transform: translate(-50%,-24px) scale(.6); opacity:0;
   display:flex; align-items:center; gap:6px;
   padding:5px 11px 5px 6px; border-radius:99px 99px 99px 4px;
   color:#fff; font-size:12px; font-weight:700; white-space:nowrap;
   box-shadow: 0 10px 20px -8px rgba(18,35,65,.5);
   transition: opacity .25s ease, transform .25s cubic-bezier(.3,1.6,.4,1);
 }
-.name-bubble.show{ opacity:1; transform: translate(-50%,-16px) scale(1); }
+.name-bubble.show{ opacity:1; transform: translate(-50%,-38px) scale(1); }
 .name-bubble .nb-avatar{
   width:18px; height:18px; border-radius:50%; background:rgba(255,255,255,.28);
   display:flex; align-items:center; justify-content:center; font-size:9px; flex:none;
@@ -959,7 +959,7 @@ function spawnBubble(target, name, color, broadcast){
   bubble.className = "name-bubble";
   bubble.style.background = color;
   bubble.style.left = (rect.left + rect.width/2 + window.scrollX) + "px";
-  bubble.style.top = (rect.top + window.scrollY) + "px";
+  bubble.style.top = (rect.top + window.scrollY - 8) + "px";
   bubble.innerHTML = `<span class="nb-avatar">${initials(name)}</span>${name}<span class="nb-pulse"></span>`;
   document.body.appendChild(bubble);
   requestAnimationFrame(()=> bubble.classList.add("show"));
