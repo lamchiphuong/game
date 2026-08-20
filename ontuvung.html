@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOEIC Boarding — Office & Business Travel Vocabulary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#122341;
+  --navy-2:#1c3157;
+  --cream:#faf5ea;
+  --paper:#fffdf8;
+  --amber:#e8a33d;
+  --amber-2:#c97f1e;
+  --teal:#2f8f82;
+  --coral:#e15b3f;
+  --ink:#1a2233;
+  --line: rgba(18,35,65,.14);
+  --shadow: 0 20px 45px -20px rgba(18,35,65,.35);
+  --radius: 18px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(circle at 12% 8%, rgba(232,163,61,.16), transparent 40%),
+    radial-gradient(circle at 92% 18%, rgba(47,143,130,.14), transparent 45%),
+    var(--cream);
+  color:var(--ink);
+  font-family:'Be Vietnam Pro', sans-serif;
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
+h1,h2,h3,.display{ font-family:'Fraunces', serif; }
+.mono{ font-family:'JetBrains Mono', monospace; }
+
+/* ---------- background runway stripes ---------- */
+.runway{
+  position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.5;
+  background-image: repeating-linear-gradient(90deg, transparent 0 120px, rgba(18,35,65,.045) 120px 126px);
+}
+
+/* ---------- LOGIN OVERLAY ---------- */
+#login-overlay{
+  position:fixed; inset:0; z-index:100;
+  background: linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 55%, #24406f 100%);
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+}
+.login-card{
+  background:var(--paper);
+  border-radius:24px;
+  max-width:560px; width:100%;
+  padding:44px 40px 36px;
+  box-shadow: 0 40px 90px -30px rgba(0,0,0,.55);
+  position:relative;
+  animation: cardIn .7s cubic-bezier(.2,.9,.25,1.1);
+  border:1px solid rgba(255,255,255,.4);
+}
+@keyframes cardIn{ from{ opacity:0; transform:translateY(30px) scale(.96);} to{opacity:1; transform:translateY(0) scale(1);} }
+.login-eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--amber-2); font-weight:700;
+  background:rgba(232,163,61,.14); padding:6px 12px; border-radius:99px;
+}
+.login-card h1{ font-size:32px; margin:16px 0 6px; color:var(--navy); line-height:1.15;}
+.login-card p.sub{ color:#5a6178; margin:0 0 26px; font-size:15px; }
+.seat-list{ display:flex; flex-direction:column; gap:12px; }
+.seat-btn{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  width:100%; padding:16px 18px; border-radius:14px;
+  border:1.6px solid var(--line); background:#fff; cursor:pointer;
+  font-family:inherit; font-size:16px; font-weight:600; color:var(--navy);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+  text-align:left;
+}
+.seat-btn:hover:not(:disabled){ transform:translateY(-3px); box-shadow:var(--shadow); border-color:var(--amber); background:#fffaf1; }
+.seat-btn:active:not(:disabled){ transform:translateY(-1px) scale(.99); }
+.seat-btn:disabled{ opacity:.45; cursor:not-allowed; }
+.seat-left{ display:flex; align-items:center; gap:12px; }
+.seat-avatar{
+  width:38px; height:38px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-weight:800; font-size:14px; flex:none;
+}
+.seat-tag{ font-size:11px; font-family:'JetBrains Mono',monospace; padding:4px 9px; border-radius:99px; font-weight:700; letter-spacing:.03em; }
+.seat-tag.free{ background:rgba(47,143,130,.14); color:var(--teal); }
+.seat-tag.taken{ background:rgba(225,91,63,.13); color:var(--coral); }
+.login-foot{ margin-top:22px; font-size:12.5px; color:#7a8096; display:flex; gap:8px; align-items:flex-start;}
+
+/* ---------- TOP HERO / BOARDING PASS HEADER ---------- */
+.wrap{ max-width:980px; margin:0 auto; padding:38px 20px 90px; position:relative; z-index:1; }
+.pass{
+  background: linear-gradient(120deg, var(--navy) 0%, var(--navy-2) 60%, #274a80 100%);
+  border-radius: 24px;
+  color:#fff;
+  position:relative;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  display:grid;
+  grid-template-columns: 1fr auto;
+}
+.pass::before{
+  content:""; position:absolute; inset:0;
+  background-image: radial-gradient(circle at 20% 120%, rgba(232,163,61,.35), transparent 50%);
+  pointer-events:none;
+}
+.pass-main{ padding:34px 30px 30px; position:relative; z-index:1; }
+.pass-eyebrow{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#f2c98a; opacity:.9;}
+.pass-title{ font-size: clamp(26px,4vw,38px); margin:10px 0 6px; line-height:1.1; }
+.pass-sub{ opacity:.82; font-size:14.5px; max-width:520px; }
+.pass-meta{ margin-top:22px; display:flex; gap:28px; flex-wrap:wrap; }
+.pass-meta div{ font-size:11px; letter-spacing:.08em; text-transform:uppercase; opacity:.65; font-family:'JetBrains Mono',monospace; }
+.pass-meta strong{ display:block; font-family:'Fraunces',serif; font-size:18px; letter-spacing:0; text-transform:none; opacity:1; margin-top:3px; }
+.pass-stub{
+  border-left:2px dashed rgba(255,255,255,.35);
+  padding:30px 26px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:8px; position:relative; z-index:1; min-width:170px;
+}
+.pass-stub .qr{
+  width:74px;height:74px;border-radius:12px;
+  background:
+    linear-gradient(45deg, transparent 48%, #fff 48% 52%, transparent 52%),
+    repeating-conic-gradient(#fff 0 25%, transparent 0 50%);
+  background-size: 100% 100%, 12px 12px;
+  opacity:.9;
+}
+.pass-stub small{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em; opacity:.7; text-transform:uppercase; }
+
+/* punch holes on the perforation */
+.pass-stub::before, .pass-stub::after{
+  content:""; position:absolute; left:-9px; width:18px; height:18px; border-radius:50%;
+  background: var(--cream);
+}
+.pass-stub::before{ top:-9px; }
+.pass-stub::after{ bottom:-9px; }
+
+/* ---------- PRESENCE BAR ---------- */
+.presence-bar{
+  display:flex; align-items:center; gap:10px; margin:18px 2px 0; flex-wrap:wrap;
+}
+.presence-label{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#7a8096; }
+.presence-chip{
+  display:flex; align-items:center; gap:7px; background:#fff; border:1px solid var(--line);
+  padding:6px 12px 6px 6px; border-radius:99px; font-size:13px; font-weight:600; box-shadow:0 4px 14px -8px rgba(18,35,65,.3);
+  animation: chipIn .4s ease;
+}
+@keyframes chipIn{ from{opacity:0; transform:scale(.7);} to{opacity:1; transform:scale(1);} }
+.presence-dot{ width:9px; height:9px; border-radius:50%; background:var(--teal); box-shadow:0 0 0 3px rgba(47,143,130,.22); flex:none; animation:pulseDot 1.8s infinite; }
+@keyframes pulseDot{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+.presence-avatar{
+  width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:10.5px; font-weight:800; flex:none;
+}
+
+/* ---------- SECTIONS ---------- */
+section.panel{
+  background:var(--paper);
+  border-radius: var(--radius);
+  border:1px solid var(--line);
+  margin-top:26px;
+  padding:30px 28px 32px;
+  box-shadow: 0 16px 40px -28px rgba(18,35,65,.4);
+  position:relative;
+  animation: fadeUp .6s ease both;
+}
+@keyframes fadeUp{ from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:translateY(0);} }
+.panel-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px; }
+.panel-kicker{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--amber-2); font-weight:700; }
+.panel-title{ font-size:24px; margin:6px 0 0; color:var(--navy); }
+.panel-points{
+  font-family:'JetBrains Mono',monospace; font-size:12px; background:var(--navy); color:#fff;
+  padding:6px 12px; border-radius:99px; font-weight:600; white-space:nowrap;
+}
+
+/* vocab table styled like tags */
+.vocab-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:14px; }
+.vocab-card{
+  border:1px solid var(--line); border-radius:14px; padding:14px 16px; background:#fff;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  position:relative; overflow:hidden;
+}
+.vocab-card::after{
+  content:""; position:absolute; top:0; left:0; height:4px; width:100%;
+  background:linear-gradient(90deg,var(--amber),var(--teal)); transform:scaleX(0); transform-origin:left;
+  transition: transform .3s ease;
+}
+.vocab-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow); border-color:transparent; }
+.vocab-card:hover::after{ transform:scaleX(1); }
+.vocab-term{ font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:var(--navy); }
+.vocab-ipa{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--teal); margin-left:6px; }
+.vocab-meaning{ font-size:13.5px; color:#4c5266; margin-top:4px; }
+.vocab-topic{
+  display:inline-block; margin-top:8px; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+  background:rgba(47,143,130,.12); color:var(--teal); padding:3px 9px; border-radius:99px; font-weight:700;
+}
+.vocab-ex{ font-size:12.5px; color:#7a8096; margin-top:8px; font-style:italic; border-top:1px dashed var(--line); padding-top:8px;}
+
+/* passages */
+.passage{ font-size:16px; line-height:2.15; color:#2b3350; }
+.passage .wordbox{
+  font-family:'JetBrains Mono',monospace; font-size:12px; background:#fbf3e2; border:1px dashed #e3c584;
+  padding:10px 14px; border-radius:10px; margin-bottom:16px; color:#7a5c1c; line-height:1.9;
+}
+.blank-wrap{ position:relative; display:inline-block; margin:0 3px; }
+input.blank{
+  font-family:'Be Vietnam Pro',sans-serif; font-weight:600; font-size:15px; color:var(--navy);
+  border:none; border-bottom:2.4px solid var(--amber); background:rgba(232,163,61,.08);
+  padding:3px 8px; border-radius:6px 6px 0 0; width:150px; text-align:center;
+  transition: box-shadow .2s ease, background .2s ease, border-color .2s ease;
+}
+input.blank:focus{ outline:none; box-shadow:0 6px 16px -8px rgba(232,163,61,.6); background:#fff8ea; }
+input.blank.correct{ border-color:var(--teal); background:rgba(47,143,130,.12); color:var(--teal); }
+input.blank.wrong{ border-color:var(--coral); background:rgba(225,91,63,.1); color:var(--coral); }
+
+/* task 2 unscramble */
+.unscramble-list{ display:flex; flex-direction:column; gap:14px; }
+.unscramble-item{
+  display:grid; grid-template-columns: 34px 1fr; gap:14px; align-items:start;
+  border:1px solid var(--line); border-radius:14px; padding:14px 16px; background:#fff;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.unscramble-item:hover{ box-shadow:0 12px 30px -20px rgba(18,35,65,.4); transform:translateY(-2px); }
+.us-num{
+  width:34px; height:34px; border-radius:50%; background:var(--navy); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-weight:800; font-family:'JetBrains Mono',monospace; font-size:13px;
+}
+.letters{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+.tile{
+  width:30px; height:34px; display:flex; align-items:center; justify-content:center;
+  background:var(--navy); color:#fff; border-radius:7px; font-family:'JetBrains Mono',monospace;
+  font-weight:700; font-size:14px; text-transform:uppercase; box-shadow: 0 3px 0 var(--navy-2);
+  transition: transform .15s ease;
+}
+.tile:hover{ transform:translateY(-2px) rotate(-2deg); background:var(--amber-2); box-shadow:0 3px 0 #8f5f13;}
+.us-context{ font-size:13.5px; color:#5a6178; margin-bottom:8px; }
+.us-context b{ color:var(--navy); }
+input.answer{
+  font-family:'Be Vietnam Pro',sans-serif; font-weight:600; font-size:14.5px; width:100%; max-width:280px;
+  padding:9px 12px; border-radius:9px; border:1.6px solid var(--line); color:var(--navy);
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+input.answer:focus{ outline:none; border-color:var(--amber); box-shadow:0 0 0 4px rgba(232,163,61,.16); }
+input.answer.correct{ border-color:var(--teal); background:rgba(47,143,130,.08); }
+input.answer.wrong{ border-color:var(--coral); background:rgba(225,91,63,.08); }
+
+/* task3 sentence chips */
+.chips{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+.chip{
+  padding:7px 13px; border-radius:99px; background:#eef1f8; color:var(--navy); font-size:13px; font-weight:600;
+  border:1px solid var(--line); transition: transform .15s ease, background .15s ease;
+}
+.chip:hover{ transform:translateY(-2px); background:var(--amber); color:#fff; border-color:transparent; }
+
+/* buttons */
+.btn{
+  font-family:'Be Vietnam Pro',sans-serif; font-weight:700; font-size:14.5px; letter-spacing:.01em;
+  padding:12px 22px; border-radius:12px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.btn-primary{ background:linear-gradient(135deg,var(--amber),var(--amber-2)); color:#fff; box-shadow:0 14px 30px -14px rgba(201,127,30,.7); }
+.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 18px 36px -14px rgba(201,127,30,.85); }
+.btn-ghost{ background:#fff; color:var(--navy); border:1.6px solid var(--line); }
+.btn-ghost:hover{ border-color:var(--navy); transform:translateY(-2px); }
+.actions-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
+
+/* score board (departure-board style) */
+#scoreboard{
+  position:sticky; top:14px; z-index:5; margin-top:26px;
+  background:var(--navy); color:#fff; border-radius:18px; padding:20px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;
+  box-shadow:var(--shadow);
+}
+.score-label{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; opacity:.7; }
+.score-num{ font-family:'JetBrains Mono',monospace; font-size:34px; font-weight:700; color:var(--amber); }
+.score-bar{ flex:1; min-width:160px; height:10px; border-radius:99px; background:rgba(255,255,255,.14); overflow:hidden; }
+.score-bar-fill{ height:100%; background:linear-gradient(90deg,var(--teal),var(--amber)); width:0%; transition: width .6s cubic-bezier(.2,.9,.3,1); border-radius:99px; }
+
+/* answer key */
+.key-table{ width:100%; border-collapse:collapse; font-size:13.5px; margin-top:10px; }
+.key-table th{ text-align:left; font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:#7a8096; padding:8px 10px; border-bottom:1.5px solid var(--line); }
+.key-table td{ padding:9px 10px; border-bottom:1px solid var(--line); color:#3a4058; }
+.key-table tr:hover td{ background:#faf5ea; }
+.key-ans{ color:var(--teal); font-weight:700; }
+details#answerkey{ margin-top:10px; }
+details#answerkey summary{
+  cursor:pointer; list-style:none; display:inline-flex; align-items:center; gap:8px;
+  font-weight:700; color:var(--navy); padding:10px 16px; border:1.6px solid var(--line); border-radius:12px; width:fit-content;
+  transition: border-color .2s ease, transform .2s ease;
+}
+details#answerkey summary::-webkit-details-marker{ display:none; }
+details#answerkey summary:hover{ border-color:var(--amber); transform:translateY(-2px); }
+details#answerkey[open] summary{ border-color:var(--navy); background:var(--navy); color:#fff; }
+
+/* stamp for perfect score */
+#stamp{
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-14deg) scale(0);
+  border:5px solid var(--coral); color:var(--coral); font-family:'Fraunces',serif; font-weight:800;
+  font-size:44px; padding:14px 34px; border-radius:16px; letter-spacing:.04em; text-transform:uppercase;
+  background:rgba(255,255,255,.9); z-index:200; pointer-events:none; opacity:0;
+}
+#stamp.show{ animation: stampIn .6s cubic-bezier(.2,1.4,.4,1) forwards; }
+@keyframes stampIn{ 0%{opacity:0; transform:translate(-50%,-50%) rotate(-14deg) scale(2.4);} 60%{opacity:1;} 100%{opacity:1; transform:translate(-50%,-50%) rotate(-10deg) scale(1);} }
+
+/* -------- floating presence / typing bubbles -------- */
+.name-bubble{
+  position:absolute; z-index:60; pointer-events:none;
+  transform: translate(-50%,-8px) scale(.6); opacity:0;
+  display:flex; align-items:center; gap:6px;
+  padding:5px 11px 5px 6px; border-radius:99px 99px 99px 4px;
+  color:#fff; font-size:12px; font-weight:700; white-space:nowrap;
+  box-shadow: 0 10px 20px -8px rgba(18,35,65,.5);
+  transition: opacity .25s ease, transform .25s cubic-bezier(.3,1.6,.4,1);
+}
+.name-bubble.show{ opacity:1; transform: translate(-50%,-16px) scale(1); }
+.name-bubble .nb-avatar{
+  width:18px; height:18px; border-radius:50%; background:rgba(255,255,255,.28);
+  display:flex; align-items:center; justify-content:center; font-size:9px; flex:none;
+}
+.name-bubble .nb-pulse{ width:6px; height:6px; border-radius:50%; background:#fff; animation:pulseDot 1s infinite; }
+
+/* footer */
+footer{ text-align:center; margin-top:40px; font-size:12px; color:#9098ab; }
+footer a{ color:var(--teal); text-decoration:none; font-weight:600; }
+
+@media (max-width:640px){
+  .pass{ grid-template-columns:1fr; }
+  .pass-stub{ border-left:none; border-top:2px dashed rgba(255,255,255,.35); flex-direction:row; }
+  .pass-stub::before{ left:50%; top:-9px; transform:translateX(-50%);}
+  .pass-stub::after{ left:50%; bottom:-9px; transform:translateX(-50%);}
+  section.panel{ padding:22px 16px 26px; }
+  #scoreboard{ position:static; }
+}
+</style>
+</head>
+<body>
+<div class="runway"></div>
+
+<!-- ============ LOGIN ============ -->
+<div id="login-overlay">
+  <div class="login-card">
+    <span class="login-eyebrow">✈ TOEIC-WORK-001 · Check-in</span>
+    <h1>Chọn ghế của bạn</h1>
+    <p class="sub">Tối đa 3 học viên có thể cùng làm bài trong phiên này. Chọn tên để bắt đầu — mỗi khi bạn gõ hoặc bấm vào bài, bong bóng tên của bạn sẽ xuất hiện cho mọi người thấy.</p>
+    <div class="seat-list" id="seat-list"></div>
+    <div class="login-foot">💡 Trạng thái "đang có mặt" và bong bóng tên được đồng bộ <b>thời gian thực giữa mọi thiết bị</b> (điện thoại, laptop khác nhau) đang mở trang này — không chỉ trên cùng một trình duyệt.</div>
+  </div>
+</div>
+
+<div id="stamp">CHECKED IN ✓</div>
+
+<div class="wrap" id="app" style="display:none;">
+
+  <!-- HERO BOARDING PASS -->
+  <div class="pass">
+    <div class="pass-main">
+      <div class="pass-eyebrow">Boarding Pass · Vocabulary Flight</div>
+      <h1 class="pass-title">Office Routine &amp; Business Travel</h1>
+      <p class="pass-sub">Bộ từ vựng TOEIC Intermediate (450–650+) chủ đề công việc văn phòng và công tác. Hoàn thành 3 chặng bài tập để về đích với 28 điểm.</p>
+      <div class="pass-meta">
+        <div>Passenger <strong id="meta-name">—</strong></div>
+        <div>Route <strong>Office → Airport → Hotel</strong></div>
+        <div>Class <strong>Intermediate</strong></div>
+        <div>Total pts <strong>28</strong></div>
+      </div>
+    </div>
+    <div class="pass-stub">
+      <div class="qr"></div>
+      <small>Seat <span id="meta-seat">01</span></small>
+      <small id="meta-code" class="mono">TOEIC-001</small>
+    </div>
+  </div>
+
+  <!-- PRESENCE -->
+  <div class="presence-bar">
+    <span class="presence-label">Đang có mặt</span>
+    <div id="presence-chips" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+  </div>
+
+  <!-- SCOREBOARD -->
+  <div id="scoreboard">
+    <div>
+      <div class="score-label">Tổng điểm</div>
+      <div class="score-num"><span id="score-num">0</span> / 28</div>
+    </div>
+    <div class="score-bar"><div class="score-bar-fill" id="score-fill"></div></div>
+    <button class="btn btn-primary" id="btn-check">✓ Chấm điểm</button>
+    <button class="btn btn-ghost" id="btn-reset">↺ Làm lại</button>
+  </div>
+
+  <!-- VOCAB -->
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-kicker">Phần 1</div>
+        <h2 class="panel-title">Bảng từ vựng trọng tâm</h2>
+      </div>
+      <div class="panel-points">17 từ · học trước khi làm bài</div>
+    </div>
+    <div class="vocab-grid" id="vocab-grid"></div>
+  </section>
+
+  <!-- TASK 1 -->
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-kicker">Task 1 · Điền vào chỗ trống</div>
+        <h2 class="panel-title">Đoạn văn (Passages)</h2>
+      </div>
+      <div class="panel-points">10 điểm</div>
+    </div>
+
+    <h3 style="color:var(--navy); font-size:16px; margin-bottom:6px;">Passage 1 — Office Daily Routines</h3>
+    <div class="wordbox">accountant · supervisor · prepare a report · attend a meeting · review documents</div>
+    <p class="passage" id="passage1"></p>
+
+    <h3 style="color:var(--navy); font-size:16px; margin:26px 0 6px;">Passage 2 — A Business Trip Experience</h3>
+    <div class="wordbox">itinerary · boarding pass · front desk · shuttle service · amenities</div>
+    <p class="passage" id="passage2"></p>
+  </section>
+
+  <!-- TASK 2 -->
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-kicker">Task 2 · Word Unscramble</div>
+        <h2 class="panel-title">Sắp xếp chữ cái</h2>
+      </div>
+      <div class="panel-points">10 điểm</div>
+    </div>
+    <div class="unscramble-list" id="task2-list"></div>
+  </section>
+
+  <!-- TASK 3 -->
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-kicker">Task 3 · Sentence Unscramble</div>
+        <h2 class="panel-title">Sắp xếp câu hoàn chỉnh</h2>
+      </div>
+      <div class="panel-points">8 điểm</div>
+    </div>
+    <div class="unscramble-list" id="task3-list"></div>
+  </section>
+
+  <!-- ANSWER KEY -->
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-kicker">Phần 3</div>
+        <h2 class="panel-title">Đáp án &amp; giải thích</h2>
+      </div>
+    </div>
+    <details id="answerkey">
+      <summary>👁 Xem đáp án chi tiết</summary>
+      <h3 style="font-size:14px;color:var(--navy);margin-top:18px;">Task 1 — Passages</h3>
+      <table class="key-table" id="key1"></table>
+      <h3 style="font-size:14px;color:var(--navy);margin-top:20px;">Task 2 — Word Unscramble</h3>
+      <table class="key-table" id="key2"></table>
+      <h3 style="font-size:14px;color:var(--navy);margin-top:20px;">Task 3 — Sentence Unscramble</h3>
+      <table class="key-table" id="key3"></table>
+    </details>
+  </section>
+
+  <div class="actions-row">
+    <button class="btn btn-primary" id="btn-check-2">✓ Chấm điểm toàn bài</button>
+    <button class="btn btn-ghost" id="btn-switch">🔁 Đổi người dùng</button>
+  </div>
+
+  <footer>Made for TOEIC-WORK-001 · Office &amp; Business Travel Vocabulary · Publish free trên <a href="https://pages.github.com" target="_blank">GitHub Pages</a></footer>
+</div>
+
+<script src="https://unpkg.com/mqtt@5.3.4/dist/mqtt.min.js"></script>
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const USERS = [
+  { name:"Võ Trọng Tấn",   color:"#c97f1e" },
+  { name:"Lâm Chí Phương", color:"#2f8f82" },
+  { name:"Võ Thị Ngọc Vy", color:"#e15b3f" },
+];
+
+const VOCAB = [
+  {t:"accountant", ipa:"/əˈkaʊntənt/", pos:"n", vi:"nhân viên kế toán", topic:"Office Personnel", ex:"The accountant prepared the financial report."},
+  {t:"supervisor", ipa:"/ˈsuːpəvaɪzə/", pos:"n", vi:"người giám sát, quản lý", topic:"Office Personnel", ex:"Discuss your leave with your supervisor."},
+  {t:"intern", ipa:"/ˈɪntɜːn/", pos:"n", vi:"thực tập sinh", topic:"Office Personnel", ex:"The new intern files office documents daily."},
+  {t:"inspector", ipa:"/ɪnˈspektə/", pos:"n", vi:"thanh tra viên", topic:"Office Personnel", ex:"An inspector checked the safety equipment."},
+  {t:"candidate", ipa:"/ˈkændɪdət/", pos:"n", vi:"ứng viên xin việc", topic:"Human Resources", ex:"HR interviewed three qualified candidates."},
+  {t:"prepare a report", ipa:"", pos:"v phr", vi:"chuẩn bị báo cáo", topic:"Daily Work", ex:"He needs to prepare a report for the meeting."},
+  {t:"attend a meeting", ipa:"", pos:"v phr", vi:"tham dự cuộc họp", topic:"Daily Work", ex:"Managers must attend a meeting at 2 PM."},
+  {t:"review documents", ipa:"", pos:"v phr", vi:"xem xét/duyệt tài liệu", topic:"Daily Work", ex:"Please review documents carefully for errors."},
+  {t:"work overtime", ipa:"", pos:"v phr", vi:"làm thêm giờ, tăng ca", topic:"Daily Work", ex:"He had to work overtime to meet the deadline."},
+  {t:"solve a problem", ipa:"", pos:"v phr", vi:"giải quyết vấn đề", topic:"Daily Work", ex:"IT support team solved the server problem."},
+  {t:"itinerary", ipa:"/aɪˈtɪnərəri/", pos:"n", vi:"lịch trình chuyến đi", topic:"Business Travel", ex:"Check your travel itinerary before leaving."},
+  {t:"boarding pass", ipa:"", pos:"n phr", vi:"thẻ lên máy bay", topic:"Airport & Flight", ex:"Show your boarding pass at the gate."},
+  {t:"delay", ipa:"/dɪˈleɪ/", pos:"n, v", vi:"hoãn, sự trễ chuyến", topic:"Airport & Flight", ex:"The flight suffered a two-hour delay."},
+  {t:"front desk", ipa:"", pos:"n phr", vi:"quầy lễ tân", topic:"Hotel Stay", ex:"Check in at the hotel front desk upon arrival."},
+  {t:"concierge", ipa:"/kɒnsiˈeəʒ/", pos:"n", vi:"nhân viên hỗ trợ khách", topic:"Hotel Stay", ex:"Ask the concierge to book restaurant tickets."},
+  {t:"shuttle service", ipa:"", pos:"n phr", vi:"dịch vụ xe đưa đón", topic:"Hotel Stay", ex:"The hotel provides a complimentary shuttle service."},
+  {t:"amenities", ipa:"/əˈmiːnətiz/", pos:"n (pl)", vi:"tiện nghi, dịch vụ", topic:"Hotel Stay", ex:"Guests enjoy free Wi-Fi and gym amenities."},
+];
+
+const PASSAGE1 = [
+  "Mr. David is an experienced ", {id:"p1_1", ans:"accountant"},
+  " at a financial firm. Every morning, right after he arrives at work, he talks with his ", {id:"p1_2", ans:"supervisor"},
+  " to update him on the day's tasks. Before noon, David has to ", {id:"p1_3", ans:"prepare a report"},
+  " regarding quarterly expenditures for the management team. In the afternoon, he needs to ", {id:"p1_4", ans:"attend a meeting"},
+  " with the board of directors. Later in the day, he carefully ", {id:"p1_5", ans:"review documents"},
+  " related to client transactions to ensure there are no errors."
+];
+const PASSAGE2 = [
+  "Ms. Linda had to go on an urgent business trip to Tokyo last week. Before traveling, she double-checked her travel ", {id:"p2_6", ans:"itinerary"},
+  " to confirm all flight and meeting schedules. At the airport, she printed her ", {id:"p2_7", ans:"boarding pass"},
+  " before passing through security to the gate. Upon arrival at the hotel, she went straight to the ", {id:"p2_8", ans:"front desk"},
+  " to check in. The hotel provided a convenient ", {id:"p2_9", ans:"shuttle service"},
+  " that transported guests directly to the conference venue. During her stay, she was impressed by the hotel's luxury ", {id:"p2_10", ans:"amenities"},
+  ", including a high-speed Wi-Fi network and a fitness center."
+];
+
+const TASK2 = [
+  {letters:"n-i-r-e-t-n", ctx:'The new [ ___ ] is helping the administrative assistant file paperwork.', ans:"intern"},
+  {letters:"r-o-t-c-e-p-s-n-i", ctx:'A safety [ ___ ] is checking the emergency exits in the plant today.', ans:"inspector"},
+  {letters:"t-r-o-p-s-a-s-p", ctx:'Make sure your [ ___ ] is valid for six months before traveling.', ans:"passport"},
+  {letters:"e-m-i-t-r-e-v-o", ctx:'He had to work [ ___ ] last night to meet the project deadline.', ans:"overtime"},
+  {letters:"e-g-r-e-i-c-n-o-c", ctx:'You can ask the [ ___ ] at the hotel lobby to help you reserve a table.', ans:"concierge"},
+  {letters:"m-e-l-b-o-r-p", ctx:'The IT support team worked quickly to solve a technical [ ___ ] with the server.', ans:"problem"},
+  {letters:"t-s-a-f-k-a-e-r-b", ctx:'All hotel guests are entitled to a daily complimentary [ ___ ].', ans:"breakfast"},
+  {letters:"s-e-t-a-d-i-d-n-a-c", ctx:'The HR department is interviewing three qualified [ ___ ] for the position.', ans:"candidates"},
+  {letters:"y-a-l-e-d", ctx:'Due to bad weather conditions, the flight suffered a two-hour [ ___ ].', ans:"delay"},
+  {letters:"e-g-a-g-g-a-b", ctx:'Please ensure your carry-on [ ___ ] fits in the overhead compartment.', ans:"baggage"},
+];
+
+const TASK3 = [
+  {scrambled:"the executive director / Mr. Harrison / as / appointed / was / last week .", ans:"Mr. Harrison was appointed as the executive director last week."},
+  {scrambled:"to discuss / held a meeting / the project manager / the budget issue .", ans:"The project manager held a meeting to discuss the budget issue."},
+  {scrambled:"at the check-in counter / present / must / passengers / their passports .", ans:"Passengers must present their passports at the check-in counter."},
+  {scrambled:"was delayed / bad weather conditions / the flight to Chicago / due to .", ans:"The flight to Chicago was delayed due to bad weather conditions."},
+  {scrambled:"a complimentary shuttle service / to the airport / provides / the hotel .", ans:"The hotel provides a complimentary shuttle service to the airport."},
+  {scrambled:"prepare a report / before / the accountant / the meeting / needs to .", ans:"The accountant needs to prepare a report before the meeting."},
+  {scrambled:"the concierge / for us / booked / a table / at the restaurant .", ans:"The concierge booked a table at the restaurant for us."},
+  {scrambled:"reviewing / the supervisor / is / the new / strategy / business .", ans:"The supervisor is reviewing the new business strategy."},
+];
+
+/* ============================================================
+   PRESENCE / MULTIPLAYER — REAL CROSS-DEVICE SYNC VIA MQTT
+   Uses the free public broker.emqx.io broker over WebSockets so that
+   3 different people on 3 different phones/computers all see each
+   other's presence + typing bubbles live, not just same-browser tabs.
+   NOTE: this is a public test broker (no login needed) — fine for a
+   classroom worksheet, but don't rely on it for private/sensitive data.
+   ============================================================ */
+const TOPIC_PREFIX   = "toeic-office-travel-vovi3/v1"; // unique-ish room name
+const TOPIC_PRESENCE = TOPIC_PREFIX + "/presence";
+const TOPIC_BUBBLE   = TOPIC_PREFIX + "/bubble";
+const HEARTBEAT_MS = 4000;
+const TIMEOUT_MS = 9000;
+
+let ME = null; // {name, color}
+let mqttClient = null;
+let mqttReady = false;
+let presenceMap = {}; // name -> {name, color, ts}
+
+function connectMqtt(){
+  if(typeof mqtt === "undefined"){ console.warn("mqtt.js not loaded — running local-only."); return; }
+  try{
+    mqttClient = mqtt.connect("wss://broker.emqx.io:8084/mqtt", {
+      clientId: "toeic_" + Math.random().toString(16).slice(2) + Date.now(),
+      reconnectPeriod: 2500,
+      connectTimeout: 8000,
+    });
+    mqttClient.on("connect", ()=>{
+      mqttReady = true;
+      mqttClient.subscribe(TOPIC_PRESENCE + "/+");
+      mqttClient.subscribe(TOPIC_BUBBLE);
+      if(ME) publishPresence();
+    });
+    mqttClient.on("reconnect", ()=>{ mqttReady = false; });
+    mqttClient.on("close", ()=>{ mqttReady = false; });
+    mqttClient.on("message", (topic, payloadBuf)=>{
+      let msg;
+      try{ msg = JSON.parse(payloadBuf.toString()); } catch(e){ return; }
+      if(!msg) return;
+      if(topic.indexOf(TOPIC_PRESENCE) === 0){
+        if(msg.name){ presenceMap[msg.name] = msg; renderPresence(); }
+      } else if(topic === TOPIC_BUBBLE){
+        if(!ME || msg.name !== ME.name){
+          const el = document.getElementById(msg.targetId);
+          if(el) spawnBubble(el, msg.name, msg.color, false);
+        }
+      }
+    });
+  } catch(e){ console.warn("MQTT connect failed, running local-only.", e); }
+}
+
+function publishPresence(){
+  if(!ME) return;
+  presenceMap[ME.name] = {name: ME.name, color: ME.color, ts: Date.now()};
+  renderPresence();
+  if(!mqttClient || !mqttReady) return;
+  const topic = TOPIC_PRESENCE + "/" + encodeURIComponent(ME.name);
+  mqttClient.publish(topic, JSON.stringify(presenceMap[ME.name]), {retain:true, qos:0});
+}
+
+function cleanPresence(){
+  const now = Date.now();
+  Object.keys(presenceMap).forEach(name=>{
+    if(now - presenceMap[name].ts >= TIMEOUT_MS) delete presenceMap[name];
+  });
+  return Object.values(presenceMap);
+}
+
+function heartbeat(){ publishPresence(); }
+
+function renderPresence(){
+  const list = cleanPresence();
+  const box = document.getElementById("presence-chips");
+  if(!box) return;
+  box.innerHTML = "";
+  list.forEach(p=>{
+    const chip = document.createElement("div");
+    chip.className = "presence-chip";
+    chip.innerHTML = `<span class="presence-dot" style="background:${p.color}; box-shadow:0 0 0 3px ${p.color}33;"></span>
+      <span class="presence-avatar" style="background:${p.color};">${initials(p.name)}</span> ${p.name}`;
+    box.appendChild(chip);
+  });
+  refreshSeatAvailability();
+}
+
+function initials(name){
+  return name.split(" ").filter(w=>w.length).slice(-2).map(w=>w[0]).join("").toUpperCase();
+}
+
+window.addEventListener("beforeunload", ()=>{
+  if(!ME || !mqttClient || !mqttReady) return;
+  const topic = TOPIC_PRESENCE + "/" + encodeURIComponent(ME.name);
+  try{ mqttClient.publish(topic, JSON.stringify({name: ME.name, color: ME.color, ts: 0}), {retain:true, qos:0}); } catch(e){}
+});
+
+/* ============================================================
+   LOGIN SCREEN
+   ============================================================ */
+function refreshSeatAvailability(){
+  const taken = cleanPresence().map(p=>p.name);
+  document.querySelectorAll(".seat-btn").forEach(btn=>{
+    const n = btn.dataset.name;
+    const tag = btn.querySelector(".seat-tag");
+    if(ME && ME.name === n){ btn.disabled = false; return; }
+    if(taken.includes(n)){
+      btn.disabled = true;
+      if(tag){ tag.textContent = "Đang làm bài"; tag.className="seat-tag taken"; }
+    } else {
+      btn.disabled = false;
+      if(tag){ tag.textContent = "Còn trống"; tag.className="seat-tag free"; }
+    }
+  });
+}
+
+function buildLogin(){
+  const seatList = document.getElementById("seat-list");
+  seatList.innerHTML = "";
+  USERS.forEach((u, idx)=>{
+    const btn = document.createElement("button");
+    btn.className = "seat-btn";
+    btn.dataset.name = u.name;
+    btn.innerHTML = `
+      <span class="seat-left">
+        <span class="seat-avatar" style="background:${u.color}">${initials(u.name)}</span>
+        <span>${u.name}<br><span style="font-weight:400;font-size:12px;color:#8a90a3;">Ghế 0${idx+1}</span></span>
+      </span>
+      <span class="seat-tag free">Còn trống</span>`;
+    btn.addEventListener("click", ()=> login(u, idx));
+    seatList.appendChild(btn);
+  });
+  refreshSeatAvailability();
+}
+
+function login(u, idx){
+  ME = u;
+  localStorage.setItem("toeic_me", JSON.stringify(u));
+  document.getElementById("login-overlay").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  document.getElementById("meta-name").textContent = u.name;
+  document.getElementById("meta-seat").textContent = "0"+(idx+1);
+  document.getElementById("meta-code").textContent = "TOEIC-" + Math.random().toString(36).slice(2,7).toUpperCase();
+  document.documentElement.style.setProperty("--me-color", u.color);
+  heartbeat();
+  clearInterval(window.__hb);
+  window.__hb = setInterval(heartbeat, HEARTBEAT_MS);
+  loadAnswers();
+}
+
+document.getElementById("btn-switch").addEventListener("click", ()=>{
+  if(ME){
+    let list = cleanPresence().filter(p=>p.name!==ME.name);
+    setPresence(list);
+  }
+  localStorage.removeItem("toeic_me");
+  location.reload();
+});
+
+/* ============================================================
+   RENDER CONTENT
+   ============================================================ */
+function renderVocab(){
+  const grid = document.getElementById("vocab-grid");
+  grid.innerHTML = "";
+  VOCAB.forEach(v=>{
+    const card = document.createElement("div");
+    card.className = "vocab-card";
+    card.innerHTML = `<div><span class="vocab-term">${v.t}</span><span class="vocab-ipa">${v.ipa} · ${v.pos}</span></div>
+      <div class="vocab-meaning">${v.vi}</div>
+      <span class="vocab-topic">${v.topic}</span>
+      <div class="vocab-ex">“${v.ex}”</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function renderPassage(arr, containerId){
+  const el = document.getElementById(containerId);
+  el.innerHTML = "";
+  arr.forEach(part=>{
+    if(typeof part === "string"){
+      el.appendChild(document.createTextNode(part));
+    } else {
+      const wrap = document.createElement("span");
+      wrap.className = "blank-wrap";
+      const inp = document.createElement("input");
+      inp.type = "text";
+      inp.className = "blank";
+      inp.id = part.id;
+      inp.dataset.ans = part.ans.toLowerCase();
+      inp.placeholder = "……";
+      inp.autocomplete = "off";
+      wrap.appendChild(inp);
+      el.appendChild(wrap);
+    }
+  });
+}
+
+function renderTask2(){
+  const list = document.getElementById("task2-list");
+  list.innerHTML = "";
+  TASK2.forEach((item, i)=>{
+    const row = document.createElement("div");
+    row.className = "unscramble-item";
+    const letters = item.letters.split("-");
+    row.innerHTML = `
+      <div class="us-num">${i+1}</div>
+      <div>
+        <div class="letters">${letters.map(l=>`<span class="tile">${l}</span>`).join("")}</div>
+        <div class="us-context">${item.ctx.replace("[ ___ ]", "<b>[ ___ ]</b>")}</div>
+        <input type="text" class="answer" id="t2_${i}" data-ans="${item.ans.toLowerCase()}" placeholder="Nhập đáp án…" autocomplete="off">
+      </div>`;
+    list.appendChild(row);
+  });
+}
+
+function renderTask3(){
+  const list = document.getElementById("task3-list");
+  list.innerHTML = "";
+  TASK3.forEach((item, i)=>{
+    const row = document.createElement("div");
+    row.className = "unscramble-item";
+    const chips = item.scrambled.split(" / ");
+    row.innerHTML = `
+      <div class="us-num">${i+1}</div>
+      <div>
+        <div class="chips">${chips.map(c=>`<span class="chip">${c}</span>`).join("")}</div>
+        <input type="text" class="answer" id="t3_${i}" data-ans="${item.ans.toLowerCase()}" placeholder="Viết lại câu hoàn chỉnh…" autocomplete="off" style="max-width:100%;">
+      </div>`;
+    list.appendChild(row);
+  });
+}
+
+function renderAnswerKey(){
+  const k1 = document.getElementById("key1");
+  k1.innerHTML = "<tr><th>#</th><th>Đáp án</th></tr>" +
+    PASSAGE1.concat(PASSAGE2).filter(p=>typeof p!=="string").map((p,i)=>`<tr><td>${i+1}</td><td class="key-ans">${p.ans}</td></tr>`).join("");
+
+  const k2 = document.getElementById("key2");
+  k2.innerHTML = "<tr><th>#</th><th>Đáp án</th><th>Nghĩa</th></tr>" +
+    TASK2.map((t,i)=>{
+      const v = VOCAB.find(v=>v.t.toLowerCase()===t.ans.toLowerCase());
+      return `<tr><td>${i+1}</td><td class="key-ans">${t.ans}</td><td>${v?v.vi:""}</td></tr>`;
+    }).join("");
+
+  const k3 = document.getElementById("key3");
+  k3.innerHTML = "<tr><th>#</th><th>Câu hoàn chỉnh</th></tr>" +
+    TASK3.map((t,i)=>`<tr><td>${i+1}</td><td class="key-ans">${t.ans}</td></tr>`).join("");
+}
+
+/* ============================================================
+   ANSWER STATE PERSISTENCE (per user)
+   ============================================================ */
+function answerStoreKey(){ return "toeic_answers_" + (ME ? ME.name : "guest"); }
+
+function saveAnswers(){
+  if(!ME) return;
+  const data = {};
+  document.querySelectorAll("input.blank, input.answer").forEach(inp=>{ data[inp.id] = inp.value; });
+  localStorage.setItem(answerStoreKey(), JSON.stringify(data));
+}
+function loadAnswers(){
+  if(!ME) return;
+  try{
+    const data = JSON.parse(localStorage.getItem(answerStoreKey()) || "{}");
+    Object.keys(data).forEach(id=>{
+      const inp = document.getElementById(id);
+      if(inp) inp.value = data[id];
+    });
+  }catch(e){}
+}
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+function normalize(s){ return (s||"").trim().toLowerCase().replace(/\s+/g," ").replace(/[.,!]+$/,""); }
+
+function checkAll(){
+  let score = 0;
+  document.querySelectorAll("input.blank, input.answer").forEach(inp=>{
+    const ans = normalize(inp.dataset.ans);
+    const val = normalize(inp.value);
+    inp.classList.remove("correct","wrong");
+    if(val.length===0){ return; }
+    if(val === ans){ inp.classList.add("correct"); score++; }
+    else{ inp.classList.add("wrong"); }
+  });
+  document.getElementById("score-num").textContent = score;
+  document.getElementById("score-fill").style.width = Math.round(score/28*100) + "%";
+  saveAnswers();
+  if(score === 28){ showStamp(); }
+  return score;
+}
+
+function showStamp(){
+  const s = document.getElementById("stamp");
+  s.classList.remove("show"); void s.offsetWidth;
+  s.classList.add("show");
+  setTimeout(()=>s.classList.remove("show"), 2200);
+}
+
+document.getElementById("btn-check").addEventListener("click", checkAll);
+document.getElementById("btn-check-2").addEventListener("click", ()=>{
+  checkAll();
+  document.getElementById("scoreboard").scrollIntoView({behavior:"smooth", block:"center"});
+});
+document.getElementById("btn-reset").addEventListener("click", ()=>{
+  document.querySelectorAll("input.blank, input.answer").forEach(inp=>{
+    inp.value=""; inp.classList.remove("correct","wrong");
+  });
+  document.getElementById("score-num").textContent = "0";
+  document.getElementById("score-fill").style.width = "0%";
+  saveAnswers();
+});
+
+/* ============================================================
+   NAME BUBBLES ON INTERACTION
+   ============================================================ */
+function spawnBubble(target, name, color, broadcast){
+  if(!target) return;
+  const rect = target.getBoundingClientRect();
+  const bubble = document.createElement("div");
+  bubble.className = "name-bubble";
+  bubble.style.background = color;
+  bubble.style.left = (rect.left + rect.width/2 + window.scrollX) + "px";
+  bubble.style.top = (rect.top + window.scrollY) + "px";
+  bubble.innerHTML = `<span class="nb-avatar">${initials(name)}</span>${name}<span class="nb-pulse"></span>`;
+  document.body.appendChild(bubble);
+  requestAnimationFrame(()=> bubble.classList.add("show"));
+  setTimeout(()=>{
+    bubble.classList.remove("show");
+    setTimeout(()=> bubble.remove(), 300);
+  }, 1400);
+
+  if(broadcast && ME && mqttClient && mqttReady && target.id){
+    mqttClient.publish(TOPIC_BUBBLE, JSON.stringify({targetId: target.id, name: ME.name, color: ME.color, ts: Date.now()}), {qos:0});
+  }
+}
+
+function attachBubbleListeners(){
+  document.body.addEventListener("focusin", (e)=>{
+    if(!ME) return;
+    if(e.target.matches("input, button, summary")){
+      spawnBubble(e.target, ME.name, ME.color, true);
+    }
+  });
+  document.body.addEventListener("click", (e)=>{
+    if(!ME) return;
+    if(e.target.matches("button, summary, .chip, .tile")){
+      spawnBubble(e.target, ME.name, ME.color, true);
+    }
+  });
+  let typingTimer;
+  document.body.addEventListener("input", (e)=>{
+    if(!ME) return;
+    if(e.target.matches("input")){
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(()=> spawnBubble(e.target, ME.name, ME.color, true), 120);
+    }
+  });
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init(){
+  connectMqtt();
+  buildLogin();
+  renderVocab();
+  renderPassage(PASSAGE1, "passage1");
+  renderPassage(PASSAGE2, "passage2");
+  renderTask2();
+  renderTask3();
+  renderAnswerKey();
+  attachBubbleListeners();
+  cleanPresence();
+  renderPresence();
+  setInterval(()=>{ cleanPresence(); renderPresence(); }, 3000);
+
+  document.querySelectorAll("input.blank, input.answer").forEach(inp=>{
+    inp.addEventListener("blur", saveAnswers);
+  });
+
+  // auto-resume session if this tab already had a user (page refresh)
+  try{
+    const saved = JSON.parse(localStorage.getItem("toeic_me") || "null");
+    if(saved){
+      const idx = USERS.findIndex(u=>u.name===saved.name);
+      const taken = cleanPresence().filter(p=>p.name!==saved.name).map(p=>p.name);
+      if(idx>-1){
+        login(USERS[idx], idx);
+      }
+    }
+  }catch(e){}
+}
+init();
+</script>
+</body>
+</html>
