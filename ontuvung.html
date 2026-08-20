@@ -218,6 +218,23 @@ input.blank:focus{ outline:none; box-shadow:0 6px 16px -8px rgba(232,163,61,.6);
 input.blank.correct{ border-color:var(--teal); background:rgba(47,143,130,.12); color:var(--teal); }
 input.blank.wrong{ border-color:var(--coral); background:rgba(225,91,63,.1); color:var(--coral); }
 
+/* live "who wrote this" tag */
+.editor-tag{
+  display:none; align-items:center; gap:5px; vertical-align:middle;
+  font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:700;
+  padding:3px 9px 3px 6px; border-radius:99px; margin-left:6px;
+  background: color-mix(in srgb, var(--tag-color, var(--teal)) 14%, #fff);
+  color: var(--tag-color, var(--teal));
+  border:1px solid color-mix(in srgb, var(--tag-color, var(--teal)) 35%, #fff);
+  animation: tagIn .35s ease;
+}
+.editor-tag.show{ display:inline-flex; }
+.editor-tag .et-dot{ width:6px; height:6px; border-radius:50%; background:currentColor; flex:none; }
+@keyframes tagIn{ from{opacity:0; transform:translateY(-4px) scale(.85);} to{opacity:1; transform:translateY(0) scale(1);} }
+
+@keyframes liveFlashBlank{ 0%{ box-shadow:0 0 0 0 rgba(232,163,61,.55);} 100%{ box-shadow:0 0 0 8px rgba(232,163,61,0);} }
+input.live-flash{ animation: liveFlashBlank .7s ease-out; }
+
 /* task 2 unscramble */
 .unscramble-list{ display:flex; flex-direction:column; gap:14px; }
 .unscramble-item{
@@ -346,9 +363,9 @@ footer a{ color:var(--teal); text-decoration:none; font-weight:600; }
   <div class="login-card">
     <span class="login-eyebrow">✈ TOEIC-WORK-001 · Check-in</span>
     <h1>Chọn ghế của bạn</h1>
-    <p class="sub">Tối đa 3 học viên có thể cùng làm bài trong phiên này. Chọn tên để bắt đầu — mỗi khi bạn gõ hoặc bấm vào bài, bong bóng tên của bạn sẽ xuất hiện cho mọi người thấy.</p>
+    <p class="sub">Cả lớp cùng làm chung MỘT bài — tối đa 3 học viên. Chọn tên để bắt đầu: mỗi đáp án bạn gõ sẽ hiện ngay lập tức trên màn hình của mọi người, kèm tên bạn.</p>
     <div class="seat-list" id="seat-list"></div>
-    <div class="login-foot">💡 Trạng thái "đang có mặt" và bong bóng tên được đồng bộ <b>thời gian thực giữa mọi thiết bị</b> (điện thoại, laptop khác nhau) đang mở trang này — không chỉ trên cùng một trình duyệt.</div>
+    <div class="login-foot">💡 Đáp án và trạng thái "đang có mặt" đồng bộ <b>thời gian thực giữa mọi thiết bị</b> đang mở trang này — không chỉ trên cùng một trình duyệt.</div>
   </div>
 </div>
 
@@ -361,7 +378,7 @@ footer a{ color:var(--teal); text-decoration:none; font-weight:600; }
     <div class="pass-main">
       <div class="pass-eyebrow">Boarding Pass · Vocabulary Flight</div>
       <h1 class="pass-title">Office Routine &amp; Business Travel</h1>
-      <p class="pass-sub">Bộ từ vựng TOEIC Intermediate (450–650+) chủ đề công việc văn phòng và công tác. Hoàn thành 3 chặng bài tập để về đích với 28 điểm.</p>
+      <p class="pass-sub">Bộ từ vựng TOEIC Intermediate (450–650+) chủ đề công việc văn phòng và công tác. Cả lớp cùng điền vào MỘT bài chung — ai gõ gì, hiện ngay cho tất cả, kèm tên người viết.</p>
       <div class="pass-meta">
         <div>Passenger <strong id="meta-name">—</strong></div>
         <div>Route <strong>Office → Airport → Hotel</strong></div>
@@ -558,6 +575,8 @@ const TASK3 = [
 const TOPIC_PREFIX   = "toeic-office-travel-vovi3/v1"; // unique-ish room name
 const TOPIC_PRESENCE = TOPIC_PREFIX + "/presence";
 const TOPIC_BUBBLE   = TOPIC_PREFIX + "/bubble";
+const TOPIC_ANSWERS  = TOPIC_PREFIX + "/answers";
+const TOPIC_RESET    = TOPIC_PREFIX + "/reset";
 const HEARTBEAT_MS = 4000;
 const TIMEOUT_MS = 9000;
 
@@ -578,13 +597,26 @@ function connectMqtt(){
       mqttReady = true;
       mqttClient.subscribe(TOPIC_PRESENCE + "/+");
       mqttClient.subscribe(TOPIC_BUBBLE);
+      mqttClient.subscribe(TOPIC_ANSWERS + "/+");
+      mqttClient.subscribe(TOPIC_RESET);
       if(ME) publishPresence();
     });
     mqttClient.on("reconnect", ()=>{ mqttReady = false; });
     mqttClient.on("close", ()=>{ mqttReady = false; });
     mqttClient.on("message", (topic, payloadBuf)=>{
+      const raw = payloadBuf.toString();
+      if(topic.indexOf(TOPIC_ANSWERS) === 0){
+        if(!raw){ return; } // cleared retained value (reset)
+        let msg; try{ msg = JSON.parse(raw); } catch(e){ return; }
+        applyAnswerUpdate(msg);
+        return;
+      }
+      if(topic === TOPIC_RESET){
+        doLocalReset();
+        return;
+      }
       let msg;
-      try{ msg = JSON.parse(payloadBuf.toString()); } catch(e){ return; }
+      try{ msg = JSON.parse(raw); } catch(e){ return; }
       if(!msg) return;
       if(topic.indexOf(TOPIC_PRESENCE) === 0){
         if(msg.name){ presenceMap[msg.name] = msg; renderPresence(); }
@@ -692,13 +724,12 @@ function login(u, idx){
   heartbeat();
   clearInterval(window.__hb);
   window.__hb = setInterval(heartbeat, HEARTBEAT_MS);
-  loadAnswers();
 }
 
 document.getElementById("btn-switch").addEventListener("click", ()=>{
-  if(ME){
-    let list = cleanPresence().filter(p=>p.name!==ME.name);
-    setPresence(list);
+  if(ME && mqttClient && mqttReady){
+    const topic = TOPIC_PRESENCE + "/" + encodeURIComponent(ME.name);
+    mqttClient.publish(topic, JSON.stringify({name: ME.name, color: ME.color, ts: 0}), {retain:true, qos:0});
   }
   localStorage.removeItem("toeic_me");
   location.reload();
@@ -738,6 +769,10 @@ function renderPassage(arr, containerId){
       inp.placeholder = "……";
       inp.autocomplete = "off";
       wrap.appendChild(inp);
+      const tag = document.createElement("span");
+      tag.className = "editor-tag";
+      tag.id = "tag_" + part.id;
+      wrap.appendChild(tag);
       el.appendChild(wrap);
     }
   });
@@ -756,6 +791,7 @@ function renderTask2(){
         <div class="letters">${letters.map(l=>`<span class="tile">${l}</span>`).join("")}</div>
         <div class="us-context">${item.ctx.replace("[ ___ ]", "<b>[ ___ ]</b>")}</div>
         <input type="text" class="answer" id="t2_${i}" data-ans="${item.ans.toLowerCase()}" placeholder="Nhập đáp án…" autocomplete="off">
+        <span class="editor-tag" id="tag_t2_${i}"></span>
       </div>`;
     list.appendChild(row);
   });
@@ -773,6 +809,7 @@ function renderTask3(){
       <div>
         <div class="chips">${chips.map(c=>`<span class="chip">${c}</span>`).join("")}</div>
         <input type="text" class="answer" id="t3_${i}" data-ans="${item.ans.toLowerCase()}" placeholder="Viết lại câu hoàn chỉnh…" autocomplete="off" style="max-width:100%;">
+        <span class="editor-tag" id="tag_t3_${i}"></span>
       </div>`;
     list.appendChild(row);
   });
@@ -796,29 +833,70 @@ function renderAnswerKey(){
 }
 
 /* ============================================================
-   ANSWER STATE PERSISTENCE (per user)
+   SHARED CLASSROOM ANSWERS — everyone edits the SAME worksheet.
+   Values are broadcast + retained on MQTT (topic per field), so any
+   student typing updates the field live for every other student, with
+   a small tag showing who wrote it. A local cache is kept as an
+   offline-friendly fallback / instant paint on load.
    ============================================================ */
-function answerStoreKey(){ return "toeic_answers_" + (ME ? ME.name : "guest"); }
+const CACHE_KEY = "toeic_shared_cache";
+const publishTimers = {};
 
-function saveAnswers(){
-  if(!ME) return;
-  const data = {};
-  document.querySelectorAll("input.blank, input.answer").forEach(inp=>{ data[inp.id] = inp.value; });
-  localStorage.setItem(answerStoreKey(), JSON.stringify(data));
+function loadCache(){
+  try{ return JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); } catch(e){ return {}; }
 }
-function loadAnswers(){
+function cacheAnswer(fieldId, value){
+  const data = loadCache();
+  data[fieldId] = value;
+  localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+}
+function paintFromCache(){
+  const data = loadCache();
+  Object.keys(data).forEach(id=>{
+    const inp = document.getElementById(id);
+    if(inp && !inp.value) inp.value = data[id];
+  });
+}
+
+function showEditorTag(fieldId, name, color, isSelf){
+  const tag = document.getElementById("tag_" + fieldId);
+  if(!tag) return;
+  tag.innerHTML = `<span class="et-dot" style="background:${color}"></span>${isSelf ? "Bạn" : name}`;
+  tag.style.setProperty("--tag-color", color);
+  tag.classList.add("show");
+}
+
+function flashField(inp){
+  if(!inp) return;
+  inp.classList.add("live-flash");
+  setTimeout(()=> inp.classList.remove("live-flash"), 700);
+}
+
+function publishAnswer(inp){
   if(!ME) return;
-  try{
-    const data = JSON.parse(localStorage.getItem(answerStoreKey()) || "{}");
-    Object.keys(data).forEach(id=>{
-      const inp = document.getElementById(id);
-      if(inp) inp.value = data[id];
-    });
-  }catch(e){}
+  showEditorTag(inp.id, ME.name, ME.color, true);
+  cacheAnswer(inp.id, inp.value);
+  if(!mqttClient || !mqttReady) return;
+  const msg = {fieldId: inp.id, value: inp.value, name: ME.name, color: ME.color, ts: Date.now()};
+  mqttClient.publish(TOPIC_ANSWERS + "/" + encodeURIComponent(inp.id), JSON.stringify(msg), {retain:true, qos:0});
+}
+
+function applyAnswerUpdate(msg){
+  if(!msg || !msg.fieldId) return;
+  const inp = document.getElementById(msg.fieldId);
+  if(!inp) return;
+  const isSelf = ME && msg.name === ME.name;
+  const iAmTypingHere = document.activeElement === inp && isSelf;
+  if(!iAmTypingHere && inp.value !== msg.value){
+    inp.value = msg.value || "";
+    flashField(inp);
+  }
+  if(msg.name){ showEditorTag(msg.fieldId, msg.name, msg.color, isSelf); }
+  cacheAnswer(msg.fieldId, inp.value);
 }
 
 /* ============================================================
-   SCORING
+   SCORING (shared — score reflects the class's current worksheet)
    ============================================================ */
 function normalize(s){ return (s||"").trim().toLowerCase().replace(/\s+/g," ").replace(/[.,!]+$/,""); }
 
@@ -834,7 +912,6 @@ function checkAll(){
   });
   document.getElementById("score-num").textContent = score;
   document.getElementById("score-fill").style.width = Math.round(score/28*100) + "%";
-  saveAnswers();
   if(score === 28){ showStamp(); }
   return score;
 }
@@ -846,18 +923,30 @@ function showStamp(){
   setTimeout(()=>s.classList.remove("show"), 2200);
 }
 
+function doLocalReset(){
+  document.querySelectorAll("input.blank, input.answer").forEach(inp=>{
+    inp.value=""; inp.classList.remove("correct","wrong");
+  });
+  document.querySelectorAll(".editor-tag").forEach(tag=>{ tag.innerHTML=""; tag.classList.remove("show"); });
+  document.getElementById("score-num").textContent = "0";
+  document.getElementById("score-fill").style.width = "0%";
+  localStorage.removeItem(CACHE_KEY);
+}
+
 document.getElementById("btn-check").addEventListener("click", checkAll);
 document.getElementById("btn-check-2").addEventListener("click", ()=>{
   checkAll();
   document.getElementById("scoreboard").scrollIntoView({behavior:"smooth", block:"center"});
 });
 document.getElementById("btn-reset").addEventListener("click", ()=>{
-  document.querySelectorAll("input.blank, input.answer").forEach(inp=>{
-    inp.value=""; inp.classList.remove("correct","wrong");
-  });
-  document.getElementById("score-num").textContent = "0";
-  document.getElementById("score-fill").style.width = "0%";
-  saveAnswers();
+  if(!confirm("Xoá toàn bộ đáp án hiện tại của CẢ LỚP? (áp dụng cho mọi người đang làm bài)")) return;
+  if(mqttClient && mqttReady){
+    document.querySelectorAll("input.blank, input.answer").forEach(inp=>{
+      mqttClient.publish(TOPIC_ANSWERS + "/" + encodeURIComponent(inp.id), "", {retain:true, qos:0});
+    });
+    if(ME) mqttClient.publish(TOPIC_RESET, JSON.stringify({by: ME.name, ts: Date.now()}), {qos:0});
+  }
+  doLocalReset();
 });
 
 /* ============================================================
@@ -904,6 +993,11 @@ function attachBubbleListeners(){
       clearTimeout(typingTimer);
       typingTimer = setTimeout(()=> spawnBubble(e.target, ME.name, ME.color, true), 120);
     }
+    if(e.target.matches("input.blank, input.answer")){
+      const inp = e.target;
+      clearTimeout(publishTimers[inp.id]);
+      publishTimers[inp.id] = setTimeout(()=> publishAnswer(inp), 150);
+    }
   });
 }
 
@@ -920,20 +1014,16 @@ function init(){
   renderTask3();
   renderAnswerKey();
   attachBubbleListeners();
+  paintFromCache();
   cleanPresence();
   renderPresence();
   setInterval(()=>{ cleanPresence(); renderPresence(); }, 3000);
-
-  document.querySelectorAll("input.blank, input.answer").forEach(inp=>{
-    inp.addEventListener("blur", saveAnswers);
-  });
 
   // auto-resume session if this tab already had a user (page refresh)
   try{
     const saved = JSON.parse(localStorage.getItem("toeic_me") || "null");
     if(saved){
       const idx = USERS.findIndex(u=>u.name===saved.name);
-      const taken = cleanPresence().filter(p=>p.name!==saved.name).map(p=>p.name);
       if(idx>-1){
         login(USERS[idx], idx);
       }
