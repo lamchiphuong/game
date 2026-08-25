@@ -3,859 +3,1167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TOEIC Listening Part 2 — Question &amp; Response</title>
+<title>Lesson 7 · Restaurants & TOEIC Part 2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0c1424;
-  --bg-alt:#101b30;
-  --paper:#ecefe9;
-  --paper-2:#e2e6dd;
-  --ink:#0f1a2e;
-  --ink-soft:#4b5568;
-  --gold:#e3a836;
-  --gold-soft:#f3d79a;
-  --red:#d6483f;
-  --red-soft:#f6c9c5;
-  --green:#3fa66b;
-  --green-soft:#c9e9d5;
-  --line:rgba(15,26,46,0.12);
-  --line-dark:rgba(236,239,233,0.14);
-  --shadow:0 18px 40px -18px rgba(0,0,0,0.55);
-  --radius:14px;
-}
-*{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{
-  margin:0;
-  background:
-    radial-gradient(1200px 600px at 15% -10%, #182842 0%, transparent 60%),
-    radial-gradient(900px 500px at 100% 0%, #1a2036 0%, transparent 55%),
-    var(--bg);
-  color:var(--paper);
-  font-family:'IBM Plex Sans', sans-serif;
-  line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-}
-@media (prefers-reduced-motion: reduce){
-  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
-}
-h1,h2,h3,.display{font-family:'Fraunces', serif;}
-.mono{font-family:'IBM Plex Mono', monospace;}
-a{color:inherit;}
-::selection{background:var(--gold-soft); color:var(--ink);}
+  :root{
+    --ivory:#F2F6FD;
+    --paper:#FFFFFF;
+    --wine:#2563EB;
+    --wine-dark:#1E3A8A;
+    --sage:#0891B2;
+    --sage-light:#E0F2FE;
+    --gold:#F59E0B;
+    --ink:#0F172A;
+    --ink-soft:#5B6B8C;
+    --line:#DCE4F5;
+    --good:#0F9D6C;
+    --bad:#DC2626;
+    --shadow-sm: 0 2px 8px rgba(30,58,138,0.08);
+    --shadow-md: 0 10px 26px rgba(30,58,138,0.12);
+    --shadow-lg: 0 24px 50px rgba(30,58,138,0.18);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 8% 0%, #DCE9FF 0%, transparent 45%),
+      radial-gradient(circle at 95% 15%, #E3EEFF 0%, transparent 40%),
+      var(--ivory);
+    font-family:'Inter', sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    padding:28px 16px 80px;
+  }
+  .stationery{
+    max-width:1080px;
+    margin:0 auto;
+  }
 
-/* ---------- layout shells ---------- */
-.wrap{max-width:980px; margin:0 auto; padding:0 28px;}
-section{padding:88px 0;}
-.eyebrow{
-  font-family:'IBM Plex Mono', monospace;
-  font-size:12.5px;
-  letter-spacing:0.14em;
-  text-transform:uppercase;
-  color:var(--gold);
-  display:flex; align-items:center; gap:10px;
-  margin-bottom:18px;
-}
-.eyebrow::before{content:""; width:26px; height:1px; background:var(--gold);}
-h2.section-title{font-size:clamp(28px,4vw,40px); font-weight:600; margin:0 0 14px; color:var(--paper);}
-.section-sub{color:#aeb8cc; max-width:620px; font-size:16px; margin-bottom:44px;}
+  /* ---------- HERO ---------- */
+  .hero{
+    background: linear-gradient(135deg, var(--wine-dark) 0%, var(--wine) 55%, #3B82F6 100%);
+    color:#EEF4FF;
+    border-radius:24px;
+    padding:34px 36px;
+    box-shadow: var(--shadow-lg);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; right:-40px; bottom:-60px;
+    width:220px; height:220px;
+    border:1px solid rgba(238,244,255,0.18);
+    border-radius:50%;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; right:20px; bottom:-100px;
+    width:280px; height:280px;
+    border:1px solid rgba(238,244,255,0.12);
+    border-radius:50%;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-size:12px;
+    color:#7DD3FC;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:10px;
+  }
+  .eyebrow::before{content:"◆ Course 07";}
+  h1.title{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight:800;
+    letter-spacing:-0.01em;
+    font-size:clamp(28px, 4vw, 42px);
+    line-height:1.1;
+    margin:0 0 8px;
+    max-width:640px;
+  }
+  .subtitle{
+    font-size:15px;
+    color:#D6E4FF;
+    max-width:560px;
+    line-height:1.55;
+    margin:0 0 20px;
+  }
+  .hero-meta{
+    display:flex; flex-wrap:wrap; gap:10px;
+  }
+  .chip{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.03em;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(238,244,255,0.28);
+    padding:7px 12px;
+    border-radius:100px;
+    color:#EEF4FF;
+  }
 
-/* ---------- hero ---------- */
-.hero{
-  min-height:92vh;
-  display:flex; flex-direction:column; justify-content:center;
-  position:relative;
-  overflow:hidden;
-  padding-top:60px;
-}
-.hero-tag{
-  font-family:'IBM Plex Mono', monospace;
-  font-size:13px; letter-spacing:0.18em; text-transform:uppercase;
-  color:var(--gold-soft);
-  border:1px solid rgba(227,168,54,0.35);
-  padding:7px 14px; border-radius:999px;
-  width:max-content;
-  margin-bottom:28px;
-  background:rgba(227,168,54,0.07);
-  animation:fadeUp 0.8s ease both;
-}
-.hero h1{
-  font-size:clamp(40px,7vw,78px);
-  font-weight:700;
-  line-height:1.02;
-  margin:0 0 22px;
-  letter-spacing:-0.01em;
-  animation:fadeUp 0.9s ease both 0.08s;
-}
-.hero h1 em{font-style:italic; font-weight:500; color:var(--gold-soft);}
-.hero p{
-  max-width:560px; font-size:18px; color:#b7c0d4;
-  animation:fadeUp 0.9s ease both 0.16s;
-  margin-bottom:40px;
-}
-.hero-actions{display:flex; gap:14px; flex-wrap:wrap; animation:fadeUp 0.9s ease both 0.24s;}
-@keyframes fadeUp{from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:translateY(0);}}
+  /* ---------- MENU NAV (course tabs) ---------- */
+  .menu-nav{
+    display:flex;
+    gap:10px;
+    margin:26px 0 22px;
+    flex-wrap:wrap;
+    position:sticky;
+    top:10px;
+    z-index:30;
+  }
+  .course-tab{
+    flex:1 1 150px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:12px 14px;
+    box-shadow:var(--shadow-sm);
+    cursor:pointer;
+    text-align:left;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    font-family:'Inter',sans-serif;
+  }
+  .course-tab:hover{ transform:translateY(-2px); box-shadow:var(--shadow-md); }
+  .course-tab .num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    color:var(--gold);
+    letter-spacing:.08em;
+    display:block;
+    margin-bottom:2px;
+  }
+  .course-tab .label{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight:700;
+    font-size:15.5px;
+    color:var(--wine-dark);
+    display:block;
+  }
+  .course-tab .sub{
+    font-size:11.5px;
+    color:var(--ink-soft);
+  }
+  .course-tab.active{
+    background:linear-gradient(135deg, var(--wine) 0%, var(--wine-dark) 100%);
+    border-color:var(--wine);
+  }
+  .course-tab.active .num{color:#93C5FD;}
+  .course-tab.active .label{color:#F2F6FD;}
+  .course-tab.active .sub{color:#D6E4FF;}
 
-.btn{
-  font-family:'IBM Plex Sans', sans-serif;
-  font-weight:600; font-size:14.5px;
-  border:none; cursor:pointer;
-  padding:14px 24px; border-radius:999px;
-  display:inline-flex; align-items:center; gap:9px;
-  transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
-}
-.btn:active{transform:translateY(1px) scale(0.98);}
-.btn-gold{background:var(--gold); color:#1b1204;}
-.btn-gold:hover{box-shadow:0 10px 26px -8px rgba(227,168,54,0.55); transform:translateY(-2px);}
-.btn-ghost{background:transparent; color:var(--paper); border:1px solid var(--line-dark);}
-.btn-ghost:hover{background:rgba(236,239,233,0.06); transform:translateY(-2px);}
+  .panel{ display:none; animation:fade .35s ease; }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
 
-/* waveform signature */
-.wave-hero{
-  position:absolute; right:-40px; bottom:-10px; top:0;
-  width:46%;
-  display:flex; align-items:flex-end; justify-content:center; gap:6px;
-  opacity:0.9;
-  pointer-events:none;
-  mask-image:linear-gradient(to top, black 55%, transparent 96%);
-}
-.wave-hero .bar{
-  width:9px; border-radius:6px;
-  background:linear-gradient(180deg, var(--gold) 0%, rgba(227,168,54,0.15) 100%);
-  animation:idlewave 2.6s ease-in-out infinite;
-}
-@keyframes idlewave{
-  0%,100%{transform:scaleY(0.35);}
-  50%{transform:scaleY(1);}
-}
+  .section-head{
+    display:flex; align-items:baseline; gap:12px;
+    margin:6px 0 18px;
+    border-bottom:2px dashed var(--line);
+    padding-bottom:12px;
+  }
+  .section-head h2{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight:800;
+    letter-spacing:-0.01em;
+    font-size:24px;
+    margin:0;
+    color:var(--wine-dark);
+  }
+  .section-head p{
+    margin:0; font-size:13.5px; color:var(--ink-soft);
+  }
 
-/* ---------- info / trap cards ---------- */
-.grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
-.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
-@media (max-width:820px){.grid-3{grid-template-columns:1fr;} .grid-2{grid-template-columns:1fr;}}
+  /* ---------- CARD SHELL ---------- */
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:16px;
+    box-shadow:var(--shadow-sm);
+    padding:20px;
+  }
 
-.card{
-  background:var(--bg-alt);
-  border:1px solid var(--line-dark);
-  border-radius:var(--radius);
-  padding:26px 24px;
-  position:relative;
-  overflow:hidden;
-  transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-}
-.card:hover{transform:translateY(-4px); border-color:rgba(227,168,54,0.4); box-shadow:var(--shadow);}
-.card .num{
-  font-family:'IBM Plex Mono', monospace;
-  font-size:12px; color:var(--gold);
-  letter-spacing:0.1em;
-  margin-bottom:12px;
-  display:block;
-}
-.card h3{margin:0 0 10px; font-size:19px; color:var(--paper); font-weight:600;}
-.card p{margin:0; color:#aab4c9; font-size:14.5px;}
-.trap-example{
-  margin-top:16px; padding-top:16px;
-  border-top:1px dashed var(--line-dark);
-  font-size:13.5px;
-  color:#8f9ab0;
-}
-.trap-example b{color:var(--red-soft); font-weight:600;}
+  /* ---------- VOCAB CAROUSEL (one word at a time) ---------- */
+  .vocab-stage{
+    max-width:640px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .vocab-counter{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .vocab-counter b{ color:var(--wine-dark); }
+  .vocab-progress{
+    width:100%;
+    height:6px;
+    background:var(--line);
+    border-radius:100px;
+    overflow:hidden;
+    margin-bottom:22px;
+  }
+  .vocab-progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--gold), var(--wine));
+    border-radius:100px;
+    transition:width .35s ease;
+  }
+  .flip-card-large{
+    perspective:2200px;
+    width:100%;
+    max-width:600px;
+    height:560px;
+    cursor:pointer;
+  }
+  .flip-inner-large{
+    position:relative; width:100%; height:100%;
+    transition:transform .5s cubic-bezier(.2,.8,.2,1);
+    transform-style:preserve-3d;
+  }
+  .flip-card-large.flipped .flip-inner-large{ transform:rotateY(180deg); }
+  .face-large{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:28px;
+    padding:36px 34px;
+    box-shadow:var(--shadow-lg);
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center;
+  }
+  .face-large.front{
+    background:var(--paper);
+    border:1px solid var(--line);
+    justify-content:center;
+    position:relative;
+  }
+  .vocab-img-wrap{
+    width:160px; height:160px;
+    border-radius:50%;
+    background:var(--sage-light);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:20px;
+    box-shadow:inset 0 0 0 1px rgba(8,145,178,0.15);
+  }
+  .vocab-img-wrap img{
+    width:92px; height:92px;
+    object-fit:contain;
+  }
+  .face-large.front .idx-large{
+    font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--gold); letter-spacing:.08em;
+    margin-bottom:6px;
+  }
+  .face-large.front .word-large{
+    font-family:'Plus Jakarta Sans', sans-serif; font-weight:800; letter-spacing:-0.01em;
+    font-size:52px; line-height:1.12; color:var(--wine-dark);
+    margin:2px 0 10px;
+    max-width:100%;
+    word-break:break-word;
+  }
+  .face-large.front .ipa-large{ font-family:'JetBrains Mono',monospace; font-size:17px; color:var(--ink-soft); margin-bottom:14px; }
+  .face-large.front .pos-large{
+    font-size:12.5px;
+    background:var(--sage-light);
+    color:var(--sage);
+    padding:6px 16px;
+    border-radius:100px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    font-weight:600;
+  }
+  .face-large.front .hint-large{
+    margin-top:24px; font-size:13.5px; color:#94A3B8; font-style:italic;
+  }
+  .speak-btn{
+    width:52px; height:52px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--sage-light);
+    color:var(--sage);
+    font-size:22px;
+    cursor:pointer;
+    box-shadow:var(--shadow-sm);
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .speak-btn:hover{ transform:translateY(-2px) scale(1.05); box-shadow:var(--shadow-md); background:var(--sage); color:#fff; }
+  .speak-btn.speaking{ background:var(--wine); color:#fff; border-color:var(--wine); }
+  .face-large.front .speak-btn{
+    position:absolute; top:20px; right:20px;
+  }
+  .face-large.back .speak-btn{
+    margin-bottom:14px;
+    background:rgba(255,255,255,0.14);
+    border-color:rgba(238,244,255,0.35);
+    color:#EEF4FF;
+  }
+  .face-large.back .speak-btn:hover{ background:rgba(255,255,255,0.26); }
+  .face-large.back{
+    background:linear-gradient(135deg, var(--wine-dark) 0%, var(--wine) 100%);
+    color:#EEF4FF;
+    transform:rotateY(180deg);
+    justify-content:center;
+    overflow-y:auto;
+  }
+  .face-large.back .word-large-back{
+    font-family:'Plus Jakarta Sans', sans-serif; font-weight:800; font-size:30px; color:#FFFFFF; margin-bottom:6px; letter-spacing:-0.01em;
+  }
+  .face-large.back .vi-large{ font-family:'Plus Jakarta Sans', sans-serif; font-size:24px; font-weight:800; color:#93C5FD; margin-bottom:16px;}
+  .face-large.back .ex-large{ font-size:16px; line-height:1.6; margin-bottom:8px; }
+  .face-large.back .exvi-large{ font-size:14px; color:#CFE0FF; line-height:1.6; margin-bottom:18px; }
+  .face-large.back .tip-large{ font-size:13.5px; color:#7DD3FC; border-top:1px dashed rgba(238,244,255,.3); padding-top:14px; }
+  .vocab-nav{
+    display:flex; align-items:center; gap:14px;
+    margin-top:24px;
+  }
+  .vocab-nav-btn{
+    width:52px; height:52px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--wine-dark);
+    font-size:20px;
+    cursor:pointer;
+    box-shadow:var(--shadow-sm);
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .vocab-nav-btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-md); }
+  .vocab-nav-btn.next{ background:var(--wine); color:#F2F6FD; border-color:var(--wine); }
+  .vocab-nav-btn.next:hover{ background:var(--wine-dark); }
+  .vocab-flip-btn{
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:13.5px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+    padding:14px 22px;
+    border-radius:100px;
+    cursor:pointer;
+    box-shadow:var(--shadow-sm);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .vocab-flip-btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-md); }
+  .vocab-dots{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:7px;
+    max-width:480px; margin-top:22px;
+  }
+  .vocab-dot{
+    width:9px; height:9px; border-radius:50%;
+    background:var(--line);
+    cursor:pointer; border:none; padding:0;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .vocab-dot:hover{ transform:scale(1.3); }
+  .vocab-dot.active{ background:var(--wine); width:22px; border-radius:100px; }
+  @media (max-width:520px){
+    .flip-card-large{ height:560px; }
+    .face-large{ padding:28px 22px; }
+    .vocab-img-wrap{ width:120px; height:120px; }
+    .vocab-img-wrap img{ width:70px; height:70px; }
+    .face-large.front .word-large{ font-size:38px; }
+    .face-large.front .speak-btn{ top:14px; right:14px; width:44px; height:44px; font-size:18px; }
+  }
 
-/* strategy split */
-.strategy-box{
-  border-radius:var(--radius);
-  padding:26px;
-  border:1px solid var(--line-dark);
-  background:var(--bg-alt);
-}
-.strategy-box.wh{border-left:3px solid var(--gold);}
-.strategy-box.aux{border-left:3px solid var(--green);}
-.strategy-box h4{margin:0 0 8px; font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:.08em; text-transform:uppercase;}
-.strategy-box.wh h4{color:var(--gold);}
-.strategy-box.aux h4{color:var(--green);}
-.strategy-box .chips{display:flex; flex-wrap:wrap; gap:8px; margin:14px 0;}
-.chip{
-  font-family:'IBM Plex Mono', monospace; font-size:12.5px;
-  padding:5px 11px; border-radius:7px;
-  background:rgba(236,239,233,0.06);
-  border:1px solid var(--line-dark);
-}
-.rule-yes-no{
-  margin-top:14px; font-size:14px; color:#c7cfe0;
-  padding:12px 14px; border-radius:9px;
-  background:rgba(214,72,63,0.08);
-  border:1px solid rgba(214,72,63,0.25);
-}
+  /* ---------- EXERCISE SUBNAV ---------- */
+  .sub-nav{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+  .sub-btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    padding:8px 14px;
+    border-radius:100px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .sub-btn.active{ background:var(--sage); border-color:var(--sage); color:#fff; }
+  .sub-panel{ display:none; }
+  .sub-panel.active{ display:block; }
 
-/* vocab tags */
-.tag-cloud{display:flex; flex-wrap:wrap; gap:10px;}
-.tag{
-  padding:9px 16px; border-radius:999px;
-  background:var(--bg-alt); border:1px solid var(--line-dark);
-  font-size:14px; color:#c7cfe0;
-  transition:all .2s ease;
-}
-.tag:hover{background:rgba(227,168,54,0.12); border-color:var(--gold); color:var(--gold-soft); transform:translateY(-2px);}
+  /* ---------- QUESTION ROWS ---------- */
+  .q{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:12px;
+    background:var(--paper);
+  }
+  .q .stem{ font-size:14.5px; margin-bottom:10px; line-height:1.5; }
+  .q .stem b{ color:var(--wine-dark); }
+  .opt-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px;}
+  .opt{
+    border:1px solid var(--line);
+    background:#fff;
+    padding:7px 13px;
+    border-radius:10px;
+    font-size:13.5px;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .opt:hover{ border-color:var(--gold); }
+  .opt.selected{ background:var(--gold); border-color:var(--gold); color:#fff; }
+  .opt.correct{ background:var(--good); border-color:var(--good); color:#fff; }
+  .opt.incorrect{ background:var(--bad); border-color:var(--bad); color:#fff; }
 
-/* ---------- practice question cards (paper on dark) ---------- */
-.practice-intro{
-  background:rgba(227,168,54,0.08);
-  border:1px solid rgba(227,168,54,0.3);
-  border-radius:12px;
-  padding:16px 20px;
-  font-size:14px;
-  color:var(--gold-soft);
-  margin-bottom:36px;
-  display:flex; gap:12px; align-items:flex-start;
-}
-.qcard{
-  background:var(--paper);
-  color:var(--ink);
-  border-radius:16px;
-  padding:0;
-  margin-bottom:26px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-  transform:translateY(18px);
-  opacity:0;
-  transition:transform .6s cubic-bezier(.2,.7,.2,1), opacity .6s ease;
-}
-.qcard.in-view{transform:translateY(0); opacity:1;}
-.qhead{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:16px;
-  padding:20px 26px;
-  border-bottom:1px solid var(--line);
-  background:var(--paper-2);
-}
-.qhead-left{display:flex; align-items:center; gap:16px;}
-.qnum{
-  font-family:'IBM Plex Mono', monospace;
-  font-weight:600; font-size:15px;
-  width:38px; height:38px;
-  border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  background:var(--ink); color:var(--gold-soft);
-  flex-shrink:0;
-}
-.qhead-title{font-size:13px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace;}
+  select.match-select{
+    font-family:'Inter',sans-serif;
+    font-size:13.5px;
+    padding:6px 10px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:#fff;
+    margin-left:8px;
+  }
+  input.fill{
+    font-family:'Inter',sans-serif;
+    font-size:13.5px;
+    padding:6px 10px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    width:170px;
+  }
 
-.qcontrols{display:flex; gap:8px; flex-wrap:wrap;}
-.pill-btn{
-  font-family:'IBM Plex Sans', sans-serif;
-  font-size:13px; font-weight:600;
-  border:1px solid var(--line);
-  background:#fff;
-  color:var(--ink);
-  padding:9px 15px;
-  border-radius:999px;
-  cursor:pointer;
-  display:inline-flex; align-items:center; gap:7px;
-  transition:all .18s ease;
-}
-.pill-btn:hover{border-color:var(--ink); background:var(--ink); color:var(--paper);}
-.pill-btn.playing{background:var(--gold); border-color:var(--gold); color:#1b1204;}
-.pill-btn svg{width:14px; height:14px;}
+  .reveal-btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.03em;
+    background:var(--wine-dark);
+    color:#EEF4FF;
+    border:none;
+    padding:7px 13px;
+    border-radius:8px;
+    cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .reveal-btn:hover{ background:var(--wine); }
+  .answer-box{
+    display:none;
+    margin-top:10px;
+    padding:10px 12px;
+    background:var(--sage-light);
+    border-left:3px solid var(--sage);
+    border-radius:8px;
+    font-size:13px;
+    color:#0C4A6E;
+  }
+  .answer-box.show{ display:block; animation:fade .3s ease; }
+  .answer-box b{ color:var(--wine-dark); }
+  .answer-box .status{ font-weight:700; margin-right:6px; }
+  .status.ok{ color:var(--good); }
+  .status.no{ color:var(--bad); }
 
-.qbody{padding:26px;}
+  .check-all-bar{
+    display:flex; justify-content:flex-end; margin:14px 0 24px;
+  }
+  .receipt-btn{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:.03em;
+    background:var(--gold);
+    color:#3a2a06;
+    border:none;
+    padding:11px 20px;
+    border-radius:100px;
+    cursor:pointer;
+    box-shadow:var(--shadow-sm);
+    display:flex; align-items:center; gap:8px;
+  }
+  .receipt-btn:hover{ box-shadow:var(--shadow-md); transform:translateY(-1px); }
+  .receipt-btn::before{ content:"🧾"; }
 
-/* mini waveform inside card, animates while speaking */
-.mini-wave{
-  display:flex; align-items:flex-end; gap:3px; height:26px; margin-bottom:4px;
-}
-.mini-wave span{
-  width:3px; border-radius:2px; background:var(--ink-soft);
-  height:20%;
-  transition:background .2s ease;
-}
-.qcard.speaking .mini-wave span{
-  background:var(--gold);
-  animation:speak 0.9s ease-in-out infinite;
-}
-.qcard.speaking .mini-wave span:nth-child(1){animation-delay:0s;}
-.qcard.speaking .mini-wave span:nth-child(2){animation-delay:.1s;}
-.qcard.speaking .mini-wave span:nth-child(3){animation-delay:.2s;}
-.qcard.speaking .mini-wave span:nth-child(4){animation-delay:.3s;}
-.qcard.speaking .mini-wave span:nth-child(5){animation-delay:.15s;}
-.qcard.speaking .mini-wave span:nth-child(6){animation-delay:.25s;}
-.qcard.speaking .mini-wave span:nth-child(7){animation-delay:.05s;}
-@keyframes speak{
-  0%,100%{height:20%;}
-  50%{height:100%;}
-}
+  .score-pill{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    background:var(--paper);
+    border:1px dashed var(--line);
+    padding:8px 14px;
+    border-radius:100px;
+    color:var(--ink-soft);
+  }
 
-.reveal-panel{
-  max-height:0; overflow:hidden;
-  transition:max-height .5s cubic-bezier(.2,.7,.2,1);
-}
-.reveal-panel.open{max-height:900px;}
-.reveal-inner{padding-top:18px;}
-.qtext{
-  font-family:'Fraunces', serif; font-weight:500; font-size:20px;
-  line-height:1.4;
-  margin:0 0 20px;
-  padding:16px 18px;
-  background:#fff;
-  border-left:3px solid var(--gold);
-  border-radius:0 8px 8px 0;
-  position:relative;
-}
+  /* speaking */
+  .speech-bubble{
+    border:1px solid var(--line);
+    background:var(--paper);
+    border-radius:14px;
+    padding:16px 18px;
+    margin-bottom:10px;
+    position:relative;
+  }
+  .speaker{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--gold); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px;}
+  .line{ font-size:14.5px; line-height:1.5; }
+  .tag-list{ display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .tag{ background:var(--sage-light); color:var(--sage); font-size:11.5px; padding:5px 11px; border-radius:100px; }
 
-/* text masking — bubbles/choices stay visible & clickable, only the
-   words are blurred out until "Hiện tất cả" is pressed */
-.ctext{
-  display:inline-block;
-  transition:filter .4s ease, opacity .4s ease;
-  filter:blur(7px);
-  opacity:.5;
-  user-select:none;
-}
-.qcard.text-revealed .ctext{
-  filter:blur(0);
-  opacity:1;
-  user-select:auto;
-}
-.mask-hint{
-  font-family:'IBM Plex Mono', monospace;
-  font-size:11px; letter-spacing:.06em; text-transform:uppercase;
-  color:var(--ink-soft);
-  margin-bottom:8px;
-  display:flex; align-items:center; gap:6px;
-}
-.qcard.text-revealed .mask-hint{display:none;}
+  /* dialogue cards */
+  .dialogue-card{ margin-bottom:18px; }
+  .dialogue-title{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    color:var(--wine-dark);
+    display:flex; align-items:center; gap:8px;
+    margin:0 0 14px;
+  }
+  .dialogue-num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    background:var(--wine);
+    color:#fff;
+    width:24px; height:24px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .speech-bubble.role-b{ background:var(--sage-light); border-color:transparent; }
+  .speaker.role-b{ color:var(--sage); }
+  .line b{ color:var(--wine-dark); }
 
-/* scantron bubbles */
-.choices{display:flex; flex-direction:column; gap:10px;}
-.choice{
-  display:flex; align-items:center; gap:14px;
-  padding:13px 16px;
-  border:1.5px solid var(--line);
-  border-radius:11px;
-  background:#fff;
-  cursor:pointer;
-  transition:border-color .2s ease, background .2s ease, transform .15s ease;
-  text-align:left;
-}
-.choice:hover{border-color:var(--ink); transform:translateX(3px);}
-.bubble{
-  width:26px; height:26px; border-radius:50%;
-  border:2px solid var(--ink-soft);
-  flex-shrink:0;
-  position:relative;
-  transition:all .25s cubic-bezier(.2,.7,.2,1);
-}
-.bubble::after{
-  content:"";
-  position:absolute; inset:4px;
-  border-radius:50%;
-  background:var(--ink);
-  transform:scale(0);
-  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
-}
-.choice-letter{font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:12px; color:var(--ink-soft); width:14px;}
-.choice-text{font-size:15px; flex:1;}
-.choice-icon{font-size:15px; opacity:0; transition:opacity .2s ease; width:18px; text-align:center;}
+  footer{
+    text-align:center;
+    margin-top:40px;
+    font-size:11.5px;
+    color:#94A3B8;
+    font-family:'JetBrains Mono',monospace;
+  }
 
-.choice.picked .bubble::after{transform:scale(1);}
-.choice.picked.correct{border-color:var(--green); background:var(--green-soft);}
-.choice.picked.correct .bubble{border-color:var(--green);}
-.choice.picked.correct .bubble::after{background:var(--green);}
-.choice.picked.correct .choice-icon{opacity:1; color:#1c6a41;}
-.choice.picked.wrong{border-color:var(--red); background:var(--red-soft);}
-.choice.picked.wrong .bubble{border-color:var(--red);}
-.choice.picked.wrong .bubble::after{background:var(--red);}
-.choice.picked.wrong .choice-icon{opacity:1; color:#8a2e28;}
-.choice.reveal-correct:not(.picked){border-color:var(--green); background:var(--green-soft);}
-.choice.locked{cursor:default;}
-.choice.locked:hover{transform:none;}
-
-.explain{
-  font-size:14px; color:var(--ink-soft);
-  margin-top:6px; padding-left:40px;
-  max-height:0; overflow:hidden;
-  transition:max-height .35s ease;
-}
-.choice.picked .explain, .choice.reveal-correct .explain{max-height:120px; margin-top:8px;}
-
-.answer-block{
-  margin-top:20px; padding-top:18px;
-  border-top:1px dashed var(--line);
-}
-.answer-block .tag-correct{
-  display:inline-flex; align-items:center; gap:8px;
-  font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px;
-  color:#1c6a41; background:var(--green-soft);
-  padding:6px 14px; border-radius:999px; margin-bottom:12px;
-}
-.answer-block ul{margin:0; padding-left:18px; font-size:14.5px; color:#3a4356;}
-.answer-block li{margin-bottom:6px;}
-
-/* footer */
-footer{
-  padding:60px 0 90px;
-  text-align:center;
-  color:#6b7690;
-  font-size:13.5px;
-}
-footer .mono{color:#8f9ab0;}
-
-/* voice selector bar */
-.voice-bar{
-  position:sticky; top:0; z-index:50;
-  backdrop-filter:blur(14px);
-  background:rgba(12,20,36,0.82);
-  border-bottom:1px solid var(--line-dark);
-}
-.voice-bar .wrap{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:12px 28px;
-  gap:16px; flex-wrap:wrap;
-}
-.voice-bar .brand{font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:.08em; color:var(--gold-soft);}
-.voice-bar select{
-  background:var(--bg-alt); color:var(--paper);
-  border:1px solid var(--line-dark);
-  border-radius:8px; padding:7px 10px; font-size:13px;
-  font-family:'IBM Plex Sans', sans-serif;
-  max-width:220px;
-}
-.voice-bar .rate-group{display:flex; align-items:center; gap:8px; font-size:13px; color:#aab4c9;}
-.voice-bar input[type=range]{width:90px;}
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
 </style>
 </head>
 <body>
+<div class="stationery">
 
-<div class="voice-bar">
-  <div class="wrap">
-    <span class="brand">◆ TOEIC · LISTENING PART 2</span>
-    <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
-      <div class="rate-group">
-        <span>Tốc độ đọc</span>
-        <input type="range" id="rateSlider" min="0.6" max="1.3" step="0.05" value="0.92">
-      </div>
-      <select id="voiceSelect" title="Chọn giọng đọc"></select>
+  <div class="hero">
+    <div class="eyebrow">TOEIC 550+ Masterclass</div>
+    <h1 class="title">Nhà hàng, Danh từ đếm được &amp; không đếm được, TOEIC Listening Part 2</h1>
+    <p class="subtitle">Bài 7 / 60 — Dành cho học viên Việt Nam (250–350 → mục tiêu 550+). Gọi món khai vị là phần ôn tập,
+    món chính là 20 từ vựng nhà hàng, và tráng miệng là 5 bài luyện tập có "hóa đơn" đáp án để bạn tự chấm.</p>
+    <div class="hero-meta">
+      <span class="chip">⏱ 120 phút</span>
+      <span class="chip">🎯 20 từ vựng cốt lõi</span>
+      <span class="chip">🎧 TOEIC Part 2 — 8 dạng câu hỏi</span>
+      <span class="chip">📋 Yêu cầu: Lesson 1–6</span>
     </div>
   </div>
+
+  <nav class="menu-nav" id="menuNav">
+    <button class="course-tab" data-panel="review">
+      <span class="num">Khai vị</span><span class="label">Ôn tập nhanh</span>
+      <span class="sub">10 câu · Lesson 4–6</span>
+    </button>
+    <button class="course-tab" data-panel="vocab">
+      <span class="num">Món chính</span><span class="label">20 từ vựng</span>
+      <span class="sub">Lật thẻ để xem nghĩa</span>
+    </button>
+    <button class="course-tab" data-panel="exercises">
+      <span class="num">Tráng miệng</span><span class="label">Luyện tập A–D</span>
+      <span class="sub">Nối từ · điền từ · trắc nghiệm</span>
+    </button>
+    <button class="course-tab" data-panel="speaking">
+      <span class="num">Hóa đơn</span><span class="label">Luyện nói</span>
+      <span class="sub">Role-play đặt bàn</span>
+    </button>
+  </nav>
+
+  <!-- ================= REVIEW PANEL ================= -->
+  <section class="panel" id="panel-review">
+    <div class="section-head">
+      <h2>Khai vị — Ôn tập Lesson 4–6</h2>
+      <p>Chọn đáp án đúng, sau đó bấm từng nút để xem giải thích.</p>
+    </div>
+    <div id="reviewList"></div>
+  </section>
+
+  <!-- ================= VOCAB PANEL ================= -->
+  <section class="panel" id="panel-vocab">
+    <div class="section-head">
+      <h2>Món chính — 20 từ vựng nhà hàng</h2>
+      <p>Bấm vào thẻ để lật xem nghĩa, ví dụ và mẹo ghi nhớ. Bấm 🔊 để nghe phát âm. Dùng nút → để sang từ mới.</p>
+    </div>
+    <div class="vocab-stage">
+      <div class="vocab-counter">Từ <b id="vocabPosNow">1</b> / <span id="vocabPosTotal">20</span></div>
+      <div class="vocab-progress"><div class="vocab-progress-fill" id="vocabProgressFill"></div></div>
+
+      <div class="flip-card-large" id="vocabFlipCard">
+        <div class="flip-inner-large" id="vocabFlipInner">
+          <div class="face-large front">
+            <button class="speak-btn" id="vocabSpeakBtnFront" aria-label="Nghe phát âm" onclick="event.stopPropagation(); speakWord();">🔊</button>
+            <div class="vocab-img-wrap"><img id="vocabImg" src="" alt=""></div>
+            <span class="idx-large" id="vocabIdx">01</span>
+            <span class="word-large" id="vocabWord"></span>
+            <span class="ipa-large" id="vocabIpa"></span>
+            <span class="pos-large" id="vocabPosTag"></span>
+            <span class="hint-large">Nhấn vào thẻ để xem nghĩa</span>
+          </div>
+          <div class="face-large back">
+            <button class="speak-btn" id="vocabSpeakBtnBack" aria-label="Nghe phát âm" onclick="event.stopPropagation(); speakWord();">🔊</button>
+            <div class="word-large-back" id="vocabWordBack"></div>
+            <div class="vi-large" id="vocabVi"></div>
+            <div class="ex-large" id="vocabEx"></div>
+            <div class="exvi-large" id="vocabExvi"></div>
+            <div class="tip-large" id="vocabTip"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="vocab-nav">
+        <button class="vocab-nav-btn prev" id="vocabPrevBtn" aria-label="Từ trước">←</button>
+        <button class="vocab-flip-btn" id="vocabFlipBtn">Lật thẻ</button>
+        <button class="vocab-nav-btn next" id="vocabNextBtn" aria-label="Từ tiếp theo">→</button>
+      </div>
+
+      <div class="vocab-dots" id="vocabDots"></div>
+    </div>
+  </section>
+
+  <!-- ================= EXERCISES PANEL ================= -->
+  <section class="panel" id="panel-exercises">
+    <div class="section-head">
+      <h2>Tráng miệng — Luyện tập</h2>
+      <p>4 bài luyện, mỗi bài đều có nút "Xem hóa đơn" để hiện đáp án.</p>
+    </div>
+
+    <div class="sub-nav" id="subNav">
+      <button class="sub-btn" data-sub="A">A. Nối từ</button>
+      <button class="sub-btn" data-sub="B">B. Điền từ</button>
+      <button class="sub-btn" data-sub="C">C. Trắc nghiệm</button>
+      <button class="sub-btn" data-sub="D">D. Collocation</button>
+    </div>
+
+    <!-- A: Matching -->
+    <div class="sub-panel" id="sub-A">
+      <div class="card">
+        <p style="font-size:13px;color:var(--ink-soft);margin-top:0;">Chọn định nghĩa phù hợp cho mỗi từ, sau đó xem hóa đơn để kiểm tra.</p>
+        <div id="matchList"></div>
+      </div>
+      <div class="check-all-bar">
+        <button class="receipt-btn" onclick="revealAll('match')">Xem hóa đơn — Bài A</button>
+      </div>
+    </div>
+
+    <!-- B: Fill in blank -->
+    <div class="sub-panel" id="sub-B">
+      <div id="fillList"></div>
+      <div class="check-all-bar">
+        <button class="receipt-btn" onclick="revealAll('fill')">Xem hóa đơn — Bài B</button>
+      </div>
+    </div>
+
+    <!-- C: Multiple choice -->
+    <div class="sub-panel" id="sub-C">
+      <div id="mcList"></div>
+      <div class="check-all-bar">
+        <button class="receipt-btn" onclick="revealAll('mc')">Xem hóa đơn — Bài C</button>
+      </div>
+    </div>
+
+    <!-- D: Collocation -->
+    <div class="sub-panel" id="sub-D">
+      <div id="collocList"></div>
+      <div class="check-all-bar">
+        <button class="receipt-btn" onclick="revealAll('colloc')">Xem hóa đơn — Bài D</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SPEAKING PANEL ================= -->
+  <section class="panel" id="panel-speaking">
+    <div class="section-head">
+      <h2>Hóa đơn — Luyện nói theo cặp</h2>
+      <p>8 đoạn hội thoại mẫu về chủ đề nhà hàng. Đọc theo cặp A–B; các từ vựng in đậm là từ đã học hôm nay.</p>
+    </div>
+    <div class="card">
+      <div class="dialogue-card">
+        <div class="dialogue-title"><span class="dialogue-num">1</span>Making a reservation</div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">Should I make a <b>reservation</b> for our client lunch?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Yes. Please ask for a table in the <b>dining area</b>.</div></div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">Sure. Should I also order some <b>appetizers</b>?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Yes, and we can choose the main course when they arrive.</div></div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="dialogue-title"><span class="dialogue-num">2</span>Dietary restrictions</div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">I made a <b>reservation</b> for twelve o'clock.</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Great. Did you ask about Mr. Brown's <b>dietary</b> restrictions?</div></div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">Yes. He cannot eat seafood.</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Okay. Let's ask the <b>server</b> about the available dishes.</div></div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="dialogue-title"><span class="dialogue-num">3</span>Ordering food</div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">What would you like for your <b>entrée</b>?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">I'd like the chicken, please.</div></div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">Would you like a <b>beverage</b> or a <b>dessert</b>?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Yes, I'd like some coffee and a small <b>dessert</b>.</div></div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="dialogue-title"><span class="dialogue-num">4</span>Paying the bill</div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">Excuse me, could we have the <b>receipt</b>, please?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Sure. Is the service charge included?</div></div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">Yes, it is.</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Great. Please put the bill on the company account.</div></div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="dialogue-title"><span class="dialogue-num">5</span>A complimentary item</div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">Excuse me, is this dessert <b>complimentary</b>?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Yes. It comes with the business lunch.</div></div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">That's great. Could we also order two <b>beverages</b>?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Of course. I'll ask the <b>server</b>.</div></div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="dialogue-title"><span class="dialogue-num">6</span>Busy restaurant</div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">Do we have a <b>reservation</b> for 1 p.m.?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Yes, but the restaurant is very busy today.</div></div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">Is there a <b>waitlist</b>?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Yes, but our table should be ready in about ten minutes.</div></div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="dialogue-title"><span class="dialogue-num">7</span>Takeout</div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">I'm not very hungry. Can I order <b>takeout</b>?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Sure. What would you like?</div></div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">I'd like the chicken <b>entrée</b> and a <b>beverage</b>.</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Okay. I'll place the order for you.</div></div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="dialogue-title"><span class="dialogue-num">8</span>More natural / business-like</div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">Have you made a <b>reservation</b> for our client?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Yes. I booked a table in the quiet <b>dining area</b>.</div></div>
+        <div class="speech-bubble"><div class="speaker">A</div><div class="line">Perfect. Did you tell the restaurant about his <b>dietary</b> restrictions?</div></div>
+        <div class="speech-bubble role-b"><div class="speaker role-b">B</div><div class="line">Yes. They said they could prepare a special meal for him.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>Lesson 7 · TOEIC 550+ Masterclass · dùng cho lớp học, không lưu dữ liệu</footer>
 </div>
 
-<!-- ================= HERO ================= -->
-<header class="hero">
-  <div class="wave-hero" id="heroWave" aria-hidden="true"></div>
-  <div class="wrap">
-    <div class="hero-tag">Question &amp; Response · Questions 7–31</div>
-    <h1>Nghe đúng <em>3 giây đầu.</em><br>Chọn đúng cả câu.</h1>
-    <p>Không hình ảnh, không văn bản in sẵn — chỉ có tai bạn và trí nhớ ngắn hạn. Đây là bài học chiến thuật cho Part 2, kèm 10 câu luyện nghe.</p>
-    <div class="hero-actions">
-      <button class="btn btn-gold" onclick="document.getElementById('practice').scrollIntoView({behavior:'smooth'})">Bắt đầu luyện nghe ↓</button>
-      <button class="btn btn-ghost" onclick="document.getElementById('strategy').scrollIntoView({behavior:'smooth'})">Xem chiến thuật</button>
-    </div>
-  </div>
-</header>
-
-<!-- ================= OVERVIEW ================= -->
-<section id="overview">
-  <div class="wrap">
-    <div class="eyebrow">Tổng quan</div>
-    <h2 class="section-title">Part 2 là gì?</h2>
-    <div class="section-sub">Cấu trúc đề thi và điều bạn sẽ đối mặt trong 25 câu hỏi này.</div>
-    <div class="grid-3">
-      <div class="card">
-        <span class="num">01</span>
-        <h3>25 câu hỏi</h3>
-        <p>Từ câu 7 đến câu 31. Không có hình ảnh, không có câu hỏi hay lựa chọn in trong sách đề.</p>
-      </div>
-      <div class="card">
-        <span class="num">02</span>
-        <h3>1 câu · 3 đáp án</h3>
-        <p>Bạn nghe một câu phát biểu hoặc câu hỏi, sau đó nghe ba phản hồi (A), (B), (C).</p>
-      </div>
-      <div class="card">
-        <span class="num">03</span>
-        <h3>Chọn phản hồi đúng nhất</h3>
-        <p>Nhiệm vụ duy nhất: chọn phản hồi phù hợp nhất với câu gốc — chỉ nghe một lần duy nhất.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= TRAPS ================= -->
-<section id="traps" style="background:var(--bg-alt); border-top:1px solid var(--line-dark); border-bottom:1px solid var(--line-dark);">
-  <div class="wrap">
-    <div class="eyebrow">Cẩn thận</div>
-    <h2 class="section-title">Bẫy thường gặp</h2>
-    <div class="section-sub">Ba kiểu bẫy ETS dùng đi dùng lại để đánh lừa người không hiểu trọn vẹn câu nói.</div>
-    <div class="grid-3">
-      <div class="card">
-        <span class="num">BẪY 01</span>
-        <h3>Từ giống / âm giống nhau</h3>
-        <p>Bẫy yêu thích của ETS! Một từ nổi bật trong câu hỏi được lặp lại — hoặc thay bằng từ nghe gần giống — trong đáp án sai.</p>
-        <div class="trap-example">Q: <i>Where is the copy machine?</i><br><b>Trap:</b> I prefer coffee, thanks.</div>
-      </div>
-      <div class="card">
-        <span class="num">BẪY 02</span>
-        <h3>Từ liên tưởng</h3>
-        <p>Dùng một từ liên quan chặt đến chủ đề câu hỏi, nhưng theo cách không hề trả lời câu hỏi đó.</p>
-        <div class="trap-example">Q: <i>When did the train arrive?</i><br><b>Trap:</b> The ticket was expensive.</div>
-      </div>
-      <div class="card">
-        <span class="num">BẪY 03</span>
-        <h3>Trả lời sai loại Wh-</h3>
-        <p>Đưa ra câu trả lời về thời gian cho câu hỏi "Where", hoặc về địa điểm cho câu hỏi "Who".</p>
-        <div class="trap-example">Kiểm tra: loại từ để hỏi trước — rồi mới nghe nội dung đáp án có khớp loại đó không.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= STRATEGY ================= -->
-<section id="strategy">
-  <div class="wrap">
-    <div class="eyebrow">Chiến thuật</div>
-    <h2 class="section-title">First-Word Focus</h2>
-    <div class="section-sub">Vì không có chữ để đọc, trí nhớ của bạn phải thật sắc. Phần quan trọng nhất của đoạn audio là <b style="color:var(--gold-soft)">1–2 giây đầu tiên</b>.</div>
-    <div class="grid-2">
-      <div class="strategy-box wh">
-        <h4>Wh- Question</h4>
-        <p style="margin:0 0 6px; font-size:15px;">Who · What · Where · When · Why · How</p>
-        <div class="chips">
-          <span class="chip">Who → người</span>
-          <span class="chip">Where → địa điểm</span>
-          <span class="chip">When → thời gian</span>
-          <span class="chip">Why → lý do</span>
-        </div>
-        <div class="rule-yes-no">⚠ Bạn <b>KHÔNG THỂ</b> trả lời bằng "Yes" hoặc "No". Nếu một lựa chọn bắt đầu bằng Yes/No → loại ngay lập tức!</div>
-      </div>
-      <div class="strategy-box aux">
-        <h4>Trợ động từ</h4>
-        <p style="margin:0 0 6px; font-size:15px;">Do · Did · Are · Is · Was · Have</p>
-        <div class="chips">
-          <span class="chip">Do you...?</span>
-          <span class="chip">Did they...?</span>
-          <span class="chip">Is it...?</span>
-          <span class="chip">Have you...?</span>
-        </div>
-        <div class="rule-yes-no" style="background:rgba(63,166,107,0.08); border-color:rgba(63,166,107,0.25);">✓ Đây là câu hỏi Yes/No. Đáp án thường (nhưng không luôn luôn) bắt đầu bằng Yes/No, hoặc xác nhận/phủ nhận trực tiếp.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= VOCAB ================= -->
-<section id="vocab" style="background:var(--bg-alt); border-top:1px solid var(--line-dark); border-bottom:1px solid var(--line-dark);">
-  <div class="wrap">
-    <div class="eyebrow">Từ vựng</div>
-    <h2 class="section-title">Thường xuất hiện trong Part 2</h2>
-    <div class="section-sub">Part 2 xoay quanh giao tiếp văn phòng hằng ngày: hỏi đường, lịch trình, ý kiến, và phân công công việc.</div>
-    <div class="tag-cloud">
-      <span class="tag">Who has the folder?</span>
-      <span class="tag">When is the meeting?</span>
-      <span class="tag">Did you call the vendor?</span>
-      <span class="tag">directions</span>
-      <span class="tag">schedules</span>
-      <span class="tag">opinions</span>
-      <span class="tag">assigning tasks</span>
-      <span class="tag">deadlines</span>
-      <span class="tag">office supplies</span>
-    </div>
-  </div>
-</section>
-
-<!-- ================= PRACTICE ================= -->
-<section id="practice">
-  <div class="wrap">
-    <div class="eyebrow">Luyện tập</div>
-    <h2 class="section-title">10 câu hỏi thực hành</h2>
-    <div class="section-sub">Định dạng TOEIC Part 2. Bấm ▶ để nghe câu hỏi và 3 lựa chọn, đoán trước khi bấm "Hiện văn bản".</div>
-
-    <div class="practice-intro">
-      💡 <div><b>Ghi chú cho giáo viên:</b> Đọc câu hỏi và 3 lựa chọn cho học sinh nghe trước (dùng nút Play). Đừng để học sinh xem văn bản bên dưới cho đến khi họ đã đoán xong.</div>
-    </div>
-
-    <div id="qlist"></div>
-  </div>
-</section>
-
-<footer>
-  <div class="mono">TOEIC LISTENING · PART 2 — QUESTION &amp; RESPONSE</div>
-  <div style="margin-top:6px;">Giọng đọc sử dụng Web Speech API của trình duyệt — ưu tiên giọng Google nếu có sẵn.</div>
-</footer>
-
 <script>
-/* ---------------- data ---------------- */
-const questions = [
-  {
-    q: "Where did you put the marketing report?",
-    choices: [
-      {t:"Yes, it's very informative.", correct:false, note:"Bẫy: \"Where\" không thể trả lời bằng Yes."},
-      {t:"I left it on your desk.", correct:true, note:"Đúng: trả lời địa điểm cụ thể (\"on your desk\")."},
-      {t:"At the supermarket.", correct:false, note:"Bẫy âm giống nhau: marketing ↔ supermarket."}
-    ],
-    explain:["\"Where\" hỏi về địa điểm. (B) trả lời đúng địa điểm.","(A) là bẫy vì không thể trả lời \"Where\" bằng \"Yes\".","(C) dùng bẫy âm giống nhau (marketing ~ supermarket)."]
-  },
-  {
-    q: "When did the IT technician fix the server?",
-    choices: [
-      {t:"Sometime yesterday afternoon.", correct:true, note:"Đúng: cụm chỉ thời gian trong quá khứ."},
-      {t:"He is a new technician.", correct:false, note:"Bẫy: lặp từ \"technician\" nhưng không trả lời When."},
-      {t:"Six network servers.", correct:false, note:"Bẫy: lặp từ \"servers\", trả lời cho \"How many\", không phải \"When\"."}
-    ],
-    explain:["\"When\" hỏi về thời gian. (A) đưa ra mốc thời gian quá khứ.","(B) lặp từ \"technician\" nhưng không trả lời câu hỏi.","(C) lặp từ \"servers\" và trả lời \"How many\", không phải \"When\"."]
-  },
-  {
-    q: "Who approved the budget for the new R&D project?",
-    choices: [
-      {t:"The board of directors did.", correct:true, note:"Đúng: trả lời bằng người/nhóm người."},
-      {t:"It proved to be successful.", correct:false, note:"Bẫy âm giống nhau: approved ~ proved."},
-      {t:"Around five thousand dollars.", correct:false, note:"Trả lời cho \"How much\", không phải \"Who\"."}
-    ],
-    explain:["\"Who\" cần một người hoặc nhóm người. \"The board of directors\" trả lời hoàn hảo.","(B) dùng bẫy âm giống nhau (approved ~ proved).","(C) trả lời \"How much\", không phải \"Who\"."]
-  },
-  {
-    q: "Did the HR department hire a new administrative assistant?",
-    choices: [
-      {t:"No, the position is still open.", correct:true, note:"Đúng: trả lời Yes/No trực tiếp kèm giải thích."},
-      {t:"Higher than the top shelf.", correct:false, note:"Bẫy âm giống hệt: hire ~ higher."},
-      {t:"She assisted me yesterday.", correct:false, note:"Lặp gốc từ \"assist\" nhưng không trả lời câu hỏi Yes/No."}
-    ],
-    explain:["\"Did\" là câu hỏi Yes/No. (A) trả lời phủ định trực tiếp và giải thích lý do.","(B) dùng bẫy âm giống hệt (hire nghe giống hệt higher).","(C) lặp gốc từ \"assist\" nhưng không trả lời câu hỏi Yes/No."]
-  },
-  {
-    q: "Why was the accounting meeting canceled?",
-    choices: [
-      {t:"Because the manager was sick.", correct:true, note:"Đúng: \"Because\" là dấu hiệu chuẩn cho câu trả lời lý do."},
-      {t:"It's in conference room B.", correct:false, note:"Trả lời cho câu hỏi \"Where\"."},
-      {t:"I opened a bank account.", correct:false, note:"Bẫy lặp gốc từ: accounting ↔ account."}
-    ],
-    explain:["\"Why\" hỏi lý do. \"Because\" là dấu hiệu trả lời chuẩn.","(B) trả lời câu hỏi \"Where\".","(C) dùng bẫy lặp gốc từ (accounting → account)."]
-  },
-  {
-    q: "How long ago did the purchasing manager leave?",
-    choices: [
-      {t:"She bought some new shoes.", correct:false, note:"Bẫy liên tưởng: purchasing ~ bought."},
-      {t:"It is about five meters long.", correct:false, note:"Bẫy từ giống hệt \"long\" nhưng mô tả độ dài vật lý, không phải thời gian."},
-      {t:"Just ten minutes ago.", correct:true, note:"Đúng: mốc thời gian cụ thể."}
-    ],
-    explain:["\"How long ago\" hỏi khoảng thời gian đã trôi qua. (C) cho khung thời gian chính xác.","(A) liên tưởng \"purchasing\" với \"bought\" — đây là bẫy.","(B) dùng đúng từ \"long\" nhưng mô tả độ dài vật lý, không phải thời gian."]
-  },
-  {
-    q: "What time did the corporate client arrive yesterday?",
-    choices: [
-      {t:"Right after the lunch break.", correct:true, note:"Đúng: chỉ ra mốc thời gian."},
-      {t:"Yes, they drove a rental car.", correct:false, note:"Bẫy: không thể trả lời \"What time\" bằng Yes."},
-      {t:"The clock is on the wall.", correct:false, note:"Bẫy liên tưởng: time ↔ clock."}
-    ],
-    explain:["\"What time\" cần câu trả lời về thời điểm. \"Right after the lunch break\" chỉ ra thời gian.","(B) sai vì không thể trả lời \"What time\" bằng \"Yes\".","(C) liên tưởng từ \"time\" với \"clock\", không trả lời đúng câu hỏi."]
-  },
-  {
-    q: "Didn't the maintenance team repair the elevator this morning?",
-    choices: [
-      {t:"To get to the fifth floor.", correct:false, note:"Trả lời cho \"Why\" hoặc \"Where\"."},
-      {t:"Actually, they are coming tomorrow.", correct:true, note:"Đúng: phản bác lịch sự giả định trong câu hỏi phủ định."},
-      {t:"I work in pairs.", correct:false, note:"Bẫy âm giống nhau: repair ~ pair."}
-    ],
-    explain:["Đây là câu hỏi Yes/No dạng phủ định. (B) phản bác lịch sự giả định bằng cách nói việc đó chưa xảy ra.","(A) trả lời cho câu hỏi \"Why\" hoặc \"Where\".","(C) dùng bẫy âm giống nhau (repair ~ pair)."]
-  },
-  {
-    q: "Whose sales presentation did you watch last week?",
-    choices: [
-      {t:"I watched Mr. Peterson's.", correct:true, note:"Đúng: chỉ rõ quyền sở hữu."},
-      {t:"It is a nice present.", correct:false, note:"Bẫy âm giống nhau: presentation ~ present."},
-      {t:"We sold thirty units.", correct:false, note:"Bẫy liên tưởng: sales ~ sold."}
-    ],
-    explain:["\"Whose\" hỏi về quyền sở hữu (của ai?). \"Mr. Peterson's\" thể hiện quyền sở hữu.","(B) dùng bẫy âm giống nhau (presentation → present).","(C) dùng bẫy từ liên tưởng (sales → sold)."]
-  },
-  {
-    q: "Did you send the contractor's invoice to payroll?",
-    choices: [
-      {t:"Her voice is very loud.", correct:false, note:"Bẫy âm giống nhau: invoice ~ voice."},
-      {t:"Yes, I emailed it an hour ago.", correct:true, note:"Đúng: trả lời Yes và xác nhận hành động."},
-      {t:"The construction contract.", correct:false, note:"Bẫy liên tưởng: contractor ~ contract, không trả lời hành động."}
-    ],
-    explain:["Câu hỏi trực tiếp dạng \"Did you\". (B) trả lời \"Yes\" và xác nhận hành động đã xảy ra.","(A) dùng bẫy âm giống nhau (invoice ~ voice).","(C) dùng từ liên tưởng (contractor → contract) nhưng không trả lời hành động."]
-  }
+/* ============ DATA ============ */
+const vocab = [
+ {w:"reservation", ipa:"/ˌrezərˈveɪʃn/", pos:"n.", vi:"sự đặt chỗ trước", ex:"We need to make a reservation for six people at 7:00 PM.", exvi:"Chúng tôi cần đặt bàn cho 6 người vào lúc 7 giờ tối.", tip:"\"Reserve\" (giữ chỗ) + \"-ation\" → sự đặt chỗ.", img:"https://cdn-icons-png.flaticon.com/512/4036/4036829.png"},
+ {w:"appetizer", ipa:"/ˈæpɪtaɪzər/", pos:"n.", vi:"món khai vị", ex:"We ordered a light appetizer while waiting for the main dish.", exvi:"Chúng tôi đã gọi một món khai vị nhẹ trong khi chờ món chính.", tip:"\"Appetite\" (sự ngon miệng) → món làm thèm ăn.", img:"https://cdn-icons-png.flaticon.com/512/8502/8502775.png"},
+ {w:"entrée", ipa:"/ˈɑːntreɪ/", pos:"n.", vi:"món chính", ex:"The steak is the most popular entrée on our dinner menu.", exvi:"Bít tết là món chính được ưa chuộng nhất trong thực đơn tối.", tip:"Từ gốc Pháp; trong TOEIC (Mỹ), entrée = món chính.", img:"https://cdn-icons-png.flaticon.com/512/19033/19033515.png"},
+ {w:"beverage", ipa:"/ˈbevərɪdʒ/", pos:"n.", vi:"đồ uống", ex:"Hot and cold beverages are served free of charge during the seminar lunch.", exvi:"Đồ uống nóng và lạnh được phục vụ miễn phí trong bữa trưa hội thảo.", tip:"Từ trang trọng của \"drink\", dùng trên menu và hóa đơn.", img:"https://cdn-icons-png.flaticon.com/512/3859/3859737.png"},
+ {w:"dessert", ipa:"/dɪˈzɜːrt/", pos:"n.", vi:"món tráng miệng", ex:"Would you like to see the dessert menu before we bring the check?", exvi:"Quý khách có muốn xem thực đơn tráng miệng trước khi mang hóa đơn ra không?", tip:"Hai chữ 's' = Sweet Stuff (phân biệt với desert - sa mạc).", img:"https://cdn-icons-png.flaticon.com/512/4465/4465584.png"},
+ {w:"patron", ipa:"/ˈpeɪtrən/", pos:"n.", vi:"khách hàng thân thiết", ex:"The restaurant offers a 10% discount to its regular patrons.", exvi:"Nhà hàng giảm giá 10% cho thực khách thân thiết.", tip:"Nghe như \"pater\" (người bảo trợ) → người ủng hộ quán.", img:"https://cdn-icons-png.flaticon.com/512/13436/13436992.png"},
+ {w:"portion", ipa:"/ˈpɔːrʃn/", pos:"n.", vi:"khẩu phần ăn", ex:"The meal was delicious and served in very generous portions.", exvi:"Bữa ăn rất ngon và được phục vụ với khẩu phần đầy đặn.", tip:"Nghĩ tới \"part\" → một phần ăn cho một người.", img:"https://cdn-icons-png.flaticon.com/512/15594/15594372.png"},
+ {w:"complimentary", ipa:"/ˌkɑːmplɪˈmentri/", pos:"adj.", vi:"miễn phí (tặng kèm)", ex:"The manager offered us complimentary desserts to apologize for the delay.", exvi:"Quản lý tặng chúng tôi món tráng miệng miễn phí để xin lỗi vì chậm trễ.", tip:"\"Complete\" praise → quà tặng miễn phí từ nhà hàng.", img:"https://cdn-icons-png.flaticon.com/512/9466/9466122.png"},
+ {w:"waitlist", ipa:"/ˈweɪtlɪst/", pos:"n.", vi:"danh sách chờ", ex:"Since the dining room was full, we had to put our names on the waitlist.", exvi:"Vì phòng ăn đã kín chỗ, chúng tôi phải ghi tên vào danh sách chờ.", tip:"\"Wait\" + \"List\" → danh sách người đang chờ bàn.", img:"https://cdn-icons-png.flaticon.com/512/3842/3842609.png"},
+ {w:"server", ipa:"/ˈsɜːrvər/", pos:"n.", vi:"người phục vụ", ex:"Our server was extremely attentive throughout the whole evening.", exvi:"Người phục vụ của chúng tôi rất chu đáo suốt buổi tối.", tip:"Từ trung tính giới tính, thay cho waiter/waitress.", img:"https://cdn-icons-png.flaticon.com/512/2949/2949264.png"},
+ {w:"venue", ipa:"/ˈvenjuː/", pos:"n.", vi:"địa điểm tổ chức", ex:"The waterfront bistro is a popular venue for company anniversary dinners.", exvi:"Nhà hàng ven sông là địa điểm phổ biến cho tiệc kỷ niệm công ty.", tip:"Từ tiếng Pháp \"venir\" (đến) → nơi người ta đến.", img:"https://cdn-icons-png.flaticon.com/512/535/535137.png"},
+ {w:"dietary", ipa:"/ˈdaɪəteri/", pos:"adj.", vi:"thuộc về chế độ ăn", ex:"Please inform us of any dietary restrictions when confirming your RSVP.", exvi:"Vui lòng báo hạn chế ăn uống khi xác nhận tham dự.", tip:"Liên quan tới \"diet\" (chế độ ăn).", img:"https://cdn-icons-png.flaticon.com/512/11126/11126320.png"},
+ {w:"banquet", ipa:"/ˈbæŋkwɪt/", pos:"n.", vi:"bữa tiệc lớn", ex:"The company held its annual awards banquet in the grand dining hall.", exvi:"Công ty tổ chức tiệc trao giải hàng năm tại đại sảnh.", tip:"Bữa tiệc lớn; \"Bank\" chỗ ngồi cho đông người.", img:"https://cdn-icons-png.flaticon.com/512/9866/9866903.png"},
+ {w:"cater", ipa:"/ˈkeɪtər/", pos:"v.", vi:"cung cấp dịch vụ ăn uống", ex:"A local company was hired to cater the luncheon for 100 executives.", exvi:"Một công ty địa phương được thuê để cung cấp tiệc trưa cho 100 lãnh đạo.", tip:"\"Catering\" = dịch vụ mang đồ ăn tới sự kiện.", img:"https://cdn-icons-png.flaticon.com/512/13910/13910635.png"},
+ {w:"receipt", ipa:"/rɪˈsiːt/", pos:"n.", vi:"hóa đơn / biên nhận", ex:"Make sure to keep the official receipt for expense reimbursement.", exvi:"Hãy giữ lại hóa đơn chính thức để làm thủ tục hoàn phí.", tip:"Chữ 'p' câm! Đọc /rɪˈsiːt/. Nghĩa: bằng chứng thanh toán.", img:"https://cdn-icons-png.flaticon.com/512/7325/7325265.png"},
+ {w:"gratuity", ipa:"/ɡrəˈtuːəti/", pos:"n.", vi:"tiền tip", ex:"A 15% gratuity is automatically added to parties of six or more.", exvi:"Tiền phục vụ 15% được tự động thêm cho nhóm từ 6 người trở lên.", tip:"Từ trang trọng của \"tip\"; liên quan \"grateful\" (biết ơn).", img:"https://cdn-icons-png.flaticon.com/512/7377/7377344.png"},
+ {w:"table setting", ipa:"/ˈteɪbl setɪŋ/", pos:"n.", vi:"cách bài trí bàn ăn", ex:"The staff arranged the elegant table settings before the VIP guests arrived.", exvi:"Nhân viên sắp xếp bàn ăn sang trọng trước khi khách VIP đến.", tip:"Sắp dao, nĩa, ly, khăn ăn lên bàn.", img:"https://cdn-icons-png.flaticon.com/512/11209/11209334.png"},
+ {w:"complaint", ipa:"/kəmˈpleɪnt/", pos:"n.", vi:"lời phàn nàn", ex:"The shift supervisor handled the customer's complaint regarding cold soup promptly.", exvi:"Trưởng ca xử lý nhanh khiếu nại của khách về món súp nguội.", tip:"Danh từ của \"complain\" (v) + \"-t\".", img:"https://cdn-icons-png.flaticon.com/512/1027/1027619.png"},
+ {w:"dining area", ipa:"/ˈdaɪnɪŋ ˈeriə/", pos:"n.", vi:"khu vực ăn uống", ex:"Patrons who smoke must sit outside the main dining area.", exvi:"Thực khách hút thuốc phải ngồi ngoài khu vực ăn uống chính.", tip:"Khu vực nơi mọi người dùng bữa.", img:"https://cdn-icons-png.flaticon.com/512/9016/9016765.png"},
+ {w:"takeout", ipa:"/ˈteɪkaʊt/", pos:"n./adj.", vi:"đồ ăn mang về", ex:"Mr. Harrison ordered takeout from the Thai restaurant on his way home.", exvi:"Ông Harrison đặt đồ ăn mang về từ nhà hàng Thái trên đường về nhà.", tip:"Đồ ăn bạn \"take out\" khỏi nhà hàng.", img:"https://cdn-icons-png.flaticon.com/512/7770/7770796.png"}
 ];
 
-/* ---------------- render ---------------- */
-const qlist = document.getElementById('qlist');
+const reviewItems = [
+ {q:"Mr. Tanaka called the front desk to ask if the hotel had any ________ available for tomorrow night.", opts:["vacancies","itineraries","deadlines","promotions"], ans:0, exp:"Vacancy (Lesson 6) = phòng trống. Itinerary = lịch trình; Deadline = hạn chót; Promotion = thăng chức."},
+ {q:"Before leaving for his flight, the executive reviewed his travel ________ to confirm the flight times.", opts:["luggage","itinerary","priority","colleague"], ans:1, exp:"Itinerary (Lesson 5) = lịch trình du lịch chi tiết."},
+ {q:"The hotel ________ was kind enough to book a city tour for the international guests.", opts:["concierge","supervisor","applicant","technician"], ans:0, exp:"Concierge (Lesson 6) = nhân viên khách sạn hỗ trợ đặt tour."},
+ {q:"Ms. Nguyen needs to extend her ________ at the Grand Hotel because her conference was prolonged.", opts:["departure","stay","task","schedule"], ans:1, exp:"\"Extend her stay\" (n.) = ở lại lâu hơn tại khách sạn."},
+ {q:"Please submit your weekly status report before the ________ on Friday at 5:00 PM.", opts:["reservation","shuttle","deadline","boarding"], ans:2, exp:"\"Before the deadline\" = trước hạn chót."},
+ {q:"The maintenance team ________ the air conditioning unit in Room 402 yesterday afternoon.", opts:["repairs","repaired","will repair","has repaired"], ans:1, exp:"Mốc thời gian \"yesterday afternoon\" yêu cầu thì Quá khứ đơn."},
+ {q:"All passengers ________ present a valid passport at the check-in counter before receiving boarding passes.", opts:["must","could","might","would"], ans:0, exp:"\"Must\" diễn tả yêu cầu bắt buộc trong ngữ cảnh trang trọng."},
+ {q:"Mr. Gomez ________ for this firm since he graduated from university eight years ago.", opts:["works","worked","is working","has worked"], ans:3, exp:"\"Since + mốc quá khứ\" cần thì Hiện tại hoàn thành (has worked)."},
+ {q:"Trong TOEIC Part 1, nếu ảnh KHÔNG có người, một lựa chọn dạng \"being + V3\" (vd: is being painted) thường:", opts:["Đúng, vì mô tả trạng thái chung","Sai, vì ngụ ý hành động của con người đang diễn ra","Đúng, vì tập trung vào vị trí đồ vật","Sai, vì Part 1 không dùng bị động"], ans:1, exp:"Không có người trong ảnh thì passive dạng \"đang diễn ra\" (being + V3) thường sai."},
+ {q:"Khi làm TOEIC Part 1, nếu nghe một từ lạ ở đáp án (A), bạn nên:", opts:["Chọn (A) ngay vì từ khó thường đúng","Loại (A) ngay lập tức","Giữ (A) là khả năng, nghe hết (B)(C)(D) rồi quyết định","Dừng nghe, chờ ảnh tiếp theo"], ans:2, exp:"Không bao giờ chọn/loại một từ lạ khi chưa nghe hết các lựa chọn."}
+];
 
-questions.forEach((item, idx) => {
-  const card = document.createElement('div');
-  card.className = 'qcard';
-  card.innerHTML = `
-    <div class="qhead">
-      <div class="qhead-left">
-        <div class="qnum">${idx+1}</div>
-        <div>
-          <div class="qhead-title">Question ${idx+1}</div>
-          <div class="mini-wave">${'<span></span>'.repeat(7)}</div>
-        </div>
-      </div>
-      <div class="qcontrols">
-        <button class="pill-btn play-btn" data-idx="${idx}">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          Nghe
-        </button>
-        <button class="pill-btn toggle-q" data-idx="${idx}">Hiện tất cả</button>
-        <button class="pill-btn toggle-a" data-idx="${idx}">Hiện đáp án</button>
-      </div>
+const matchItems = [
+ {w:"Gratuity", def:"A formal term for a tip given to service staff.", key:"C"},
+ {w:"Patron", def:"A regular customer of a business or restaurant.", key:"D"},
+ {w:"Venue", def:"The location where an event or dining gathering takes place.", key:"F"},
+ {w:"Complimentary", def:"Free of charge; given as a courtesy.", key:"E"},
+ {w:"Banquet", def:"A formal meal for a large number of people, often with speeches.", key:"B"},
+ {w:"Entrée", def:"The main course of a meal in a restaurant.", key:"I"},
+ {w:"Dietary", def:"Related to the food that a person eats or needs to avoid.", key:"H"},
+ {w:"Portion", def:"The size or amount of food served to one person.", key:"G"},
+ {w:"Takeout", def:"Food ordered and picked up to be eaten elsewhere.", key:"A"},
+ {w:"Receipt", def:"A written acknowledgment that a payment has been made.", key:"J"}
+];
+const allDefs = matchItems.map(m=>m.def);
+
+const fillItems = [
+ {q:"Because the main dining hall was fully booked, we had to put our names on the ________.", ans:"waitlist"},
+ {q:"The company hired a professional company to ________ the annual sales conference luncheon.", ans:"cater"},
+ {q:"Our ________ recommended the grilled salmon, which turned out to be an excellent choice.", ans:"server"},
+ {q:"If you have any strict ________ restrictions, please notify the event planner in advance.", ans:"dietary"},
+ {q:"The supervisor apologized for the slow service and offered us a ________ glass of wine.", ans:"complimentary"},
+ {q:"Mr. Lee requested an itemized ________ so he could submit his business lunch expenses to accounting.", ans:"receipt"},
+ {q:"The restaurant staff worked quickly to arrange the ________ before the dinner rush began.", ans:"table settings"},
+ {q:"A 10% ________ was included directly in the total bill for our party of eight.", ans:"gratuity"},
+ {q:"Management took the customer's ________ about noisy construction next door very seriously.", ans:"complaint"},
+ {q:"The bistro provides a very cozy outdoor ________ for guests who enjoy eating in the open air.", ans:"dining area"}
+];
+
+const mcItems = [
+ {q:"The executive chef prepared a special three-course meal featuring a local seafood ________.", opts:["receipt","entrée","waitlist","complaint"], ans:1},
+ {q:"All non-alcoholic ________, such as iced tea and fruit juice, are included with your meal.", opts:["beverages","patrons","portions","venues"], ans:0},
+ {q:"To guarantee a table near the window, it is advisable to make a ________ at least two days in advance.", opts:["banquet","portion","reservation","gratuity"], ans:2},
+ {q:"The restaurant manager welcomed several frequent ________ who visit the establishment every week.", opts:["servers","patrons","receipts","table settings"], ans:1},
+ {q:"We were too full to order ________, so we just asked for coffee after our main course.", opts:["appetizers","venues","desserts","waitlists"], ans:2},
+ {q:"The hotel's grand ballroom is the premier ________ for corporate galas and wedding receptions.", opts:["venue","tip","takeout","server"], ans:0},
+ {q:"The soup was served as an optional ________ before the main course arrived.", opts:["receipt","appetizer","gratuity","dietary"], ans:1},
+ {q:"Customers who do not have time to sit down can order food from our convenient ________ window.", opts:["banquet","waitlist","takeout","portion"], ans:2},
+ {q:"The server ensured that the plates were arranged neatly according to the restaurant's formal ________ standards.", opts:["table setting","complaint","beverage","patron"], ans:0},
+ {q:"The company celebrated its successful quarter with a lavish evening ________ at the Plaza Hotel.", opts:["waitlist","receipt","banquet","dietary"], ans:2}
+];
+
+const collocItems = [
+ {stem:"We should ________ a reservation early.", opts:["make","do"], ans:0},
+ {stem:"The manager knows how to ________ customer complaints effectively.", opts:["handle","make"], ans:0},
+ {stem:"They hired a top chef to ________ the corporate anniversary party.", opts:["cater","place"], ans:0},
+ {stem:"The dish was served in a very ________ portion.", opts:["generous","high"], ans:0},
+ {stem:"Does anyone in your group have special ________ restrictions?", opts:["dietary","food"], ans:0},
+ {stem:"Please request an ________ receipt for company accounting.", opts:["itemized","listed"], ans:0},
+ {stem:"Would you like to ________ the waitlist, or come back later?", opts:["join","take"], ans:0},
+ {stem:"The hotel package includes a ________ buffet breakfast.", opts:["complimentary","free-cost"], ans:0},
+ {stem:"The restaurant serves both soft drinks and ________ beverages.", opts:["alcoholic","drinking"], ans:0},
+ {stem:"Parties of six or more are subject to an ________ 18% gratuity.", opts:["automatic","added"], ans:0}
+];
+
+/* ============ NAV ============ */
+const tabs = document.querySelectorAll('.course-tab');
+tabs.forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-'+tab.dataset.panel).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+tabs[0].click();
+
+const subBtns = document.querySelectorAll('.sub-btn');
+subBtns.forEach(b=>{
+  b.addEventListener('click', ()=>{
+    subBtns.forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('sub-'+b.dataset.sub).classList.add('active');
+  });
+});
+subBtns[0].click();
+
+/* ============ RENDER: REVIEW ============ */
+const reviewList = document.getElementById('reviewList');
+reviewItems.forEach((it, i)=>{
+  const div = document.createElement('div');
+  div.className = 'q';
+  div.innerHTML = `
+    <div class="stem"><b>${i+1}.</b> ${it.q}</div>
+    <div class="opt-row" id="rev-opts-${i}">
+      ${it.opts.map((o,j)=>`<span class="opt" data-i="${j}">${String.fromCharCode(65+j)}. ${o}</span>`).join('')}
     </div>
-    <div class="qbody">
-      <div class="mask-hint">🔒 Nghe rồi đoán — chữ đang được che, bấm "Hiện tất cả" để xem</div>
-      <p class="qtext"><span class="ctext">${item.q}</span></p>
-      <div class="choices">
-        ${item.choices.map((c,ci)=>`
-          <div class="choice" data-idx="${idx}" data-ci="${ci}" data-correct="${c.correct}">
-            <span class="choice-letter">${String.fromCharCode(65+ci)}</span>
-            <span class="bubble"></span>
-            <span class="choice-text">
-              <span class="ctext">${c.t}</span>
-              <div class="explain"><span class="ctext">${c.note}</span></div>
-            </span>
-            <span class="choice-icon">${c.correct ? '✓' : '✕'}</span>
-          </div>
-        `).join('')}
-      </div>
-      <div class="reveal-panel a-panel">
-        <div class="reveal-inner">
-          <div class="answer-block">
-            <span class="tag-correct">✓ Đáp án đúng: ${String.fromCharCode(65 + item.choices.findIndex(c=>c.correct))}</span>
-            <ul>${item.explain.map(e=>`<li>${e}</li>`).join('')}</ul>
-          </div>
-        </div>
-      </div>
-    </div>
+    <button class="reveal-btn" onclick="toggleAnswer('rev-ans-${i}')">Xem hóa đơn</button>
+    <div class="answer-box" id="rev-ans-${i}"></div>
   `;
-  qlist.appendChild(card);
-});
-
-/* reveal on scroll */
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); } });
-}, {threshold:0.12});
-document.querySelectorAll('.qcard').forEach(c=>io.observe(c));
-
-/* hero waveform bars */
-const heroWave = document.getElementById('heroWave');
-for(let i=0;i<34;i++){
-  const b = document.createElement('div');
-  b.className = 'bar';
-  b.style.height = (30 + Math.random()*160) + 'px';
-  b.style.animationDelay = (Math.random()*2) + 's';
-  b.style.animationDuration = (1.8 + Math.random()*1.6) + 's';
-  heroWave.appendChild(b);
-}
-
-/* toggle question / answer panels */
-document.addEventListener('click', (e)=>{
-  const qBtn = e.target.closest('.toggle-q');
-  const aBtn = e.target.closest('.toggle-a');
-  if(qBtn){
-    const card = qBtn.closest('.qcard');
-    const revealed = card.classList.toggle('text-revealed');
-    qBtn.textContent = revealed ? 'Ẩn chữ' : 'Hiện tất cả';
-  }
-  if(aBtn){
-    const card = aBtn.closest('.qcard');
-    const panel = card.querySelector('.a-panel');
-    panel.classList.toggle('open');
-    aBtn.textContent = panel.classList.contains('open') ? 'Ẩn đáp án' : 'Hiện đáp án';
-    // seeing the explanation only makes sense once the text is visible too
-    if(panel.classList.contains('open') && !card.classList.contains('text-revealed')){
-      card.classList.add('text-revealed');
-      card.querySelector('.toggle-q').textContent = 'Ẩn chữ';
-    }
-  }
-  const choice = e.target.closest('.choice');
-  if(choice && !choice.classList.contains('locked')){
-    const group = choice.closest('.choices');
-    const isCorrect = choice.dataset.correct === 'true';
-    group.querySelectorAll('.choice').forEach(c=>{
-      c.classList.add('locked');
-      if(c.dataset.correct === 'true') c.classList.add('reveal-correct');
+  reviewList.appendChild(div);
+  const opts = div.querySelectorAll('.opt');
+  let picked = null;
+  opts.forEach(o=>{
+    o.addEventListener('click', ()=>{
+      opts.forEach(x=>x.classList.remove('selected'));
+      o.classList.add('selected');
+      picked = parseInt(o.dataset.i);
     });
-    choice.classList.add('picked', isCorrect ? 'correct' : 'wrong');
-  }
+  });
+  window['revShow_'+i] = ()=>{
+    const box = document.getElementById(`rev-ans-${i}`);
+    const correctLetter = String.fromCharCode(65+it.ans);
+    const statusHtml = picked===null ? '' :
+      (picked===it.ans ? `<span class="status ok">✓ Chính xác!</span>` : `<span class="status no">✗ Chưa đúng.</span>`);
+    box.innerHTML = `${statusHtml}<b>Đáp án: ${correctLetter}. ${it.opts[it.ans]}</b><br>${it.exp}`;
+  };
 });
 
-/* ---------------- Text-to-Speech ---------------- */
-let voices = [];
-const voiceSelect = document.getElementById('voiceSelect');
-const rateSlider = document.getElementById('rateSlider');
-
-function loadVoices(){
-  voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
-  if(!voices.length) voices = speechSynthesis.getVoices();
-  voiceSelect.innerHTML = '';
-  voices.forEach((v,i)=>{
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = `${v.name} (${v.lang})`;
-    voiceSelect.appendChild(opt);
-  });
-  // prefer a Google English voice by default
-  const googleIdx = voices.findIndex(v => /Google/i.test(v.name) && v.lang.startsWith('en'));
-  if(googleIdx >= 0) voiceSelect.value = googleIdx;
+function toggleAnswer(id){
+  const box = document.getElementById(id);
+  const idx = id.split('-').pop();
+  const prefix = id.split('-')[0];
+  if(prefix==='rev' && window['revShow_'+idx]) window['revShow_'+idx]();
+  box.classList.toggle('show');
 }
-speechSynthesis.onvoiceschanged = loadVoices;
-loadVoices();
 
-let currentCard = null;
+/* ============ RENDER: VOCAB (single-card carousel) ============ */
+let vocabIndex = 0;
 
-function speakQueue(lines, card){
-  speechSynthesis.cancel();
-  const chosen = voices[voiceSelect.value] || voices[0];
-  const rate = parseFloat(rateSlider.value);
-  let i = 0;
-  currentCard = card;
-  card.classList.add('speaking');
+const vocabFlipCard = document.getElementById('vocabFlipCard');
+const vocabImg = document.getElementById('vocabImg');
+const vocabIdx = document.getElementById('vocabIdx');
+const vocabWord = document.getElementById('vocabWord');
+const vocabWordBack = document.getElementById('vocabWordBack');
+const vocabIpa = document.getElementById('vocabIpa');
+const vocabPosTag = document.getElementById('vocabPosTag');
+const vocabVi = document.getElementById('vocabVi');
+const vocabEx = document.getElementById('vocabEx');
+const vocabExvi = document.getElementById('vocabExvi');
+const vocabTip = document.getElementById('vocabTip');
+const vocabPosNow = document.getElementById('vocabPosNow');
+const vocabPosTotal = document.getElementById('vocabPosTotal');
+const vocabProgressFill = document.getElementById('vocabProgressFill');
+const vocabDots = document.getElementById('vocabDots');
 
-  function next(){
-    if(i >= lines.length){
-      card.classList.remove('speaking');
-      document.querySelectorAll('.play-btn.playing').forEach(b=>{
-        b.classList.remove('playing');
-        b.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Nghe';
+vocabPosTotal.textContent = vocab.length;
+
+vocab.forEach((v,i)=>{
+  const dot = document.createElement('button');
+  dot.className = 'vocab-dot';
+  dot.setAttribute('aria-label', `Đi tới từ ${i+1}: ${v.w}`);
+  dot.addEventListener('click', ()=> showVocab(i));
+  vocabDots.appendChild(dot);
+});
+
+function showVocab(i){
+  vocabIndex = (i + vocab.length) % vocab.length;
+  const v = vocab[vocabIndex];
+  vocabFlipCard.classList.remove('flipped');
+  vocabImg.src = v.img;
+  vocabImg.alt = v.w;
+  vocabIdx.textContent = String(vocabIndex+1).padStart(2,'0');
+  vocabWord.textContent = v.w;
+  vocabWordBack.textContent = v.w;
+  vocabIpa.textContent = v.ipa;
+  vocabPosTag.textContent = v.pos;
+  vocabVi.textContent = v.vi;
+  vocabEx.textContent = `"${v.ex}"`;
+  vocabExvi.textContent = v.exvi;
+  vocabTip.textContent = `💡 ${v.tip}`;
+  vocabPosNow.textContent = vocabIndex+1;
+  vocabProgressFill.style.width = ((vocabIndex+1)/vocab.length*100)+'%';
+  vocabDots.querySelectorAll('.vocab-dot').forEach((d,j)=> d.classList.toggle('active', j===vocabIndex));
+}
+
+vocabFlipCard.addEventListener('click', ()=> vocabFlipCard.classList.toggle('flipped'));
+document.getElementById('vocabFlipBtn').addEventListener('click', ()=> vocabFlipCard.classList.toggle('flipped'));
+document.getElementById('vocabNextBtn').addEventListener('click', ()=> showVocab(vocabIndex+1));
+document.getElementById('vocabPrevBtn').addEventListener('click', ()=> showVocab(vocabIndex-1));
+
+showVocab(0);
+
+/* ============ TEXT-TO-SPEECH (phát âm bằng giọng AI của trình duyệt) ============
+   Dùng Web Speech API (SpeechSynthesis) — API công khai, miễn phí, không cần key,
+   hoạt động ngay trên trình duyệt (Chrome/Edge/Safari) với giọng đọc AI có sẵn. */
+let ttsVoice = null;
+function pickBestEnglishVoice(){
+  if(!('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  if(!voices.length) return null;
+  // Ưu tiên giọng US tự nhiên (Google/Neural/Natural) nếu trình duyệt có sẵn
+  const priority = [
+    v => /en-US/i.test(v.lang) && /Google/i.test(v.name),
+    v => /en-US/i.test(v.lang) && /(Neural|Natural|Online)/i.test(v.name),
+    v => /en-US/i.test(v.lang),
+    v => /^en/i.test(v.lang)
+  ];
+  for(const test of priority){
+    const found = voices.find(test);
+    if(found) return found;
+  }
+  return voices[0];
+}
+if('speechSynthesis' in window){
+  window.speechSynthesis.onvoiceschanged = ()=>{ ttsVoice = pickBestEnglishVoice(); };
+  ttsVoice = pickBestEnglishVoice();
+}
+
+function speakWord(){
+  if(!('speechSynthesis' in window)){
+    alert('Trình duyệt của bạn chưa hỗ trợ phát âm. Hãy thử Chrome, Edge hoặc Safari mới nhất.');
+    return;
+  }
+  const v = vocab[vocabIndex];
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(v.w);
+  utter.lang = 'en-US';
+  utter.rate = 0.85;
+  utter.pitch = 1;
+  if(!ttsVoice) ttsVoice = pickBestEnglishVoice();
+  if(ttsVoice) utter.voice = ttsVoice;
+
+  const btns = [document.getElementById('vocabSpeakBtnFront'), document.getElementById('vocabSpeakBtnBack')];
+  btns.forEach(b=> b && b.classList.add('speaking'));
+  utter.onend = ()=> btns.forEach(b=> b && b.classList.remove('speaking'));
+  utter.onerror = ()=> btns.forEach(b=> b && b.classList.remove('speaking'));
+
+  window.speechSynthesis.speak(utter);
+}
+
+/* ============ RENDER: MATCHING (A) ============ */
+const matchList = document.getElementById('matchList');
+matchItems.forEach((m,i)=>{
+  const row = document.createElement('div');
+  row.className='q';
+  row.innerHTML = `
+    <div class="stem"><b>${i+1}. ${m.w}</b>
+      <select class="match-select" id="match-sel-${i}">
+        <option value="">-- chọn định nghĩa --</option>
+        ${allDefs.map(d=>`<option value="${d}">${d}</option>`).join('')}
+      </select>
+    </div>
+    <div class="answer-box" id="match-ans-${i}"></div>
+  `;
+  matchList.appendChild(row);
+});
+
+/* ============ RENDER: FILL BLANK (B) ============ */
+const fillList = document.getElementById('fillList');
+fillItems.forEach((f,i)=>{
+  const row = document.createElement('div');
+  row.className='q';
+  row.innerHTML = `
+    <div class="stem"><b>${i+1}.</b> ${f.q}</div>
+    <input type="text" class="fill" id="fill-in-${i}" placeholder="điền từ...">
+    <div class="answer-box" id="fill-ans-${i}"></div>
+  `;
+  fillList.appendChild(row);
+});
+
+/* ============ RENDER: MULTIPLE CHOICE (C) ============ */
+const mcList = document.getElementById('mcList');
+mcItems.forEach((it,i)=>{
+  const row = document.createElement('div');
+  row.className='q';
+  row.innerHTML = `
+    <div class="stem"><b>${i+1}.</b> ${it.q}</div>
+    <div class="opt-row" id="mc-opts-${i}">
+      ${it.opts.map((o,j)=>`<span class="opt" data-i="${j}">${String.fromCharCode(65+j)}. ${o}</span>`).join('')}
+    </div>
+    <div class="answer-box" id="mc-ans-${i}"></div>
+  `;
+  mcList.appendChild(row);
+  const opts = row.querySelectorAll('.opt');
+  opts.forEach(o=>{
+    o.addEventListener('click', ()=>{
+      opts.forEach(x=>x.classList.remove('selected'));
+      o.classList.add('selected');
+    });
+  });
+});
+
+/* ============ RENDER: COLLOCATION (D) ============ */
+const collocList = document.getElementById('collocList');
+collocItems.forEach((it,i)=>{
+  const row = document.createElement('div');
+  row.className='q';
+  row.innerHTML = `
+    <div class="stem"><b>${i+1}.</b> ${it.stem}</div>
+    <div class="opt-row" id="colloc-opts-${i}">
+      ${it.opts.map((o,j)=>`<span class="opt" data-i="${j}">${o}</span>`).join('')}
+    </div>
+    <div class="answer-box" id="colloc-ans-${i}"></div>
+  `;
+  collocList.appendChild(row);
+  const opts = row.querySelectorAll('.opt');
+  opts.forEach(o=>{
+    o.addEventListener('click', ()=>{
+      opts.forEach(x=>x.classList.remove('selected'));
+      o.classList.add('selected');
+    });
+  });
+});
+
+/* ============ REVEAL LOGIC ============ */
+function revealAll(type){
+  if(type==='match'){
+    let score=0;
+    matchItems.forEach((m,i)=>{
+      const sel = document.getElementById(`match-sel-${i}`);
+      const box = document.getElementById(`match-ans-${i}`);
+      const picked = sel.value;
+      const correct = m.def;
+      const ok = picked===correct;
+      if(ok) score++;
+      box.innerHTML = `<span class="status ${ok?'ok':'no'}">${ok?'✓ Đúng':'✗ Sai'}</span><b>Đáp án đúng:</b> ${correct}`;
+      box.classList.add('show');
+    });
+    showScore('sub-A', score, matchItems.length);
+  }
+  if(type==='fill'){
+    let score=0;
+    fillItems.forEach((f,i)=>{
+      const inp = document.getElementById(`fill-in-${i}`);
+      const box = document.getElementById(`fill-ans-${i}`);
+      const val = (inp.value||'').trim().toLowerCase();
+      const ok = val===f.ans.toLowerCase();
+      if(ok) score++;
+      box.innerHTML = `<span class="status ${ok?'ok':'no'}">${ok?'✓ Đúng':'✗ Sai'}</span><b>Đáp án đúng:</b> ${f.ans}`;
+      box.classList.add('show');
+    });
+    showScore('sub-B', score, fillItems.length);
+  }
+  if(type==='mc'){
+    let score=0;
+    mcItems.forEach((it,i)=>{
+      const opts = document.querySelectorAll(`#mc-opts-${i} .opt`);
+      const box = document.getElementById(`mc-ans-${i}`);
+      let pickedIdx=null;
+      opts.forEach(o=>{ if(o.classList.contains('selected')) pickedIdx=parseInt(o.dataset.i); });
+      opts.forEach((o,j)=>{
+        if(j===it.ans) o.classList.add('correct');
+        else if(j===pickedIdx) o.classList.add('incorrect');
       });
-      return;
-    }
-    const u = new SpeechSynthesisUtterance(lines[i]);
-    if(chosen) u.voice = chosen;
-    u.rate = rate;
-    u.pitch = 1;
-    u.lang = 'en-US';
-    u.onend = ()=>{ i++; setTimeout(next, 380); };
-    speechSynthesis.speak(u);
+      const ok = pickedIdx===it.ans;
+      if(ok) score++;
+      box.innerHTML = `<span class="status ${ok?'ok':'no'}">${ok?'✓ Đúng':'✗ Sai'}</span><b>Đáp án: ${String.fromCharCode(65+it.ans)}. ${it.opts[it.ans]}</b>`;
+      box.classList.add('show');
+    });
+    showScore('sub-C', score, mcItems.length);
   }
-  next();
+  if(type==='colloc'){
+    let score=0;
+    collocItems.forEach((it,i)=>{
+      const opts = document.querySelectorAll(`#colloc-opts-${i} .opt`);
+      const box = document.getElementById(`colloc-ans-${i}`);
+      let pickedIdx=null;
+      opts.forEach(o=>{ if(o.classList.contains('selected')) pickedIdx=parseInt(o.dataset.i); });
+      opts.forEach((o,j)=>{
+        if(j===it.ans) o.classList.add('correct');
+        else if(j===pickedIdx) o.classList.add('incorrect');
+      });
+      const ok = pickedIdx===it.ans;
+      if(ok) score++;
+      box.innerHTML = `<span class="status ${ok?'ok':'no'}">${ok?'✓ Đúng':'✗ Sai'}</span><b>Đáp án đúng:</b> ${it.opts[it.ans]}`;
+      box.classList.add('show');
+    });
+    showScore('sub-D', score, collocItems.length);
+  }
 }
 
-document.querySelectorAll('.play-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const idx = btn.dataset.idx;
-    const item = questions[idx];
-    const card = btn.closest('.qcard');
-
-    document.querySelectorAll('.play-btn.playing').forEach(b=>{
-      b.classList.remove('playing');
-      b.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Nghe';
-    });
-
-    if(speechSynthesis.speaking && currentCard === card){
-      speechSynthesis.cancel();
-      card.classList.remove('speaking');
-      return;
-    }
-
-    btn.classList.add('playing');
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg> Dừng';
-
-    const lines = [item.q, ...item.choices.map((c,ci)=>`${String.fromCharCode(65+ci)}. ${c.t}`)];
-    speakQueue(lines, card);
-  });
-});
+function showScore(panelId, score, total){
+  const panel = document.getElementById(panelId);
+  let pill = panel.querySelector('.score-pill');
+  if(!pill){
+    pill = document.createElement('div');
+    pill.className='score-pill';
+    panel.insertBefore(pill, panel.firstChild);
+  }
+  pill.textContent = `Điểm: ${score} / ${total}`;
+}
 </script>
 </body>
 </html>
