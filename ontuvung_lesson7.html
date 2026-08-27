@@ -284,6 +284,10 @@
       <label>Mã phòng có sẵn</label>
       <div class="name-row"><input type="text" id="joinCode" placeholder="VD: A7K2P" maxlength="6" style="text-transform:uppercase;"></div>
     </div>
+    <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink-soft);margin:-8px 0 16px;cursor:pointer;">
+      <input type="checkbox" id="spectateCheck" style="width:16px;height:16px;accent-color:var(--pink-2);">
+      👀 Chỉ xem (không tham gia chơi)
+    </label>
     <button class="primary-btn" id="joinRoomBtn" style="background:linear-gradient(135deg, var(--mint), #0E8A6E);">🚪 Vào phòng</button>
     <p id="entryError" style="color:var(--coral);font-weight:700;font-size:13px;margin-top:14px;min-height:18px;"></p>
   </section>
@@ -301,6 +305,10 @@
     <div class="field">
       <label>Người chơi đã vào phòng</label>
       <div id="lobbyPlayers"></div>
+    </div>
+    <div class="field" id="lobbySpectatorsField" style="display:none;">
+      <label>Đang xem (khán giả)</label>
+      <div id="lobbySpectators"></div>
     </div>
     <button class="primary-btn" id="startGameBtn" style="display:none;">Bắt đầu hành trình →</button>
     <p id="lobbyWaitText" style="text-align:center;color:var(--ink-soft);font-weight:700;font-size:13px;"></p>
@@ -338,6 +346,7 @@
         <div class="legend-row"><span class="legend-chip" style="background:var(--wine-soft);">🐍</span> Ô Rắn Xanh — trả lời sai sẽ bị rắn kéo xuống chặng thấp hơn</div>
         <div class="legend-row"><span class="legend-chip" style="background:var(--gold);">🏁</span> Ô Đích — về đích đầu tiên thắng cuộc</div>
         <button class="ghost-btn" id="restartBtn" style="margin-top:8px;width:100%;">↺ Chơi lại từ đầu (chủ phòng)</button>
+        <button class="ghost-btn" id="leaveGameBtn" style="margin-top:8px;width:100%;">← Rời phòng</button>
       </div>
     </div>
   </section>
@@ -473,7 +482,7 @@
 
   // ---------- Trạng thái phòng được dựng lại từ các thông điệp MQTT ----------
   function emptyRoom(){
-    return { hostId:null, createdAt:null, status:null, order:null, turnIndex:0, winnerId:null, players:{}, pos:{} };
+    return { hostId:null, createdAt:null, status:null, order:null, turnIndex:0, winnerId:null, players:{}, pos:{}, spectators:{} };
   }
 
   function applyRoomField(rest, raw){
@@ -491,6 +500,12 @@
       const pid = rest.slice("players/".length);
       if(!raw){ delete latestRoom.players[pid]; }
       else { try{ latestRoom.players[pid] = JSON.parse(raw); }catch(e){} }
+      return;
+    }
+    if(rest.indexOf("spectators/") === 0){
+      const pid = rest.slice("spectators/".length);
+      if(!raw){ delete latestRoom.spectators[pid]; }
+      else { try{ latestRoom.spectators[pid] = JSON.parse(raw); }catch(e){} }
       return;
     }
     if(rest.indexOf("pos/") === 0){
@@ -589,6 +604,7 @@
   if(!myId){ myId = genId(); localStorage.setItem("vocabRaceMyId", myId); }
   let myName = "";
   let roomCode = "";
+  let iAmSpectator = false; // true = chỉ xem, không tham gia chơi
   let gameInitialized = false;
   let rolling = false;
   let players = [];       // mảng người chơi dựng lại mỗi khi có cập nhật từ phòng
@@ -596,12 +612,23 @@
   let tokenEls = {};      // playerId -> DOM element của quân cờ
   let latestRoom = null;
 
-  function saveSession(){ localStorage.setItem("vocabRaceSession", JSON.stringify({roomCode})); }
+  function saveSession(){ localStorage.setItem("vocabRaceSession", JSON.stringify({roomCode, spectator: iAmSpectator})); }
   function clearSession(){ localStorage.removeItem("vocabRaceSession"); }
+
+  // Rời phòng: xóa thông tin của mình khỏi phòng (retained), xóa phiên đã lưu, tải lại trang
+  // để quay về màn hình nhập tên — dùng chung cho cả người chơi lẫn khán giả, cả ở màn
+  // chờ lẫn khi đang chơi giữa chừng.
+  function leaveRoomNow(){
+    const branch = iAmSpectator ? "spectators/" : "players/";
+    publishRetained(branch + myId, "");
+    clearSession();
+    location.reload();
+  }
 
   // ================== ENTRY SCREEN ==================
   const entryNameInput = document.getElementById("entryName");
   const joinCodeInput  = document.getElementById("joinCode");
+  const spectateCheck  = document.getElementById("spectateCheck");
   const entryError     = document.getElementById("entryError");
   const createRoomBtn  = document.getElementById("createRoomBtn");
   const joinRoomBtn    = document.getElementById("joinRoomBtn");
@@ -613,6 +640,7 @@
     entryError.textContent = "";
     myName = name.slice(0,16);
     roomCode = genRoomCode();
+    iAmSpectator = false;
     const createdAt = Date.now();
     latestRoom = emptyRoom();
     latestRoom.hostId = myId; latestRoom.createdAt = createdAt; latestRoom.status = "lobby";
@@ -630,6 +658,7 @@
   joinRoomBtn.addEventListener("click", async ()=>{
     const name = entryNameInput.value.trim();
     const code = joinCodeInput.value.trim().toUpperCase();
+    const wantSpectate = !!spectateCheck.checked;
     if(!name){ entryError.textContent = "Vui lòng nhập tên của bạn."; return; }
     if(!code){ entryError.textContent = "Vui lòng nhập mã phòng."; return; }
     if(!mqttReady){ entryError.textContent = "Đang kết nối máy chủ online, vui lòng thử lại sau giây lát."; return; }
@@ -638,20 +667,27 @@
     const probe = await probeRoom(code, 1000);
     joinRoomBtn.disabled = false;
     if(!probe.host){ entryError.textContent = "Không tìm thấy phòng này."; return; }
-    if(probe.status && probe.status !== "lobby"){ entryError.textContent = "Phòng đã bắt đầu chơi, không thể vào lúc này."; return; }
+    // Chỉ chặn vào chơi (không chặn vào xem) nếu ván đã bắt đầu.
+    if(!wantSpectate && probe.status && probe.status !== "lobby"){
+      entryError.textContent = "Phòng đã bắt đầu chơi, không thể vào chơi lúc này — bạn có thể tick \"Chỉ xem\" để theo dõi.";
+      return;
+    }
     myName = name.slice(0,16);
     roomCode = code;
+    iAmSpectator = wantSpectate;
     latestRoom = emptyRoom();
     latestRoom.hostId = probe.host.hostId; latestRoom.createdAt = probe.host.createdAt; latestRoom.status = probe.status || "lobby";
     mqttClient.subscribe(roomBase(roomCode) + "/#", ()=>{
-      publishRetained("players/" + myId, JSON.stringify({name: myName, joinedAt: Date.now()}));
+      const branch = iAmSpectator ? "spectators/" : "players/";
+      publishRetained(branch + myId, JSON.stringify({name: myName, joinedAt: Date.now()}));
       saveSession();
       screenEntry.style.display = "none";
       scheduleRoomRender();
     });
   });
 
-  // Thử tự khôi phục phiên chơi trước đó nếu người dùng tải lại trang
+  // Thử tự khôi phục phiên chơi trước đó nếu người dùng tải lại trang.
+  // Nếu bạn đã bấm "Rời phòng" thì phiên đã bị xóa nên refresh sẽ về lại màn hình nhập tên.
   (function tryRestoreSession(){
     const raw = localStorage.getItem("vocabRaceSession");
     if(!raw) return;
@@ -661,11 +697,13 @@
       const probe = await probeRoom(s.roomCode, 1200);
       if(!probe.host){ clearSession(); return; }
       roomCode = s.roomCode;
+      iAmSpectator = !!s.spectator;
       latestRoom = emptyRoom();
       latestRoom.hostId = probe.host.hostId; latestRoom.createdAt = probe.host.createdAt; latestRoom.status = probe.status || "lobby";
       mqttClient.subscribe(roomBase(roomCode) + "/#", ()=>{
         setTimeout(()=>{
-          const p = latestRoom.players[myId];
+          const map = iAmSpectator ? latestRoom.spectators : latestRoom.players;
+          const p = map[myId];
           if(!p){ clearSession(); roomCode = ""; return; }
           myName = p.name;
           screenEntry.style.display = "none";
@@ -678,6 +716,8 @@
   // ================== LOBBY SCREEN ==================
   const roomCodeDisplay = document.getElementById("roomCodeDisplay");
   const lobbyPlayersEl  = document.getElementById("lobbyPlayers");
+  const lobbySpectatorsField = document.getElementById("lobbySpectatorsField");
+  const lobbySpectatorsEl    = document.getElementById("lobbySpectators");
   const startGameBtn    = document.getElementById("startGameBtn");
   const lobbyWaitText   = document.getElementById("lobbyWaitText");
 
@@ -689,11 +729,7 @@
     });
   });
 
-  document.getElementById("leaveRoomBtn").addEventListener("click", ()=>{
-    publishRetained("players/" + myId, "");
-    clearSession();
-    location.reload();
-  });
+  document.getElementById("leaveRoomBtn").addEventListener("click", leaveRoomNow);
 
   startGameBtn.addEventListener("click", ()=>{
     if(!latestRoom || latestRoom.hostId !== myId) return;
@@ -721,16 +757,45 @@
       dot.textContent = PLAYER_ICONS[idx % PLAYER_ICONS.length];
       const name = document.createElement("div");
       name.className = "player-name";
-      name.textContent = p.name + (pid===myId ? " (Bạn)" : "") + (pid===room.hostId ? " · Chủ phòng" : "");
+      name.textContent = p.name + (pid===myId && !iAmSpectator ? " (Bạn)" : "") + (pid===room.hostId ? " · Chủ phòng" : "");
       row.appendChild(dot); row.appendChild(name);
       lobbyPlayersEl.appendChild(row);
     });
-    const isHost = room.hostId === myId;
+
+    const specIds = Object.keys(room.spectators||{}).sort((a,b)=> (room.spectators[a].joinedAt||0)-(room.spectators[b].joinedAt||0));
+    if(specIds.length){
+      lobbySpectatorsField.style.display = "block";
+      lobbySpectatorsEl.innerHTML = "";
+      specIds.forEach(pid=>{
+        const sp = room.spectators[pid];
+        const row = document.createElement("div");
+        row.className = "player-row";
+        const dot = document.createElement("div");
+        dot.className = "player-token-mini";
+        dot.style.background = "#B9BFCC";
+        dot.textContent = "👀";
+        const name = document.createElement("div");
+        name.className = "player-name";
+        name.textContent = sp.name + (pid===myId && iAmSpectator ? " (Bạn)" : "");
+        row.appendChild(dot); row.appendChild(name);
+        lobbySpectatorsEl.appendChild(row);
+      });
+    } else {
+      lobbySpectatorsField.style.display = "none";
+    }
+
+    const isHost = !iAmSpectator && room.hostId === myId;
     startGameBtn.style.display = isHost ? "inline-flex" : "none";
-    lobbyWaitText.textContent = isHost
-      ? (pids.length<2 ? "Cần thêm ít nhất " + (2-pids.length) + " người nữa để bắt đầu." : "")
-      : "Đang chờ chủ phòng bắt đầu trò chơi...";
+    if(iAmSpectator){
+      lobbyWaitText.textContent = "👀 Bạn đang xem phòng này — chờ chủ phòng bắt đầu trò chơi...";
+    } else {
+      lobbyWaitText.textContent = isHost
+        ? (pids.length<2 ? "Cần thêm ít nhất " + (2-pids.length) + " người nữa để bắt đầu." : "")
+        : "Đang chờ chủ phòng bắt đầu trò chơi...";
+    }
   }
+
+  document.getElementById("leaveGameBtn").addEventListener("click", leaveRoomNow);
 
   // ================== GAME INITIALIZATION ==================
   function initGameUI(room){
@@ -739,7 +804,7 @@
     createTokenElementsFor(room.order);
     drawConnectors();
     window.addEventListener("resize", ()=>{ drawConnectors(); layoutAllTokens(false); });
-    document.getElementById("youAreText").textContent = "Bạn: " + myName;
+    document.getElementById("youAreText").textContent = iAmSpectator ? ("👀 " + myName + " (đang xem)") : ("Bạn: " + myName);
   }
 
   function createTokenElementsFor(order){
@@ -773,6 +838,12 @@
     layoutAllTokens(true);
     refreshRollAvailability();
 
+    const isHost = !iAmSpectator && room.hostId === myId;
+    const restartBtnEl = document.getElementById("restartBtn");
+    if(restartBtnEl) restartBtnEl.style.display = isHost ? "block" : "none";
+    const playAgainBtnEl = document.getElementById("playAgainBtn");
+    if(playAgainBtnEl) playAgainBtnEl.style.display = isHost ? "inline-flex" : "none";
+
     if(room.status === "finished" && room.winnerId){
       const w = players.find(p=> p.id === room.winnerId);
       if(w) showWinner(w);
@@ -785,7 +856,7 @@
     const active = players[currentIndex];
     const myTurn = !!active && active.id === myId;
     rollBtn.disabled = !myTurn || rolling;
-    rollBtn.textContent = myTurn ? "Lắc xúc xắc" : "Chờ đến lượt...";
+    rollBtn.textContent = iAmSpectator ? "👀 Đang xem" : (myTurn ? "Lắc xúc xắc" : "Chờ đến lượt...");
   }
 
   function finishTurnAndSync(finalPos){
@@ -1347,3 +1418,4 @@
 </script>
 </body>
 </html>
+
