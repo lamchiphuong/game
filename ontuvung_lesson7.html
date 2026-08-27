@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuộc Đua Nhà Hàng — Trò Chơi Từ Vựng TOEIC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-base:#FFFBF3;
+    --paper:#FFFFFF;
+    --cream:#FFF6EA;
+    --ink:#4A3358;
+    --ink-soft:#9483A8;
+    --pink:#4A90D9;
+    --pink-2:#2E6DA4;
+    --pink-soft:#E3F0FC;
+    --peach:#FFB648;
+    --peach-soft:#FFEFD2;
+    --mint:#22BFA1;
+    --mint-soft:#D8F7EF;
+    --lav:#9B7BE0;
+    --lav-soft:#F0E6FC;
+    --sky:#42B7E8;
+    --sky-soft:#E1F5FD;
+    --coral:#FF5C72;
+    --coral-soft:#FFE0E4;
+    --snake-green:#2F9E44;
+    --snake-green-dark:#1B7A34;
+    --snake-green-light:#8CE99A;
+    --snake-green-soft:#DEF7E0;
+    /* legacy aliases kept for inline styles in the markup */
+    --gold:var(--peach);
+    --sage-soft:var(--mint-soft);
+    --wine-soft:var(--snake-green-soft);
+    --shadow-sm:0 6px 16px rgba(155,110,190,0.14);
+    --shadow-md:0 14px 30px rgba(155,110,190,0.16);
+    --shadow-lg:0 22px 46px rgba(155,110,190,0.20);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(760px 460px at 8% -6%, rgba(255,143,184,0.28), transparent 60%),
+      radial-gradient(820px 520px at 92% 4%, rgba(66,183,232,0.20), transparent 55%),
+      radial-gradient(900px 600px at 50% 115%, rgba(255,182,72,0.22), transparent 60%),
+      var(--bg-base);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:'Quicksand', sans-serif;
+    font-weight:500;
+    min-height:100vh;
+    padding:24px 16px 70px;
+  }
+  h1,h2,h3,.display{ font-family:'Baloo 2', sans-serif; font-weight:700; letter-spacing:0.2px; }
+  .mono{font-family:'Quicksand', sans-serif; font-weight:700;}
+
+  .site-header{ max-width:1200px; margin:0 auto 30px; text-align:center; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Quicksand', sans-serif; font-weight:700; font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--pink-2); background:var(--pink-soft); border:1.5px solid #B9D9F5;
+    padding:6px 16px; border-radius:999px; margin-bottom:14px;
+  }
+  .site-header h1{ font-size:clamp(30px,4.8vw,50px); margin:0 0 8px; color:var(--ink);
+    background:linear-gradient(100deg,#4A90D9 0%,#FF9F5A 45%,#9B7BE0 100%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .site-header p{ color:var(--ink-soft); max-width:580px; margin:0 auto; font-size:15px; line-height:1.55; font-weight:600; }
+
+  .wrap{max-width:1200px;margin:0 auto;}
+
+  /* ---------- cute card base ---------- */
+  .glass{
+    background:var(--paper);
+    border:2px solid #D6E8FA;
+    border-radius:26px;
+    box-shadow:var(--shadow-md);
+  }
+
+  /* ---------- Setup screen ---------- */
+  #setup{ max-width:660px; margin:0 auto; padding:34px clamp(20px,4vw,46px); }
+  #setup h2{color:var(--pink-2); font-size:23px; margin-top:0;}
+  .field{margin-bottom:22px;}
+  .field label{ display:block; font-size:12px; letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--lav); margin-bottom:9px; font-family:'Quicksand', sans-serif; font-weight:700; }
+  .count-stepper{display:flex; align-items:center; gap:16px;}
+  .count-stepper button{
+    width:40px;height:40px; border-radius:14px; border:2px solid var(--pink);
+    background:var(--pink-soft); color:var(--pink-2); font-size:19px; font-weight:700; cursor:pointer;
+    transition:background .15s, transform .1s;
+  }
+  .count-stepper button:hover{background:#C7E3FA; transform:translateY(-1px) scale(1.05);}
+  .count-stepper .count-value{ font-family:'Baloo 2', sans-serif; font-size:28px; color:var(--ink); min-width:34px; text-align:center; }
+  #nameFields{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .name-row{
+    display:flex; align-items:center; gap:10px;
+    background:var(--cream); border:2px solid #FFEAD9;
+    border-radius:14px; padding:9px 12px;
+  }
+  .token-preview{
+    width:26px;height:26px;border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
+    font-size:14px; box-shadow:0 3px 8px rgba(0,0,0,0.15), inset 0 0 0 2px rgba(255,255,255,0.6);
+  }
+  .name-row input{ background:transparent; border:none; outline:none; color:var(--ink);
+    font-family:'Quicksand', sans-serif; font-weight:600; font-size:14px; width:100%; }
+  .primary-btn{
+    display:inline-flex; align-items:center; gap:10px; justify-content:center; width:100%; margin-top:8px;
+    padding:15px 20px; border-radius:999px; border:none;
+    background:linear-gradient(135deg, #6CB4E8, #2E6DA4);
+    color:#FFFFFF; font-family:'Baloo 2', sans-serif; font-weight:700; font-size:17px; cursor:pointer;
+    box-shadow:0 12px 24px rgba(255,71,133,0.35); transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .primary-btn:hover{transform:translateY(-2px) scale(1.01); box-shadow:0 16px 30px rgba(255,71,133,0.45);}
+  .primary-btn:active{transform:translateY(0) scale(0.99);}
+  .primary-btn:disabled{opacity:0.5; cursor:not-allowed; transform:none;}
+  .ghost-btn{
+    background:var(--paper); border:2px solid var(--pink-soft); color:var(--pink-2);
+    border-radius:14px; padding:10px 16px; font-family:'Quicksand',sans-serif; font-weight:700; font-size:13px; cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .ghost-btn:hover{border-color:var(--pink); background:var(--pink-soft);}
+
+  /* ---------- Game layout ---------- */
+  #game{ display:none; gap:26px; grid-template-columns:1fr 330px; align-items:start; }
+  #game.active{display:grid;}
+  @media (max-width:920px){ #game.active{grid-template-columns:1fr;} }
+
+  .board-panel{ padding:26px 26px 70px; position:relative; overflow:visible; }
+  .board-stage{ position:relative; overflow:visible; }
+  .board{
+    display:grid;
+    grid-template-columns:repeat(5, minmax(90px,1fr));
+    grid-template-rows:repeat(6, 108px);
+    gap:9px;
+    position:relative; z-index:1;
+    min-width:520px;
+  }
+  .board-scroll{ overflow-x:auto; padding-bottom:6px; }
+  .connector-svg{ position:absolute; inset:0; z-index:2; pointer-events:none; overflow:visible; }
+  .token-layer{ position:absolute; inset:0; z-index:3; pointer-events:none; }
+  .lobby-label{ text-align:center; margin-top:52px; font-family:'Quicksand',sans-serif; font-weight:700; font-size:11px;
+    letter-spacing:2px; text-transform:uppercase; color:var(--lav); }
+
+  .tile{
+    position:relative;
+    border-radius:16px;
+    border:2px solid rgba(255,255,255,0.7);
+    padding:8px 9px 8px;
+    color:var(--ink);
+    display:flex; flex-direction:column; justify-content:space-between;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.6), 0 4px 10px rgba(155,110,190,0.16);
+    overflow:hidden;
+  }
+  .tile.shade-a{ background:linear-gradient(155deg, #FFFFFF, #E4F2FC); }
+  .tile.shade-b{ background:linear-gradient(155deg, #FFFDF7, #FFF0DB); }
+  .tile.ladder{ background:linear-gradient(155deg, var(--mint-soft), #A9EFDC); }
+  .tile.snake{ background:linear-gradient(155deg, var(--snake-green-soft), var(--snake-green-light)); }
+  .tile.finish{
+    background:linear-gradient(155deg, #FFF3D2, var(--peach));
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.8), 0 0 0 3px rgba(255,182,72,0.4), 0 6px 16px rgba(255,182,72,0.5);
+    animation:finishGlow 2.4s ease-in-out infinite;
+  }
+  @keyframes finishGlow{
+    0%,100%{ box-shadow:inset 0 0 0 1px rgba(255,255,255,0.8), 0 0 0 3px rgba(255,182,72,0.28), 0 6px 16px rgba(255,182,72,0.4); }
+    50%{ box-shadow:inset 0 0 0 1px rgba(255,255,255,0.95), 0 0 0 7px rgba(255,182,72,0.4), 0 8px 22px rgba(255,182,72,0.65); }
+  }
+  .tile-top-row{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .tile-num{
+    font-family:'Quicksand', sans-serif; font-size:10.5px; font-weight:700; color:var(--pink-2);
+    background:rgba(255,255,255,0.85); padding:1px 6px; border-radius:8px;
+  }
+  .tile-icon{ font-size:14px; }
+  .tile-word{ font-family:'Baloo 2', sans-serif; font-size:12px; font-weight:600; line-height:1.15; margin-top:2px; }
+  .tile-tag{
+    font-size:9.5px; text-transform:uppercase; letter-spacing:0.5px; font-family:'Quicksand', sans-serif;
+    font-weight:700; opacity:0.9; align-self:flex-start;
+  }
+  .tile.ladder .tile-tag{color:#0E8A6E;}
+  .tile.snake .tile-tag{color:var(--snake-green-dark);}
+  .tile.finish .tile-word{color:#8A5A0A; font-size:13px;}
+
+  /* ---------- Side panel ---------- */
+  .side-panel{ display:flex; flex-direction:column; gap:16px; }
+  .card{ padding:17px 19px; }
+  .card h3{ margin:0 0 12px; font-size:13px; letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--pink-2); font-family:'Quicksand', sans-serif; font-weight:700; }
+  .player-row{
+    display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:14px; margin-bottom:6px;
+    background:var(--cream); border:1.5px solid transparent; transition:background .2s, border-color .2s;
+  }
+  .player-row.active{ background:var(--pink-soft); border-color:#B9D9F5; }
+  .player-token-mini{
+    width:26px;height:26px;border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
+    font-size:13px; box-shadow:0 3px 6px rgba(0,0,0,0.15), inset 0 0 0 2px rgba(255,255,255,0.6);
+  }
+  .player-name{font-size:14px;font-weight:700;flex:1;color:var(--ink);}
+  .player-pos{font-family:'Quicksand', sans-serif;font-weight:700;font-size:11.5px;color:var(--ink-soft);}
+
+  .dice-area{text-align:center;}
+  .die-wrap{ display:flex; justify-content:center; margin:8px 0 16px; }
+  .die-cube{
+    width:64px;height:64px; border-radius:18px;
+    background:linear-gradient(155deg, #FFFFFF, #FFF0DB);
+    box-shadow:0 12px 24px rgba(255,182,72,0.35), inset 0 0 0 2px rgba(255,255,255,0.8);
+    display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,1fr);
+    padding:9px; transition:transform .1s ease;
+  }
+  .die-cube.rolling{ animation:diceShake .09s linear infinite; }
+  @keyframes diceShake{ 0%{transform:rotate(-6deg);} 50%{transform:rotate(6deg);} 100%{transform:rotate(-6deg);} }
+  .pip{ width:9px;height:9px; border-radius:50%; background:transparent; align-self:center; justify-self:center; }
+  .pip.on{ background:var(--pink-2); box-shadow:0 1px 2px rgba(46,109,164,0.3); }
+  #turnInfo{ font-family:'Baloo 2', sans-serif; font-size:15px; color:var(--ink); min-height:20px; margin:6px 0 0; }
+
+  .legend-row{display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--ink-soft); font-weight:600; margin-bottom:9px;}
+  .legend-chip{width:22px;height:22px;border-radius:8px;flex:none; display:flex;align-items:center;justify-content:center;font-size:12px;}
+
+  /* ---------- Player tokens on board ---------- */
+  .token-marker{
+    position:absolute;
+    width:36px; height:36px;
+    margin-left:-18px; margin-top:-18px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:17px;
+    box-shadow:0 6px 14px rgba(74,51,88,0.3), inset 0 0 0 2.5px rgba(255,255,255,0.9);
+    border:2px solid rgba(255,255,255,0.5);
+    transition:left .32s cubic-bezier(.4,1.4,.6,1), top .32s cubic-bezier(.4,1.4,.6,1);
+    z-index:4;
+  }
+  .token-marker.hop{ animation:hopBounce .32s ease; }
+  @keyframes hopBounce{ 0%{transform:scale(1);} 40%{transform:scale(1.28) translateY(-10px);} 100%{transform:scale(1);} }
+  .token-marker.slide{ transition:left .65s cubic-bezier(.3,.7,.2,1), top .65s cubic-bezier(.3,.7,.2,1); }
+
+  /* ---------- Modal ---------- */
+  .modal{ display:none; position:fixed; inset:0; background:rgba(74,51,88,0.45); backdrop-filter:blur(3px);
+    align-items:center; justify-content:center; z-index:50; padding:20px; }
+  .modal.open{display:flex;}
+  .modal-box{
+    background:var(--paper); color:var(--ink); border-radius:26px; max-width:470px; width:100%;
+    padding:28px 28px 22px; box-shadow:0 24px 60px rgba(74,51,88,0.35); border-top:8px solid var(--pink);
+  }
+  .modal-box.wrong-border{border-top-color:var(--coral);}
+  .modal-eyebrow{ font-family:'Quicksand', sans-serif; font-weight:700; font-size:11px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--pink-2); margin-bottom:7px; }
+  .modal-box h2{ margin:0 0 4px; font-size:22px; }
+  .modal-sub{font-size:13px; color:var(--ink-soft); font-weight:600; margin-bottom:18px;}
+  .choices{display:flex; flex-direction:column; gap:9px; margin-bottom:6px;}
+  .choice-btn{
+    text-align:left; padding:12px 15px; border-radius:14px; border:2px solid #F0E6F5; background:#fff;
+    font-family:'Quicksand', sans-serif; font-weight:600; font-size:14.5px; cursor:pointer; color:var(--ink);
+    transition:border-color .12s, background .12s, transform .1s;
+  }
+  .choice-btn:hover{border-color:var(--pink); transform:translateX(2px);}
+  .choice-btn.correct{background:var(--mint-soft); border-color:var(--mint); font-weight:700;}
+  .choice-btn.wrong{background:var(--coral-soft); border-color:var(--coral);}
+  .choice-btn[disabled]{cursor:default;}
+  .result-line{margin-top:15px; font-size:14px; font-weight:700; min-height:20px;}
+  .result-line.ok{color:var(--mint);}
+  .result-line.bad{color:var(--coral);}
+  .modal-footer{margin-top:16px; text-align:right;}
+
+  .winner-box{text-align:center;}
+  .winner-box .display{font-size:27px; margin:6px 0 4px;}
+  .winner-box p{color:var(--ink-soft); font-weight:600; margin-bottom:20px; font-size:14px;}
+  .trophy{font-size:54px; margin-bottom:6px;}
+
+  @media (max-width:520px){ #nameFields{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="site-header">
+    <span class="eyebrow">Vocabulary Review · Restaurant & Dining</span>
+    <h1>Cuộc Đua Nhà Hàng</h1>
+    <p>Lắc xúc xắc, băng qua 30 chặng đường, trèo thang và né rắn để trả lời đúng từ vựng nhà hàng (TOEIC) và về đích đầu tiên! Không cần đăng nhập — chỉ cần nhập tên là chơi ngay.</p>
+  </header>
+
+  <!-- SETUP -->
+  <section id="setup" class="glass">
+    <h2>Thiết lập trò chơi</h2>
+    <div class="field">
+      <label>Số người chơi (2–10)</label>
+      <div class="count-stepper">
+        <button type="button" id="minus">−</button>
+        <div class="count-value" id="countVal">2</div>
+        <button type="button" id="plus">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Tên người chơi (nhập tên để vào game — không cần đăng nhập)</label>
+      <div id="nameFields"></div>
+    </div>
+    <button class="primary-btn" id="startBtn">Bắt đầu hành trình →</button>
+  </section>
+
+  <!-- GAME -->
+  <section id="game">
+    <div class="board-panel glass">
+      <div class="board-scroll">
+        <div class="board-stage" id="boardStage">
+          <div class="board" id="board"></div>
+          <svg class="connector-svg" id="connectorSvg"></svg>
+          <div class="token-layer" id="tokenLayer"></div>
+        </div>
+      </div>
+      <div class="lobby-label">🍽️ Điểm xuất phát — Nhà hàng</div>
+    </div>
+
+    <div class="side-panel">
+      <div class="card glass">
+        <h3>Lượt chơi</h3>
+        <div id="playersList"></div>
+      </div>
+      <div class="card glass dice-area">
+        <h3>Xúc xắc</h3>
+        <div class="die-wrap"><div class="die-cube" id="dieCube"></div></div>
+        <button class="primary-btn" id="rollBtn">Lắc xúc xắc</button>
+        <p id="turnInfo"></p>
+      </div>
+      <div class="card glass">
+        <h3>Chú thích</h3>
+        <div class="legend-row"><span class="legend-chip" style="background:var(--sage-soft);">🪜</span> Ô Trèo Cây — trả lời đúng để trèo lên chặng cao hơn</div>
+        <div class="legend-row"><span class="legend-chip" style="background:var(--wine-soft);">🐍</span> Ô Rắn Xanh — trả lời sai sẽ bị rắn kéo xuống chặng thấp hơn</div>
+        <div class="legend-row"><span class="legend-chip" style="background:var(--gold);">🏁</span> Ô Đích — về đích đầu tiên thắng cuộc</div>
+        <button class="ghost-btn" id="restartBtn" style="margin-top:8px;width:100%;">↺ Chơi lại từ đầu</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- OVERSHOOT NOTICE MODAL -->
+<div class="modal" id="overshootModal">
+  <div class="modal-box" id="overshootBox" style="border-top-color:var(--peach);">
+    <div class="modal-eyebrow">🎯 CHƯA THỂ VỀ ĐÍCH</div>
+    <h2 id="overshootTitle" style="font-size:20px;">Cần lắc đúng số bước!</h2>
+    <div class="modal-sub" id="overshootText"></div>
+    <div class="modal-footer">
+      <button class="primary-btn" id="overshootContinueBtn" style="width:auto;padding:10px 22px;">Trả lời câu hỏi để tiến thêm →</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTION MODAL -->
+<div class="modal" id="questionModal">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-eyebrow" id="modalEyebrow">CÂU HỎI TỪ VỰNG</div>
+    <h2 id="modalQuestion">—</h2>
+    <div class="modal-sub" id="modalSub">Chọn đáp án đúng</div>
+    <div class="choices" id="choices"></div>
+    <div class="result-line" id="resultLine"></div>
+    <div class="modal-footer">
+      <button class="primary-btn" id="continueBtn" style="display:none;width:auto;padding:10px 22px;">Tiếp tục →</button>
+    </div>
+  </div>
+</div>
+
+<!-- WINNER MODAL -->
+<div class="modal" id="winnerModal">
+  <div class="modal-box winner-box">
+    <div class="trophy">🏆</div>
+    <div class="modal-eyebrow">CHIẾN THẮNG</div>
+    <h2 class="display" id="winnerName">—</h2>
+    <p>đã về đích đầu tiên trong cuộc đua nhà hàng &amp; từ vựng!</p>
+    <button class="primary-btn" id="playAgainBtn" style="width:auto;padding:12px 26px;">Chơi lại</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- Vocabulary data (Restaurant & Dining — TOEIC) ----------
+  const VOCAB = [
+    {en:"reservation", vi:"sự đặt chỗ trước"},
+    {en:"appetizer", vi:"món khai vị"},
+    {en:"entrée", vi:"món chính"},
+    {en:"beverage", vi:"đồ uống"},
+    {en:"dessert", vi:"món tráng miệng"},
+    {en:"patron", vi:"khách hàng thân thiết"},
+    {en:"portion", vi:"khẩu phần ăn"},
+    {en:"complimentary", vi:"miễn phí (tặng kèm)"},
+    {en:"waitlist", vi:"danh sách chờ"},
+    {en:"server", vi:"người phục vụ"},
+    {en:"venue", vi:"địa điểm tổ chức"},
+    {en:"dietary", vi:"thuộc về chế độ ăn"},
+    {en:"banquet", vi:"bữa tiệc lớn"},
+    {en:"cater", vi:"cung cấp dịch vụ ăn uống"},
+    {en:"receipt", vi:"hóa đơn / biên nhận"},
+    {en:"gratuity", vi:"tiền tip"},
+    {en:"table setting", vi:"cách bài trí bàn ăn"},
+    {en:"complaint", vi:"lời phàn nàn"},
+    {en:"dining area", vi:"khu vực ăn uống"},
+    {en:"takeout", vi:"đồ ăn mang về"}
+  ];
+
+  // ---------- Interactive (speaking) questions ----------
+  const INTERACTIVE_QUESTIONS = [
+    "How old are you?",
+    "How are you?",
+    "What's your name?",
+    "Would you like a table for two?",
+    "What would you like to order?"
+  ];
+  const INTERACTIVE_CHANCE = 0.3; // xác suất một chặng thường trở thành câu hỏi tương tác
+
+  const TOTAL_TILES = 30;
+  // Real ladders (climb up on a correct answer) and snakes (slide down on a wrong answer)
+  const CONNECTORS = [
+    {type:"ladder", from:3,  to:14},
+    {type:"ladder", from:8,  to:19},
+    {type:"ladder", from:12, to:23},
+    {type:"ladder", from:17, to:26},
+    {type:"ladder", from:21, to:28},
+    {type:"snake",  from:10, to:4},
+    {type:"snake",  from:16, to:6},
+    {type:"snake",  from:20, to:13},
+    {type:"snake",  from:24, to:15},
+    {type:"snake",  from:29, to:22}
+  ];
+  const PLAYER_COLORS = ["#4A90D9","#22BFA1","#42B7E8","#FFB648","#9B7BE0","#6CB4E8","#3FCF7F","#FF9A5A","#5CC8E0","#C97BE0"];
+  const PLAYER_ICONS  = ["🐵","🦁","🐯","🐼","🦊","🐰","🐨","🐸","🦉","🐢"];
+
+  function pad(n){ return String(n).padStart(2,"0"); }
+
+  // ---------- State ----------
+  let playerCount = 2;
+  let players = [];
+  let currentIndex = 0;
+  let rolling = false;
+
+  // ---------- Setup screen ----------
+  const countVal = document.getElementById("countVal");
+  const nameFields = document.getElementById("nameFields");
+
+  function renderNameFields(){
+    nameFields.innerHTML = "";
+    for(let i=0;i<playerCount;i++){
+      const row = document.createElement("div");
+      row.className = "name-row";
+      const sw = document.createElement("div");
+      sw.className = "token-preview";
+      sw.style.background = PLAYER_COLORS[i % PLAYER_COLORS.length];
+      sw.textContent = PLAYER_ICONS[i % PLAYER_ICONS.length];
+      const input = document.createElement("input");
+      input.type = "text";
+      input.placeholder = "Người chơi " + (i+1);
+      input.maxLength = 16;
+      input.id = "name-" + i;
+      row.appendChild(sw);
+      row.appendChild(input);
+      nameFields.appendChild(row);
+    }
+  }
+  renderNameFields();
+
+  document.getElementById("minus").addEventListener("click", ()=>{
+    if(playerCount>2){ playerCount--; countVal.textContent = playerCount; renderNameFields(); }
+  });
+  document.getElementById("plus").addEventListener("click", ()=>{
+    if(playerCount<10){ playerCount++; countVal.textContent = playerCount; renderNameFields(); }
+  });
+
+  document.getElementById("startBtn").addEventListener("click", ()=>{
+    players = [];
+    for(let i=0;i<playerCount;i++){
+      const input = document.getElementById("name-"+i);
+      const name = (input.value.trim() || ("Người chơi " + (i+1))).slice(0,16);
+      players.push({name, color: PLAYER_COLORS[i % PLAYER_COLORS.length], icon: PLAYER_ICONS[i % PLAYER_ICONS.length], pos:0, id:i, el:null});
+    }
+    currentIndex = 0;
+    document.getElementById("setup").style.display = "none";
+    document.getElementById("game").classList.add("active");
+    buildBoard();
+    createTokenElements();
+    drawConnectors();
+    layoutAllTokens(false);
+    renderPlayers();
+    updateTurnInfo();
+    window.addEventListener("resize", ()=>{ drawConnectors(); layoutAllTokens(false); });
+  });
+
+  // ---------- Board building ----------
+  const boardEl = document.getElementById("board");
+  const boardStage = document.getElementById("boardStage");
+  const svgEl = document.getElementById("connectorSvg");
+  const tokenLayer = document.getElementById("tokenLayer");
+
+  function connectorFrom(n, type){
+    return CONNECTORS.find(c => c.from === n && c.type === type) || null;
+  }
+  function tileType(n){
+    if(n === TOTAL_TILES) return "finish";
+    if(connectorFrom(n,"ladder")) return "ladder";
+    if(connectorFrom(n,"snake")) return "snake";
+    return "normal";
+  }
+  const TOTAL_ROWS = Math.ceil(TOTAL_TILES/5);
+  function tileGridPosition(n){
+    const idx = n - 1;
+    const rowIndex = Math.floor(idx/5);
+    const posInRow = idx % 5;
+    const leftToRight = (rowIndex % 2 === 0);
+    const col = leftToRight ? posInRow+1 : 5-posInRow;
+    const row = TOTAL_ROWS - rowIndex;
+    return {col, row};
+  }
+
+  function buildBoard(){
+    boardEl.innerHTML = "";
+    for(let n=1;n<=TOTAL_TILES;n++){
+      const type = tileType(n);
+      const {col,row} = tileGridPosition(n);
+      const tile = document.createElement("div");
+      const shade = (col+row) % 2 === 0 ? "shade-a" : "shade-b";
+      tile.className = "tile " + (type!=="normal" ? type : shade);
+      tile.style.gridColumn = col;
+      tile.style.gridRow = row;
+      tile.id = "tile-"+n;
+
+      const topRow = document.createElement("div");
+      topRow.className = "tile-top-row";
+      const num = document.createElement("div");
+      num.className = "tile-num mono";
+      num.textContent = "#" + pad(n);
+      topRow.appendChild(num);
+      if(type!=="normal"){
+        const icon = document.createElement("div");
+        icon.className = "tile-icon";
+        icon.textContent = type==="ladder" ? "🪜" : type==="snake" ? "🐍" : "🏁";
+        topRow.appendChild(icon);
+      }
+      tile.appendChild(topRow);
+
+      if(type==="finish"){
+        const wordEl = document.createElement("div");
+        wordEl.className = "tile-word";
+        wordEl.textContent = "ĐÍCH — Vương Quốc Từ Vựng";
+        tile.appendChild(wordEl);
+      }
+
+      const tag = document.createElement("div");
+      tag.className = "tile-tag";
+      if(type==="ladder"){ const c = connectorFrom(n,"ladder"); tag.textContent = "leo → #"+pad(c.to); }
+      else if(type==="snake"){ const c = connectorFrom(n,"snake"); tag.textContent = "trượt → #"+pad(c.to); }
+      else if(type==="finish"){ tag.textContent = "🏁 finish"; }
+      else tag.textContent = "";
+      tile.appendChild(tag);
+
+      boardEl.appendChild(tile);
+    }
+  }
+
+  // ---------- Snake & ladder connector drawing ----------
+  function tileCenter(n){
+    const stageRect = boardStage.getBoundingClientRect();
+    const el = document.getElementById("tile-"+n);
+    const r = el.getBoundingClientRect();
+    return { x: r.left - stageRect.left + r.width/2, y: r.top - stageRect.top + r.height/2 };
+  }
+
+  function drawConnectors(){
+    const stageRect = boardStage.getBoundingClientRect();
+    svgEl.setAttribute("viewBox", "0 0 " + stageRect.width + " " + stageRect.height);
+    svgEl.style.width = stageRect.width + "px";
+    svgEl.style.height = stageRect.height + "px";
+
+    let markup = '<defs>' +
+      '<linearGradient id="snakeGrad" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0%" stop-color="#8CE99A"/><stop offset="100%" stop-color="#2F9E44"/>' +
+      '</linearGradient></defs>';
+
+    CONNECTORS.forEach(c=>{
+      const s = tileCenter(c.from);
+      const e = tileCenter(c.to);
+      if(c.type==="ladder") markup += ladderMarkup(s.x,s.y,e.x,e.y);
+      else markup += snakeMarkup(s.x,s.y,e.x,e.y);
+    });
+    svgEl.innerHTML = markup;
+  }
+
+  function ladderMarkup(sx,sy,ex,ey){
+    const dx=ex-sx, dy=ey-sy, len=Math.hypot(dx,dy) || 1;
+    const ux=dx/len, uy=dy/len, px=-uy, py=ux, offset=8;
+    let s = '<g opacity="0.95">';
+    s += `<line x1="${sx+px*offset}" y1="${sy+py*offset}" x2="${ex+px*offset}" y2="${ey+py*offset}" stroke="#E8A33D" stroke-width="5" stroke-linecap="round"/>`;
+    s += `<line x1="${sx-px*offset}" y1="${sy-py*offset}" x2="${ex-px*offset}" y2="${ey-py*offset}" stroke="#E8A33D" stroke-width="5" stroke-linecap="round"/>`;
+    s += `<line x1="${sx+px*offset}" y1="${sy+py*offset}" x2="${ex+px*offset}" y2="${ey+py*offset}" stroke="#FFD37A" stroke-width="3" stroke-linecap="round"/>`;
+    s += `<line x1="${sx-px*offset}" y1="${sy-py*offset}" x2="${ex-px*offset}" y2="${ey-py*offset}" stroke="#FFD37A" stroke-width="3" stroke-linecap="round"/>`;
+    const steps = Math.max(3, Math.floor(len/22));
+    for(let i=1;i<steps;i++){
+      const t=i/steps, cx=sx+dx*t, cy=sy+dy*t;
+      s += `<line x1="${cx+px*offset}" y1="${cy+py*offset}" x2="${cx-px*offset}" y2="${cy-py*offset}" stroke="#FFD37A" stroke-width="3.5" stroke-linecap="round"/>`;
+    }
+    s += '</g>';
+    return s;
+  }
+
+  function snakeMarkup(sx,sy,ex,ey){
+    const dx=ex-sx, dy=ey-sy, len=Math.hypot(dx,dy) || 1;
+    const ux=dx/len, uy=dy/len, px=-uy, py=ux;
+    const segs = 3;
+    let d = `M ${sx} ${sy}`;
+    let prevX=sx, prevY=sy;
+    for(let i=1;i<=segs;i++){
+      const t=i/segs;
+      const baseX = sx+dx*t, baseY = sy+dy*t;
+      const wig = (i%2===0? 1:-1) * (len*0.16);
+      const cx1 = prevX + dx/segs*0.5 + px*wig;
+      const cy1 = prevY + dy/segs*0.5 + py*wig;
+      const cx2 = baseX - dx/segs*0.5 + px*wig;
+      const cy2 = baseY - dy/segs*0.5 + py*wig;
+      d += ` C ${cx1} ${cy1}, ${cx2} ${cy2}, ${baseX} ${baseY}`;
+      prevX = baseX; prevY = baseY;
+    }
+    let s = `<path d="${d}" fill="none" stroke="url(#snakeGrad)" stroke-width="12" stroke-linecap="round"/>`;
+    s += `<path d="${d}" fill="none" stroke="#1B7A34" stroke-width="12" stroke-linecap="round" opacity="0.18" stroke-dasharray="1 14"/>`;
+    s += `<circle cx="${sx}" cy="${sy}" r="10" fill="#51CF66" stroke="#1B7A34" stroke-width="2"/>`;
+    s += `<circle cx="${sx-3.2}" cy="${sy-3.2}" r="1.7" fill="#fff"/>`;
+    s += `<circle cx="${sx+3.2}" cy="${sy-3.2}" r="1.7" fill="#fff"/>`;
+    return s;
+  }
+
+  // ---------- Player tokens ----------
+  function createTokenElements(){
+    tokenLayer.innerHTML = "";
+    players.forEach(p=>{
+      const el = document.createElement("div");
+      el.className = "token-marker";
+      el.style.background = "radial-gradient(circle at 35% 30%, #fff2, transparent 40%), " + p.color;
+      el.textContent = p.icon;
+      el.title = p.name;
+      tokenLayer.appendChild(el);
+      p.el = el;
+    });
+  }
+
+  function lobbyAnchor(){
+    const t1 = tileCenter(1);
+    const stageRect = boardStage.getBoundingClientRect();
+    return { x: Math.max(24, t1.x - 60), y: stageRect.height + 30 };
+  }
+
+  function layoutAllTokens(animate){
+    const groups = {};
+    players.forEach(p=>{ (groups[p.pos] = groups[p.pos] || []).push(p); });
+    Object.keys(groups).forEach(posKey=>{
+      const group = groups[posKey];
+      const pos = Number(posKey);
+      const center = pos === 0 ? lobbyAnchor() : tileCenter(pos);
+      const n = group.length;
+      group.forEach((p, idx)=>{
+        let ox=0, oy=0;
+        if(n>1){
+          const angle = (idx/n) * Math.PI*2;
+          const r = 13;
+          ox = Math.cos(angle)*r; oy = Math.sin(angle)*r;
+        }
+        if(!animate) p.el.style.transition = "none";
+        else p.el.style.transition = "";
+        p.el.style.left = (center.x+ox) + "px";
+        p.el.style.top = (center.y+oy) + "px";
+        if(!animate){
+          void p.el.offsetWidth;
+          p.el.style.transition = "";
+        }
+      });
+    });
+  }
+
+  function bounceToken(player){
+    player.el.classList.remove("hop");
+    void player.el.offsetWidth;
+    player.el.classList.add("hop");
+  }
+
+  // ---------- Players panel ----------
+  function renderPlayers(){
+    const el = document.getElementById("playersList");
+    el.innerHTML = "";
+    players.forEach((p,i)=>{
+      const row = document.createElement("div");
+      row.className = "player-row" + (i===currentIndex ? " active" : "");
+      const dot = document.createElement("div");
+      dot.className = "player-token-mini";
+      dot.style.background = p.color;
+      dot.textContent = p.icon;
+      const name = document.createElement("div");
+      name.className = "player-name";
+      name.textContent = p.name;
+      const pos = document.createElement("div");
+      pos.className = "player-pos mono";
+      pos.textContent = p.pos===0 ? "Khởi đầu" : ("#"+pad(p.pos));
+      row.appendChild(dot); row.appendChild(name); row.appendChild(pos);
+      el.appendChild(row);
+    });
+  }
+
+  function updateTurnInfo(msg){
+    document.getElementById("turnInfo").textContent = msg || ("Đến lượt: " + players[currentIndex].name);
+  }
+
+  // ---------- Dice (pip cube) ----------
+  const rollBtn = document.getElementById("rollBtn");
+  const dieCube = document.getElementById("dieCube");
+  const PIP_PATTERNS = {
+    1:[4], 2:[0,8], 3:[0,4,8], 4:[0,2,6,8], 5:[0,2,4,6,8], 6:[0,2,3,5,6,8]
+  };
+  function buildPips(){
+    dieCube.innerHTML = "";
+    for(let i=0;i<9;i++){
+      const s = document.createElement("span");
+      s.className = "pip";
+      dieCube.appendChild(s);
+    }
+  }
+  function showFace(value){
+    const pips = dieCube.querySelectorAll(".pip");
+    pips.forEach(p=>p.classList.remove("on"));
+    (PIP_PATTERNS[value]||[]).forEach(idx=> pips[idx].classList.add("on"));
+  }
+  buildPips();
+  showFace(1);
+
+  // ---------- Weighted dice roll ----------
+  // Vẫn là random (Math.random), chỉ chỉnh TỈ LỆ để:
+  //  - Khó ra đúng số bước cần thiết để về đích hơn
+  //  - Khó rơi trúng ô thang (ô "may mắn") hơn
+  const FINISH_EXACT_WEIGHT = 0.35; // hệ số giảm khi mặt xúc xắc = đúng số bước còn lại để về đích
+  const LUCKY_TILE_WEIGHT   = 0.4;  // hệ số giảm khi mặt xúc xắc đưa người chơi đáp thẳng vào ô thang
+
+  function rollWeightedDice(player){
+    const remaining = TOTAL_TILES - player.pos;
+    const weights = [1,1,1,1,1,1]; // trọng số ban đầu cho mặt 1..6, đều nhau
+
+    // Giảm trọng số của mặt xúc xắc trùng đúng số bước còn lại để về đích
+    if(remaining >= 1 && remaining <= 6){
+      weights[remaining-1] *= FINISH_EXACT_WEIGHT;
+    }
+
+    // Giảm trọng số của mặt xúc xắc khiến người chơi đáp thẳng vào ô thang (ô may mắn)
+    for(let v=1; v<=6; v++){
+      const dest = player.pos + v;
+      if(dest <= TOTAL_TILES && connectorFrom(dest, "ladder")){
+        weights[v-1] *= LUCKY_TILE_WEIGHT;
+      }
+    }
+
+    const total = weights.reduce((a,b)=>a+b, 0);
+    let r = Math.random() * total;
+    for(let i=0;i<6;i++){
+      if(r < weights[i]) return i+1;
+      r -= weights[i];
+    }
+    return 6; // dự phòng, tránh lỗi làm tròn số thực
+  }
+
+  rollBtn.addEventListener("click", ()=>{
+    if(rolling) return;
+    rolling = true;
+    rollBtn.disabled = true;
+    dieCube.classList.add("rolling");
+    let ticks = 0;
+    const maxTicks = 10;
+    const interval = setInterval(()=>{
+      showFace(1 + Math.floor(Math.random()*6));
+      ticks++;
+      if(ticks>=maxTicks){
+        clearInterval(interval);
+        dieCube.classList.remove("rolling");
+        const finalValue = rollWeightedDice(players[currentIndex]);
+        showFace(finalValue);
+        movePlayer(finalValue);
+      }
+    }, 70);
+  });
+
+  // ---------- Movement ----------
+  function wait(ms){ return new Promise(res=> setTimeout(res, ms)); }
+
+  async function movePlayer(steps){
+    const player = players[currentIndex];
+    const remaining = TOTAL_TILES - player.pos;
+
+    if(steps > remaining){
+      updateTurnInfo(player.name + " lắc được " + steps + " — vượt quá số bước cần để về đích!");
+      showOvershootNotice(player, steps, remaining);
+      return;
+    }
+
+    const startPos = player.pos; // vị trí trước khi lắc xí ngầu — dùng để lùi về nếu trả lời sai
+    updateTurnInfo(player.name + " lắc được " + steps + " — đang di chuyển...");
+    const target = player.pos + steps;
+
+    for(let p = player.pos + 1; p <= target; p++){
+      player.pos = p;
+      layoutAllTokens(true);
+      bounceToken(player);
+      renderPlayers();
+      await wait(260);
+    }
+
+    if(player.pos >= TOTAL_TILES){
+      await wait(200);
+      showWinner(player);
+      return;
+    }
+
+    const type = tileType(player.pos);
+
+    if(type === "snake"){
+      // Ô rắn (ô lùi): tự động trượt xuống ngay, không cần trả lời câu hỏi
+      const c = connectorFrom(player.pos, "snake");
+      await wait(300);
+      updateTurnInfo(player.name + " gặp rắn xanh, bị kéo tuột xuống chặng #" + pad(c.to) + "!");
+      await wait(350);
+      await slideToken(player, c.to);
+      nextTurn();
+      return;
+    }
+
+    await wait(200);
+    if(type === "normal" && Math.random() < INTERACTIVE_CHANCE){
+      openInteractiveQuestion(player.pos, player);
+    } else {
+      openQuestion(player.pos, type, player, startPos);
+    }
+  }
+
+  // ---------- Overshoot notice (must roll the exact remaining steps to finish) ----------
+  const overshootModal = document.getElementById("overshootModal");
+  const overshootText = document.getElementById("overshootText");
+  const overshootContinueBtn = document.getElementById("overshootContinueBtn");
+
+  function showOvershootNotice(player, steps, remaining){
+    overshootText.textContent = player.name + " ơi, chỉ còn " + remaining + " chặng nữa là về đích, nhưng bạn lại lắc được " + steps +
+      " — vượt quá số bước cần thiết nên chưa thể về đích ở lượt này. Hãy trả lời đúng câu hỏi từ vựng dưới đây để vẫn được tiến thêm 1 chặng!";
+    overshootModal.classList.add("open");
+    overshootContinueBtn.onclick = ()=>{
+      overshootModal.classList.remove("open");
+      openOvershootQuestion(player);
+    };
+  }
+
+  // ---------- Interactive speaking question (không chấm điểm) ----------
+  function openInteractiveQuestion(tileNum, player){
+    modalBox.classList.remove("wrong-border");
+    const q = INTERACTIVE_QUESTIONS[Math.floor(Math.random()*INTERACTIVE_QUESTIONS.length)];
+    modalEyebrow.textContent = "CHẶNG #" + pad(tileNum) + " · 💬 CÂU HỎI TƯƠNG TÁC";
+    modalQuestion.textContent = q;
+    modalSub.textContent = player.name + " ơi, hãy trả lời to câu này bằng tiếng Anh nhé!";
+    resultLine.textContent = "";
+    resultLine.className = "result-line";
+    continueBtn.style.display = "none";
+    choicesEl.innerHTML = "";
+
+    const btn = document.createElement("button");
+    btn.className = "choice-btn";
+    btn.textContent = "✓ Mình đã trả lời xong!";
+    btn.addEventListener("click", ()=>{
+      btn.disabled = true;
+      btn.classList.add("correct");
+      resultLine.textContent = "✓ Giỏi lắm! Tiếp tục nào!";
+      resultLine.className = "result-line ok";
+      continueBtn.style.display = "inline-flex";
+      continueBtn.onclick = ()=>{
+        questionModal.classList.remove("open");
+        if(player.pos >= TOTAL_TILES){ showWinner(player); return; }
+        nextTurn();
+      };
+    });
+    choicesEl.appendChild(btn);
+
+    questionModal.classList.add("open");
+  }
+
+  function openOvershootQuestion(player){
+    currentQuestion = buildQuestion();
+    modalBox.classList.remove("wrong-border");
+    modalEyebrow.textContent = "CHẶNG #" + pad(player.pos) + " · 🎯 CƠ HỘI TIẾN THÊM";
+    modalQuestion.textContent = currentQuestion.prompt;
+    modalSub.textContent = currentQuestion.direction==="en2vi"
+      ? (player.name + " ơi, từ này nghĩa là gì?")
+      : (player.name + " ơi, từ tiếng Anh tương ứng là gì?");
+    resultLine.textContent = "";
+    resultLine.className = "result-line";
+    continueBtn.style.display = "none";
+    choicesEl.innerHTML = "";
+
+    currentQuestion.options.forEach(opt=>{
+      const btn = document.createElement("button");
+      btn.className = "choice-btn";
+      btn.textContent = opt;
+      btn.addEventListener("click", ()=> handleAnswer(opt, btn, player.pos, "overshoot", player));
+      choicesEl.appendChild(btn);
+    });
+
+    questionModal.classList.add("open");
+  }
+
+  async function slideToken(player, destPos){
+    player.el.classList.add("slide");
+    player.pos = destPos;
+    layoutAllTokens(true);
+    await wait(650);
+    player.el.classList.remove("slide");
+    renderPlayers();
+  }
+
+  // ---------- Question modal ----------
+  const questionModal = document.getElementById("questionModal");
+  const modalBox = document.getElementById("modalBox");
+  const modalEyebrow = document.getElementById("modalEyebrow");
+  const modalQuestion = document.getElementById("modalQuestion");
+  const modalSub = document.getElementById("modalSub");
+  const choicesEl = document.getElementById("choices");
+  const resultLine = document.getElementById("resultLine");
+  const continueBtn = document.getElementById("continueBtn");
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+    return a;
+  }
+
+  let lastWordIdx = -1;
+  function buildQuestion(tileNum){
+    // Pick a random vocab word each time (avoid repeating the immediately previous one)
+    let wordIdx;
+    do{ wordIdx = Math.floor(Math.random()*VOCAB.length); } while(VOCAB.length>1 && wordIdx===lastWordIdx);
+    lastWordIdx = wordIdx;
+    const word = VOCAB[wordIdx];
+    const direction = Math.random()<0.5 ? "en2vi" : "vi2en";
+    const correct = direction==="en2vi" ? word.vi : word.en;
+    const pool = VOCAB.filter((w,idx)=> idx !== wordIdx).map(w=> direction==="en2vi" ? w.vi : w.en);
+    const distractors = shuffle(pool).slice(0,3);
+    const options = shuffle([correct, ...distractors]);
+    return { direction, prompt: direction==="en2vi" ? word.en : word.vi, correct, options };
+  }
+
+  let currentQuestion = null;
+
+  function openQuestion(tileNum, type, player, startPos){
+    currentQuestion = buildQuestion(tileNum);
+    modalBox.classList.remove("wrong-border");
+    let tagText = "";
+    if(type==="ladder") tagText = " · 🪜 Ô TRÈO CÂY";
+    modalEyebrow.textContent = "CHẶNG #" + pad(tileNum) + tagText;
+    modalQuestion.textContent = currentQuestion.prompt;
+    modalSub.textContent = currentQuestion.direction==="en2vi"
+      ? (player.name + " ơi, từ này nghĩa là gì?")
+      : (player.name + " ơi, từ tiếng Anh tương ứng là gì?");
+    resultLine.textContent = "";
+    resultLine.className = "result-line";
+    continueBtn.style.display = "none";
+    choicesEl.innerHTML = "";
+
+    currentQuestion.options.forEach(opt=>{
+      const btn = document.createElement("button");
+      btn.className = "choice-btn";
+      btn.textContent = opt;
+      btn.addEventListener("click", ()=> handleAnswer(opt, btn, tileNum, type, player, startPos));
+      choicesEl.appendChild(btn);
+    });
+
+    questionModal.classList.add("open");
+  }
+
+  function handleAnswer(selected, btnEl, tileNum, type, player, startPos){
+    const allBtns = choicesEl.querySelectorAll(".choice-btn");
+    allBtns.forEach(b=> b.disabled = true);
+    const isCorrect = selected === currentQuestion.correct;
+
+    allBtns.forEach(b=>{
+      if(b.textContent === currentQuestion.correct) b.classList.add("correct");
+      else if(b === btnEl && !isCorrect) b.classList.add("wrong");
+    });
+
+    let action = null; // {kind:'slide', dest} or {kind:'step', delta}
+    let note = "";
+
+    if(isCorrect){
+      resultLine.textContent = "✓ Chính xác!";
+      resultLine.className = "result-line ok";
+      if(type==="ladder"){
+        const c = connectorFrom(tileNum,"ladder");
+        action = {kind:"slide", dest:c.to};
+        note = " Trèo lên chặng #" + pad(c.to) + "!";
+      } else if(type==="overshoot"){
+        action = {kind:"step", delta:+1};
+        note = " Tiến thêm 1 chặng — sắp tới đích rồi!";
+      }
+      // type === "normal": trả lời đúng thì được đứng nguyên ở ô vừa tới, không cần làm gì thêm
+    } else {
+      modalBox.classList.add("wrong-border");
+      resultLine.textContent = "✗ Chưa đúng. Đáp án: " + currentQuestion.correct;
+      resultLine.className = "result-line bad";
+      if(type==="overshoot"){
+        // Overshoot: người chơi chưa hề di chuyển khỏi vị trí hiện tại, nên trả lời sai thì đứng yên
+        action = null;
+        note = " Bạn giữ nguyên vị trí hiện tại.";
+      } else {
+        // normal / ladder: trả lời sai -> lùi về đúng vị trí trước khi lắc xí ngầu
+        action = {kind:"slide", dest:startPos};
+        note = " Lùi về lại chặng #" + pad(startPos) + " (vị trí trước khi lắc xí ngầu).";
+      }
+    }
+    if(note) resultLine.textContent += note;
+
+    continueBtn.style.display = "inline-flex";
+    continueBtn.onclick = async ()=>{
+      questionModal.classList.remove("open");
+      if(action && action.kind==="slide"){
+        await slideToken(player, action.dest);
+      } else if(action && action.kind==="step"){
+        const np = Math.max(0, player.pos + action.delta);
+        await slideToken(player, np);
+      }
+      if(player.pos >= TOTAL_TILES){ showWinner(player); return; }
+      nextTurn();
+    };
+  }
+
+  function nextTurn(){
+    currentIndex = (currentIndex + 1) % players.length;
+    renderPlayers();
+    updateTurnInfo();
+    rolling = false;
+    rollBtn.disabled = false;
+  }
+
+  // ---------- Winner ----------
+  const winnerModal = document.getElementById("winnerModal");
+  const winnerName = document.getElementById("winnerName");
+
+  function showWinner(player){
+    winnerName.textContent = player.name;
+    winnerName.style.color = player.color;
+    winnerModal.classList.add("open");
+    rollBtn.disabled = true;
+  }
+
+  document.getElementById("playAgainBtn").addEventListener("click", ()=>{
+    winnerModal.classList.remove("open");
+    resetGame();
+  });
+  document.getElementById("restartBtn").addEventListener("click", ()=>{
+    if(confirm("Chơi lại từ đầu? Tiến trình hiện tại sẽ mất.")) resetGame();
+  });
+
+  function resetGame(){
+    players.forEach(p=> p.pos = 0);
+    currentIndex = 0;
+    rolling = false;
+    rollBtn.disabled = false;
+    showFace(1);
+    layoutAllTokens(false);
+    renderPlayers();
+    updateTurnInfo();
+  }
+
+})();
+</script>
+</body>
+</html>
