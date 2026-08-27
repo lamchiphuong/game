@@ -415,6 +415,77 @@
   .opt.correct{ background:var(--good); border-color:var(--good); color:#fff; }
   .opt.incorrect{ background:var(--bad); border-color:var(--bad); color:#fff; }
 
+  /* ===== Sentence-building (Duolingo-style) ===== */
+  .sentence-q .stem{
+    font-size:16.5px;
+    font-weight:700;
+    color:var(--wine-dark);
+    font-family:'Plus Jakarta Sans', sans-serif;
+    margin-bottom:12px;
+  }
+  .sentence-q .stem .vi-flag{
+    font-size:10.5px;
+    font-weight:700;
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:.06em;
+    color:var(--sage);
+    background:var(--sage-light);
+    padding:3px 9px;
+    border-radius:100px;
+    margin-right:8px;
+    vertical-align:middle;
+  }
+  .answer-strip{
+    min-height:58px;
+    border:2px dashed #B9CBEF;
+    border-radius:14px;
+    background:var(--ivory);
+    padding:10px;
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    margin-bottom:14px;
+    transition:border-color .15s ease;
+  }
+  .strip-placeholder{ color:#94A3B8; font-size:13.5px; font-style:italic; }
+  .word-bank{
+    display:flex; flex-wrap:wrap; gap:9px;
+    padding-top:2px;
+  }
+  .word-chip{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight:600;
+    font-size:14.5px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-bottom:3px solid var(--line);
+    color:var(--wine-dark);
+    padding:8px 15px;
+    border-radius:11px;
+    cursor:pointer;
+    box-shadow:var(--shadow-sm);
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+    user-select:none;
+  }
+  .word-chip:hover{ transform:translateY(-2px); box-shadow:var(--shadow-md); }
+  .word-chip.in-strip{
+    background:var(--wine);
+    border-color:var(--wine-dark);
+    border-bottom-color:var(--wine-dark);
+    color:#fff;
+  }
+  .sentence-check-btn{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight:700;
+    font-size:13px;
+    background:var(--sage-light);
+    color:var(--sage);
+    border:none;
+    padding:9px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    margin-top:4px;
+  }
+  .sentence-check-btn:hover{ background:var(--sage); color:#fff; }
+
   select.match-select{
     font-family:'Inter',sans-serif;
     font-size:13.5px;
@@ -571,6 +642,10 @@
       <span class="num">Tráng miệng</span><span class="label">Luyện tập A–D</span>
       <span class="sub">Nối từ · điền từ · trắc nghiệm</span>
     </button>
+    <button class="course-tab" data-panel="sentence">
+      <span class="num">Món phụ</span><span class="label">Đặt câu</span>
+      <span class="sub">Việt → Anh, kiểu Duolingo</span>
+    </button>
     <button class="course-tab" data-panel="speaking">
       <span class="num">Hóa đơn</span><span class="label">Luyện nói</span>
       <span class="sub">Role-play đặt bàn</span>
@@ -674,6 +749,20 @@
       <div id="collocList"></div>
       <div class="check-all-bar">
         <button class="receipt-btn" onclick="revealAll('colloc')">Xem hóa đơn — Bài D</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SENTENCE BUILDING PANEL ================= -->
+  <section class="panel" id="panel-sentence">
+    <div class="section-head">
+      <h2>Món phụ — Đặt câu (Việt → Anh)</h2>
+      <p>Chạm vào các từ bên dưới để ghép thành câu tiếng Anh đúng, giống bài tập trên Duolingo. Có vài từ "gài bẫy" không dùng đến.</p>
+    </div>
+    <div class="card" id="sentenceCard">
+      <div id="sentenceList"></div>
+      <div class="check-all-bar">
+        <button class="receipt-btn" onclick="revealAll('sentence')">Xem hóa đơn — Đặt câu</button>
       </div>
     </div>
   </section>
@@ -843,6 +932,19 @@ const collocItems = [
  {stem:"The hotel package includes a ________ buffet breakfast.", opts:["complimentary","free-cost"], ans:0},
  {stem:"The restaurant serves both soft drinks and ________ beverages.", opts:["alcoholic","drinking"], ans:0},
  {stem:"Parties of six or more are subject to an ________ 18% gratuity.", opts:["automatic","added"], ans:0}
+];
+
+const sentenceItems = [
+  {vi:"Tôi muốn đặt bàn cho bữa trưa.", en:"I want to make a reservation for lunch."},
+  {vi:"Bàn của chúng tôi ở trong khu vực ăn uống yên tĩnh.", en:"Our table is in a quiet dining area."},
+  {vi:"Anh ấy có chế độ ăn kiêng đặc biệt.", en:"He has special dietary restrictions."},
+  {vi:"Bạn muốn gọi món khai vị nào?", en:"What appetizer would you like to order?"},
+  {vi:"Món chính của tôi là món gà.", en:"My entrée is the chicken."},
+  {vi:"Chúng tôi muốn hai đồ uống và một món tráng miệng.", en:"We would like two beverages and one dessert."},
+  {vi:"Món tráng miệng này có được miễn phí không?", en:"Is this dessert complimentary?"},
+  {vi:"Có danh sách chờ ở nhà hàng không?", en:"Is there a waitlist at the restaurant?"},
+  {vi:"Tôi muốn đặt món mang đi.", en:"I would like to order takeout."},
+  {vi:"Cho tôi xin hóa đơn được không?", en:"Could I have the receipt, please?"}
 ];
 
 /* ============ NAV ============ */
@@ -1046,6 +1148,12 @@ fillItems.forEach((f,i)=>{
 /* ============ RENDER: MULTIPLE CHOICE (C) ============ */
 const mcList = document.getElementById('mcList');
 mcItems.forEach((it,i)=>{
+  // Xáo trộn thứ tự các lựa chọn để đáp án đúng không cố định ở vị trí đầu
+  const idxOrder = shuffleArr(it.opts.map((_,j)=>j));
+  const newOpts = idxOrder.map(j=>it.opts[j]);
+  it.ans = idxOrder.indexOf(it.ans);
+  it.opts = newOpts;
+
   const row = document.createElement('div');
   row.className='q';
   row.innerHTML = `
@@ -1068,6 +1176,12 @@ mcItems.forEach((it,i)=>{
 /* ============ RENDER: COLLOCATION (D) ============ */
 const collocList = document.getElementById('collocList');
 collocItems.forEach((it,i)=>{
+  // Xáo trộn thứ tự các lựa chọn để đáp án đúng không cố định ở vị trí đầu
+  const idxOrder = shuffleArr(it.opts.map((_,j)=>j));
+  const newOpts = idxOrder.map(j=>it.opts[j]);
+  it.ans = idxOrder.indexOf(it.ans);
+  it.opts = newOpts;
+
   const row = document.createElement('div');
   row.className='q';
   row.innerHTML = `
@@ -1086,6 +1200,88 @@ collocItems.forEach((it,i)=>{
     });
   });
 });
+
+/* ============ RENDER: SENTENCE BUILDING (Duolingo-style Việt → Anh) ============ */
+const sentenceList = document.getElementById('sentenceList');
+const distractorPool = ['today','please','very','some','maybe','already','just','soon','again','usually','really','still','a','the'];
+const sentenceBanks = [];
+const sentenceOrders = [];
+
+function shuffleArr(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function renderSentenceChips(i){
+  const bank = sentenceBanks[i];
+  const order = sentenceOrders[i];
+  const strip = document.getElementById(`sent-strip-${i}`);
+  const bankEl = document.getElementById(`sent-bank-${i}`);
+  strip.innerHTML=''; bankEl.innerHTML='';
+
+  if(order.length===0){
+    strip.innerHTML = '<span class="strip-placeholder">Chạm vào từ bên dưới để ghép câu…</span>';
+  }
+  order.forEach(id=>{
+    const tok = bank.find(t=>t.id===id);
+    const chip = document.createElement('span');
+    chip.className='word-chip in-strip';
+    chip.textContent = tok.word;
+    chip.onclick = ()=>{ sentenceOrders[i] = sentenceOrders[i].filter(x=>x!==id); renderSentenceChips(i); };
+    strip.appendChild(chip);
+  });
+  bank.forEach(tok=>{
+    if(order.includes(tok.id)) return;
+    const chip = document.createElement('span');
+    chip.className='word-chip';
+    chip.textContent = tok.word;
+    chip.onclick = ()=>{ sentenceOrders[i].push(tok.id); renderSentenceChips(i); };
+    bankEl.appendChild(chip);
+  });
+}
+
+sentenceItems.forEach((it,i)=>{
+  const tokens = it.en.split(' ');
+  const cleanTokens = tokens.map(t=>t.toLowerCase().replace(/[.,?!]/g,''));
+  const avail = distractorPool.filter(d=> !cleanTokens.includes(d));
+  const chosenDistractors = shuffleArr(avail).slice(0,3);
+  const bank = shuffleArr(tokens.concat(chosenDistractors)).map((w,k)=>({word:w, id:`s${i}-${k}`}));
+  sentenceBanks[i] = bank;
+  sentenceOrders[i] = [];
+
+  const row = document.createElement('div');
+  row.className='q sentence-q';
+  row.innerHTML = `
+    <div class="stem"><span class="vi-flag">VI</span>${i+1}. ${it.vi}</div>
+    <div class="answer-strip" id="sent-strip-${i}"></div>
+    <div class="word-bank" id="sent-bank-${i}"></div>
+    <button class="sentence-check-btn" onclick="checkSentence(${i})">Kiểm tra</button>
+    <div class="answer-box" id="sent-ans-${i}"></div>
+  `;
+  sentenceList.appendChild(row);
+  renderSentenceChips(i);
+});
+
+/* ============ CHECK ONE SENTENCE (nút Kiểm tra riêng từng câu) ============ */
+function checkSentence(i){
+  const bank = sentenceBanks[i];
+  const order = sentenceOrders[i];
+  const it = sentenceItems[i];
+  const constructed = order.map(id=> bank.find(t=>t.id===id).word).join(' ');
+  const box = document.getElementById(`sent-ans-${i}`);
+  if(order.length===0){
+    box.innerHTML = `<span class="status no">✗ Chưa ghép câu</span>Hãy chạm vào các từ để ghép câu trước khi kiểm tra.`;
+    box.classList.add('show');
+    return;
+  }
+  const ok = constructed.trim().toLowerCase() === it.en.trim().toLowerCase();
+  box.innerHTML = `<span class="status ${ok?'ok':'no'}">${ok?'✓ Đúng':'✗ Sai'}</span><b>Đáp án đúng:</b> ${it.en}`;
+  box.classList.add('show');
+}
 
 /* ============ REVEAL LOGIC ============ */
 function revealAll(type){
@@ -1151,6 +1347,20 @@ function revealAll(type){
       box.classList.add('show');
     });
     showScore('sub-D', score, collocItems.length);
+  }
+  if(type==='sentence'){
+    let score=0;
+    sentenceItems.forEach((it,i)=>{
+      const bank = sentenceBanks[i];
+      const order = sentenceOrders[i];
+      const constructed = order.map(id=> bank.find(t=>t.id===id).word).join(' ');
+      const box = document.getElementById(`sent-ans-${i}`);
+      const ok = constructed.trim().toLowerCase() === it.en.trim().toLowerCase();
+      if(ok) score++;
+      box.innerHTML = `<span class="status ${ok?'ok':'no'}">${ok?'✓ Đúng':'✗ Sai'}</span><b>Đáp án đúng:</b> ${it.en}`;
+      box.classList.add('show');
+    });
+    showScore('sentenceCard', score, sentenceItems.length);
   }
 }
 
