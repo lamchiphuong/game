@@ -340,6 +340,10 @@
         <button class="primary-btn" id="rollBtn">Lắc xúc xắc</button>
         <p id="turnInfo"></p>
       </div>
+      <div class="card glass" id="liveActivityCard" style="display:none;">
+        <h3>👀 Đang diễn ra</h3>
+        <div id="liveActivityBody"></div>
+      </div>
       <div class="card glass">
         <h3>Chú thích</h3>
         <div class="legend-row"><span class="legend-chip" style="background:var(--sage-soft);">🪜</span> Ô Trèo Cây — trả lời đúng để trèo lên chặng cao hơn</div>
@@ -482,7 +486,7 @@
 
   // ---------- Trạng thái phòng được dựng lại từ các thông điệp MQTT ----------
   function emptyRoom(){
-    return { hostId:null, createdAt:null, status:null, order:null, turnIndex:0, winnerId:null, players:{}, pos:{}, spectators:{} };
+    return { hostId:null, createdAt:null, status:null, order:null, turnIndex:0, winnerId:null, players:{}, pos:{}, spectators:{}, activity:null };
   }
 
   function applyRoomField(rest, raw){
@@ -514,6 +518,19 @@
       else { latestRoom.pos[pid] = Number(raw); }
       return;
     }
+    // "activity" phát trực tiếp câu hỏi/tương tác mà người chơi đang lượt đang xử lý,
+    // để mọi người khác (khán giả + người chơi đang chờ) xem trực tiếp theo thời gian
+    // thực, chỉ xem không bấm được — không ảnh hưởng đến logic chấm điểm của người chơi.
+    if(rest === "activity"){
+      try{ latestRoom.activity = raw ? JSON.parse(raw) : null; }catch(e){ latestRoom.activity = null; }
+      return;
+    }
+  }
+
+  function publishActivity(obj){ publishRetained("activity", JSON.stringify(obj)); }
+  function clearActivity(){ publishRetained("activity", ""); }
+  function escapeHtml(s){
+    return String(s==null?"":s).replace(/[&<>"']/g, c=> ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   }
 
   let roomRenderTimer = null;
@@ -837,6 +854,7 @@
     updateTurnInfo();
     layoutAllTokens(true);
     refreshRollAvailability();
+    renderLiveActivity(room);
 
     const isHost = !iAmSpectator && room.hostId === myId;
     const restartBtnEl = document.getElementById("restartBtn");
@@ -850,6 +868,57 @@
     } else {
       winnerModal.classList.remove("open");
     }
+  }
+
+  // ---------- Xem trực tiếp câu hỏi/tương tác của người đang đến lượt ----------
+  // Hiện cho tất cả mọi người KHÔNG phải là người đang đến lượt (khán giả lẫn người
+  // chơi đang chờ) — chỉ đọc, không có nút bấm nào để trả lời thay người khác.
+  const liveActivityCard = document.getElementById("liveActivityCard");
+  const liveActivityBody = document.getElementById("liveActivityBody");
+
+  function renderLiveActivity(room){
+    if(!liveActivityCard) return;
+    const act = room && room.activity;
+    const active = players[currentIndex];
+    const amActivePlayer = !!active && active.id === myId;
+    if(!act || amActivePlayer){
+      liveActivityCard.style.display = "none";
+      return;
+    }
+    liveActivityCard.style.display = "block";
+
+    let html = '<div style="font-family:\'Quicksand\',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:1.5px;'
+      + 'text-transform:uppercase;color:var(--lav);margin-bottom:6px;">' + escapeHtml(act.tag || "") + '</div>';
+    html += '<div style="font-family:\'Baloo 2\',sans-serif;font-weight:700;font-size:15px;color:var(--ink);margin-bottom:4px;">'
+      + escapeHtml(act.prompt || "") + '</div>';
+    if(act.sub){
+      html += '<div style="font-size:11.5px;color:var(--ink-soft);font-weight:600;margin-bottom:10px;">' + escapeHtml(act.sub) + '</div>';
+    }
+
+    if(act.options && act.options.length){
+      html += '<div style="display:flex;flex-direction:column;gap:6px;">';
+      act.options.forEach(opt=>{
+        let style = "padding:8px 12px;border-radius:11px;border:2px solid #EDE3F8;font-size:12.5px;font-weight:700;background:var(--paper);color:var(--ink);";
+        if(act.status === "answered"){
+          if(opt === act.correctText){
+            style = "padding:8px 12px;border-radius:11px;border:2px solid var(--mint);background:var(--mint-soft);font-size:12.5px;font-weight:700;color:#0E8A6E;";
+          } else if(opt === act.selected){
+            style = "padding:8px 12px;border-radius:11px;border:2px solid var(--coral);background:var(--coral-soft);font-size:12.5px;font-weight:700;color:#B23A4C;";
+          }
+        }
+        html += '<div style="' + style + '">' + escapeHtml(opt) + '</div>';
+      });
+      html += '</div>';
+    } else if(act.kind === "interactive"){
+      html += '<div style="font-size:11.5px;color:var(--ink-soft);font-style:italic;">🎤 Câu hỏi nói trực tiếp — không có đáp án trắc nghiệm</div>';
+    }
+
+    if(act.status === "answered" && act.resultText){
+      const color = act.isCorrect ? "var(--mint)" : "var(--coral)";
+      html += '<div style="margin-top:10px;font-size:12.5px;font-weight:700;color:' + color + ';">' + escapeHtml(act.resultText) + '</div>';
+    }
+
+    liveActivityBody.innerHTML = html;
   }
 
   function refreshRollAvailability(){
@@ -1234,6 +1303,12 @@
     continueBtn.style.display = "none";
     choicesEl.innerHTML = "";
 
+    publishActivity({
+      pid: player.id, name: player.name, tileNum, kind:"interactive",
+      tag: modalEyebrow.textContent, prompt: q, sub: modalSub.textContent,
+      options: null, status:"pending"
+    });
+
     const btn = document.createElement("button");
     btn.className = "choice-btn";
     btn.textContent = "✓ Mình đã trả lời xong!";
@@ -1242,9 +1317,15 @@
       btn.classList.add("correct");
       resultLine.textContent = "✓ Giỏi lắm! Tiếp tục nào!";
       resultLine.className = "result-line ok";
+      publishActivity({
+        pid: player.id, name: player.name, tileNum, kind:"interactive",
+        tag: modalEyebrow.textContent, prompt: q, sub: modalSub.textContent,
+        options: null, status:"answered", isCorrect:true, resultText: "✓ Đã trả lời xong!"
+      });
       continueBtn.style.display = "inline-flex";
       continueBtn.onclick = ()=>{
         questionModal.classList.remove("open");
+        clearActivity();
         finishTurnAndSync(player.pos);
       };
     });
@@ -1265,6 +1346,12 @@
     resultLine.className = "result-line";
     continueBtn.style.display = "none";
     choicesEl.innerHTML = "";
+
+    publishActivity({
+      pid: player.id, name: player.name, tileNum: player.pos, kind:"mcq",
+      tag: modalEyebrow.textContent, prompt: currentQuestion.prompt, sub: modalSub.textContent,
+      options: currentQuestion.options, selected:null, correctText:null, status:"pending"
+    });
 
     currentQuestion.options.forEach(opt=>{
       const btn = document.createElement("button");
@@ -1333,6 +1420,12 @@
     continueBtn.style.display = "none";
     choicesEl.innerHTML = "";
 
+    publishActivity({
+      pid: player.id, name: player.name, tileNum, kind:"mcq",
+      tag: modalEyebrow.textContent, prompt: currentQuestion.prompt, sub: modalSub.textContent,
+      options: currentQuestion.options, selected:null, correctText:null, status:"pending"
+    });
+
     currentQuestion.options.forEach(opt=>{
       const btn = document.createElement("button");
       btn.className = "choice-btn";
@@ -1382,9 +1475,17 @@
     }
     if(note) resultLine.textContent += note;
 
+    publishActivity({
+      pid: player.id, name: player.name, tileNum, kind:"mcq",
+      tag: modalEyebrow.textContent, prompt: currentQuestion.prompt, sub: modalSub.textContent,
+      options: currentQuestion.options, selected, correctText: currentQuestion.correct,
+      status:"answered", isCorrect, resultText: resultLine.textContent
+    });
+
     continueBtn.style.display = "inline-flex";
     continueBtn.onclick = async ()=>{
       questionModal.classList.remove("open");
+      clearActivity();
       if(action && action.kind==="slide"){
         await slideToken(player, action.dest);
       } else if(action && action.kind==="step"){
@@ -1418,4 +1519,3 @@
 </script>
 </body>
 </html>
-
