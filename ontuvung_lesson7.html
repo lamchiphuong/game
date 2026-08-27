@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cuộc Đua Nhà Hàng — Trò Chơi Từ Vựng TOEIC</title>
+<title>Cuộc Đua Từ Vựng Nhà Hàng — Chơi Online</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -79,21 +79,12 @@
     box-shadow:var(--shadow-md);
   }
 
-  /* ---------- Setup screen ---------- */
-  #setup{ max-width:660px; margin:0 auto; padding:34px clamp(20px,4vw,46px); }
-  #setup h2{color:var(--pink-2); font-size:23px; margin-top:0;}
+  /* ---------- Setup / entry / lobby screens ---------- */
+  #screen-entry, #screen-lobby{ max-width:660px; margin:0 auto; padding:34px clamp(20px,4vw,46px); }
+  #screen-entry h2, #screen-lobby h2{color:var(--pink-2); font-size:23px; margin-top:0;}
   .field{margin-bottom:22px;}
   .field label{ display:block; font-size:12px; letter-spacing:1.5px; text-transform:uppercase;
     color:var(--lav); margin-bottom:9px; font-family:'Quicksand', sans-serif; font-weight:700; }
-  .count-stepper{display:flex; align-items:center; gap:16px;}
-  .count-stepper button{
-    width:40px;height:40px; border-radius:14px; border:2px solid var(--pink);
-    background:var(--pink-soft); color:var(--pink-2); font-size:19px; font-weight:700; cursor:pointer;
-    transition:background .15s, transform .1s;
-  }
-  .count-stepper button:hover{background:#C7E3FA; transform:translateY(-1px) scale(1.05);}
-  .count-stepper .count-value{ font-family:'Baloo 2', sans-serif; font-size:28px; color:var(--ink); min-width:34px; text-align:center; }
-  #nameFields{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   .name-row{
     display:flex; align-items:center; gap:10px;
     background:var(--cream); border:2px solid #FFEAD9;
@@ -121,6 +112,7 @@
     transition:border-color .15s, background .15s;
   }
   .ghost-btn:hover{border-color:var(--pink); background:var(--pink-soft);}
+
 
   /* ---------- Game layout ---------- */
   #game{ display:none; gap:26px; grid-template-columns:1fr 330px; align-items:start; }
@@ -266,34 +258,53 @@
   .winner-box p{color:var(--ink-soft); font-weight:600; margin-bottom:20px; font-size:14px;}
   .trophy{font-size:54px; margin-bottom:6px;}
 
-  @media (max-width:520px){ #nameFields{grid-template-columns:1fr;} }
+  @media (max-width:520px){ #screen-entry, #screen-lobby{padding:24px 18px;} }
 </style>
 </head>
 <body>
 
 <div class="wrap">
   <header class="site-header">
-    <span class="eyebrow">Vocabulary Review · Restaurant & Dining</span>
-    <h1>Cuộc Đua Nhà Hàng</h1>
-    <p>Lắc xúc xắc, băng qua 30 chặng đường, trèo thang và né rắn để trả lời đúng từ vựng nhà hàng (TOEIC) và về đích đầu tiên! Không cần đăng nhập — chỉ cần nhập tên là chơi ngay.</p>
+    <span class="eyebrow">Vocabulary Review · Online</span>
+    <h1>Cuộc Đua Từ Vựng Nhà Hàng</h1>
+    <p>Nhập tên, tạo hoặc vào một phòng chơi, rồi cùng bạn bè lắc xúc xắc, băng qua 30 chặng đường, trèo lên những cành cây và né chú rắn xanh để trả lời đúng từ vựng và về đích đầu tiên!</p>
   </header>
 
-  <!-- SETUP -->
-  <section id="setup" class="glass">
-    <h2>Thiết lập trò chơi</h2>
+  <!-- ENTRY: nhập tên + tạo/vào phòng -->
+  <section id="screen-entry" class="glass">
+    <h2>Vào phòng chơi</h2>
+    <p id="mqttStatusNote" style="color:var(--ink-soft);font-weight:600;font-size:13px;margin-top:-10px;">Đang kết nối máy chủ chơi online…</p>
     <div class="field">
-      <label>Số người chơi (2–10)</label>
-      <div class="count-stepper">
-        <button type="button" id="minus">−</button>
-        <div class="count-value" id="countVal">2</div>
-        <button type="button" id="plus">+</button>
+      <label>Tên của bạn</label>
+      <div class="name-row"><input type="text" id="entryName" placeholder="Nhập tên hiển thị..." maxlength="16"></div>
+    </div>
+    <button class="primary-btn" id="createRoomBtn">🎲 Tạo phòng mới</button>
+    <div style="text-align:center;margin:16px 0;color:var(--ink-soft);font-weight:700;font-size:12px;letter-spacing:1px;">— HOẶC —</div>
+    <div class="field">
+      <label>Mã phòng có sẵn</label>
+      <div class="name-row"><input type="text" id="joinCode" placeholder="VD: A7K2P" maxlength="6" style="text-transform:uppercase;"></div>
+    </div>
+    <button class="primary-btn" id="joinRoomBtn" style="background:linear-gradient(135deg, var(--mint), #0E8A6E);">🚪 Vào phòng</button>
+    <p id="entryError" style="color:var(--coral);font-weight:700;font-size:13px;margin-top:14px;min-height:18px;"></p>
+  </section>
+
+  <!-- LOBBY: phòng chờ -->
+  <section id="screen-lobby" class="glass" style="display:none;">
+    <h2>Phòng chờ</h2>
+    <div style="display:flex;align-items:center;gap:10px;background:var(--cream);border:2px solid #FFEAD9;border-radius:14px;padding:12px 16px;margin-bottom:20px;">
+      <div style="flex:1;">
+        <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--lav);font-weight:700;">Mã phòng — chia sẻ cho bạn bè</div>
+        <div class="display" id="roomCodeDisplay" style="font-size:26px;color:var(--pink-2);letter-spacing:3px;">—</div>
       </div>
+      <button class="ghost-btn" id="copyCodeBtn">Sao chép</button>
     </div>
     <div class="field">
-      <label>Tên người chơi (nhập tên để vào game — không cần đăng nhập)</label>
-      <div id="nameFields"></div>
+      <label>Người chơi đã vào phòng</label>
+      <div id="lobbyPlayers"></div>
     </div>
-    <button class="primary-btn" id="startBtn">Bắt đầu hành trình →</button>
+    <button class="primary-btn" id="startGameBtn" style="display:none;">Bắt đầu hành trình →</button>
+    <p id="lobbyWaitText" style="text-align:center;color:var(--ink-soft);font-weight:700;font-size:13px;"></p>
+    <button class="ghost-btn" id="leaveRoomBtn" style="width:100%;margin-top:12px;">← Rời phòng</button>
   </section>
 
   <!-- GAME -->
@@ -306,12 +317,13 @@
           <div class="token-layer" id="tokenLayer"></div>
         </div>
       </div>
-      <div class="lobby-label">🍽️ Điểm xuất phát — Nhà hàng</div>
+      <div class="lobby-label">🍽️ Điểm xuất phát tại nhà hàng</div>
     </div>
 
     <div class="side-panel">
       <div class="card glass">
         <h3>Lượt chơi</h3>
+        <p id="youAreText" style="font-size:12px;color:var(--ink-soft);font-weight:700;margin:-6px 0 10px;"></p>
         <div id="playersList"></div>
       </div>
       <div class="card glass dice-area">
@@ -325,7 +337,7 @@
         <div class="legend-row"><span class="legend-chip" style="background:var(--sage-soft);">🪜</span> Ô Trèo Cây — trả lời đúng để trèo lên chặng cao hơn</div>
         <div class="legend-row"><span class="legend-chip" style="background:var(--wine-soft);">🐍</span> Ô Rắn Xanh — trả lời sai sẽ bị rắn kéo xuống chặng thấp hơn</div>
         <div class="legend-row"><span class="legend-chip" style="background:var(--gold);">🏁</span> Ô Đích — về đích đầu tiên thắng cuộc</div>
-        <button class="ghost-btn" id="restartBtn" style="margin-top:8px;width:100%;">↺ Chơi lại từ đầu</button>
+        <button class="ghost-btn" id="restartBtn" style="margin-top:8px;width:100%;">↺ Chơi lại từ đầu (chủ phòng)</button>
       </div>
     </div>
   </section>
@@ -363,16 +375,154 @@
     <div class="trophy">🏆</div>
     <div class="modal-eyebrow">CHIẾN THẮNG</div>
     <h2 class="display" id="winnerName">—</h2>
-    <p>đã về đích đầu tiên trong cuộc đua nhà hàng &amp; từ vựng!</p>
-    <button class="primary-btn" id="playAgainBtn" style="width:auto;padding:12px 26px;">Chơi lại</button>
+    <p>đã về đích đầu tiên trong cuộc đua từ vựng nhà hàng!</p>
+    <button class="primary-btn" id="playAgainBtn" style="width:auto;padding:12px 26px;">Chơi lại (chủ phòng)</button>
   </div>
 </div>
 
+<script src="https://unpkg.com/mqtt@5.3.4/dist/mqtt.min.js"></script>
 <script>
 (function(){
   "use strict";
 
-  // ---------- Vocabulary data (Restaurant & Dining — TOEIC) ----------
+  const screenEntry  = document.getElementById("screen-entry");
+  const screenLobby  = document.getElementById("screen-lobby");
+  const gameSection  = document.getElementById("game");
+
+  // ================== KẾT NỐI ONLINE QUA MQTT (không cần server riêng) ==================
+  // Dùng chung cơ chế với ontuvung.html: broker công cộng broker.emqx.io qua WebSocket,
+  // mỗi phòng chơi có một "namespace" topic riêng (mã phòng ngẫu nhiên), dữ liệu phòng
+  // được publish dạng "retained" theo từng nhánh nhỏ (host / status / order / turnIndex /
+  // winnerId / players/{id} / pos/{id}) — client nào subscribe vào phòng sẽ nhận lại ngay
+  // giá trị mới nhất của từng nhánh mà không cần máy chủ dữ liệu riêng, không cần đăng ký,
+  // không cần cấu hình gì cả. Đây là broker test công cộng (miễn phí, không đăng nhập) nên
+  // phù hợp cho lớp học / nhóm bạn nhỏ, đừng dùng cho dữ liệu riêng tư quan trọng.
+  const TOPIC_PREFIX = "ranleothang-nhahang-vovi1/v1"; // tên "phòng gốc" gần như duy nhất
+  function roomBase(code){ return TOPIC_PREFIX + "/rooms/" + code; }
+
+  let mqttClient = null;
+  let mqttReady = false;
+  const mqttStatusNote = document.getElementById("mqttStatusNote");
+
+  function setMqttNote(text, ok){
+    if(!mqttStatusNote) return;
+    mqttStatusNote.textContent = text;
+    mqttStatusNote.style.color = ok ? "var(--mint)" : "var(--ink-soft)";
+  }
+
+  function whenMqttReady(cb){
+    if(mqttReady){ cb(); return; }
+    const t = setInterval(()=>{ if(mqttReady){ clearInterval(t); cb(); } }, 150);
+  }
+
+  function connectMqtt(){
+    if(typeof mqtt === "undefined"){
+      setMqttNote("Không tải được thư viện kết nối online — hãy kiểm tra lại kết nối mạng và tải lại trang.", false);
+      return;
+    }
+    mqttClient = mqtt.connect("wss://broker.emqx.io:8084/mqtt", {
+      clientId: "ranleothang_" + Math.random().toString(16).slice(2) + Date.now(),
+      reconnectPeriod: 2500,
+      connectTimeout: 8000,
+    });
+    mqttClient.on("connect", ()=>{
+      mqttReady = true;
+      setMqttNote("✓ Đã kết nối máy chủ chơi online.", true);
+      if(roomCode) mqttClient.subscribe(roomBase(roomCode) + "/#");
+    });
+    mqttClient.on("reconnect", ()=>{ mqttReady = false; setMqttNote("Đang kết nối lại máy chủ online…", false); });
+    mqttClient.on("close", ()=>{ mqttReady = false; });
+    mqttClient.on("message", (topic, payloadBuf)=>{
+      if(!roomCode) return;
+      const prefix = roomBase(roomCode) + "/";
+      if(topic.indexOf(prefix) !== 0) return;
+      applyRoomField(topic.slice(prefix.length), payloadBuf.toString());
+      scheduleRoomRender();
+    });
+  }
+  connectMqtt();
+
+  function publishRetained(sub, payload){
+    if(!mqttClient || !roomCode) return;
+    mqttClient.publish(roomBase(roomCode) + "/" + sub, payload, {retain:true, qos:0});
+  }
+
+  // Kiểm tra một mã phòng có tồn tại không + trạng thái hiện tại, bằng cách subscribe
+  // tạm thời vào các nhánh 1 cấp (host/status/order/...) và đợi broker trả lại các giá
+  // trị "retained" đã lưu (nếu phòng đó từng được tạo).
+  function probeRoom(code, timeoutMs){
+    return new Promise((resolve)=>{
+      if(!mqttClient){ resolve({host:null, status:null}); return; }
+      const base = roomBase(code);
+      const topic = base + "/+";
+      const found = {host:null, status:null};
+      function onMsg(t, buf){
+        if(t === base + "/host"){ try{ found.host = JSON.parse(buf.toString()); }catch(e){} }
+        if(t === base + "/status"){ found.status = buf.toString() || null; }
+      }
+      mqttClient.on("message", onMsg);
+      mqttClient.subscribe(topic, ()=>{
+        setTimeout(()=>{
+          mqttClient.removeListener("message", onMsg);
+          mqttClient.unsubscribe(topic);
+          resolve(found);
+        }, timeoutMs);
+      });
+    });
+  }
+
+  // ---------- Trạng thái phòng được dựng lại từ các thông điệp MQTT ----------
+  function emptyRoom(){
+    return { hostId:null, createdAt:null, status:null, order:null, turnIndex:0, winnerId:null, players:{}, pos:{} };
+  }
+
+  function applyRoomField(rest, raw){
+    if(!latestRoom) latestRoom = emptyRoom();
+    if(rest === "host"){
+      if(!raw){ latestRoom.hostId = null; return; }
+      try{ const d = JSON.parse(raw); latestRoom.hostId = d.hostId; latestRoom.createdAt = d.createdAt; }catch(e){}
+      return;
+    }
+    if(rest === "status"){ latestRoom.status = raw || null; return; }
+    if(rest === "order"){ try{ latestRoom.order = raw ? JSON.parse(raw) : null; }catch(e){ latestRoom.order = null; } return; }
+    if(rest === "turnIndex"){ latestRoom.turnIndex = raw ? Number(raw) : 0; return; }
+    if(rest === "winnerId"){ latestRoom.winnerId = raw || null; return; }
+    if(rest.indexOf("players/") === 0){
+      const pid = rest.slice("players/".length);
+      if(!raw){ delete latestRoom.players[pid]; }
+      else { try{ latestRoom.players[pid] = JSON.parse(raw); }catch(e){} }
+      return;
+    }
+    if(rest.indexOf("pos/") === 0){
+      const pid = rest.slice("pos/".length);
+      if(!raw){ delete latestRoom.pos[pid]; }
+      else { latestRoom.pos[pid] = Number(raw); }
+      return;
+    }
+  }
+
+  let roomRenderTimer = null;
+  function scheduleRoomRender(){
+    clearTimeout(roomRenderTimer);
+    roomRenderTimer = setTimeout(renderRoom, 120);
+  }
+
+  function renderRoom(){
+    const room = latestRoom;
+    if(!room || !room.status) return;
+    if(room.status === "lobby"){
+      screenLobby.style.display = "block";
+      gameSection.classList.remove("active");
+      renderLobby(room);
+    } else if(room.status === "playing" || room.status === "finished"){
+      if(!room.order || !room.order.length) return; // đợi dữ liệu phòng về đủ
+      screenLobby.style.display = "none";
+      if(!gameInitialized){ initGameUI(room); gameInitialized = true; }
+      applyRoomSnapshot(room);
+    }
+  }
+
+  // ---------- Vocabulary data (từ vựng chủ đề Nhà Hàng) ----------
   const VOCAB = [
     {en:"reservation", vi:"sự đặt chỗ trước"},
     {en:"appetizer", vi:"món khai vị"},
@@ -400,14 +550,11 @@
   const INTERACTIVE_QUESTIONS = [
     "How old are you?",
     "How are you?",
-    "What's your name?",
-    "Would you like a table for two?",
-    "What would you like to order?"
+    "What's your name?"
   ];
-  const INTERACTIVE_CHANCE = 0.3; // xác suất một chặng thường trở thành câu hỏi tương tác
+  const INTERACTIVE_CHANCE = 0.3;
 
   const TOTAL_TILES = 30;
-  // Real ladders (climb up on a correct answer) and snakes (slide down on a wrong answer)
   const CONNECTORS = [
     {type:"ladder", from:3,  to:14},
     {type:"ladder", from:8,  to:19},
@@ -424,69 +571,249 @@
   const PLAYER_ICONS  = ["🐵","🦁","🐯","🐼","🦊","🐰","🐨","🐸","🦉","🐢"];
 
   function pad(n){ return String(n).padStart(2,"0"); }
+  function wait(ms){ return new Promise(res=> setTimeout(res, ms)); }
 
-  // ---------- State ----------
-  let playerCount = 2;
-  let players = [];
-  let currentIndex = 0;
-  let rolling = false;
-
-  // ---------- Setup screen ----------
-  const countVal = document.getElementById("countVal");
-  const nameFields = document.getElementById("nameFields");
-
-  function renderNameFields(){
-    nameFields.innerHTML = "";
-    for(let i=0;i<playerCount;i++){
-      const row = document.createElement("div");
-      row.className = "name-row";
-      const sw = document.createElement("div");
-      sw.className = "token-preview";
-      sw.style.background = PLAYER_COLORS[i % PLAYER_COLORS.length];
-      sw.textContent = PLAYER_ICONS[i % PLAYER_ICONS.length];
-      const input = document.createElement("input");
-      input.type = "text";
-      input.placeholder = "Người chơi " + (i+1);
-      input.maxLength = 16;
-      input.id = "name-" + i;
-      row.appendChild(sw);
-      row.appendChild(input);
-      nameFields.appendChild(row);
-    }
+  // ================== SESSION / IDENTITY (không cần đăng nhập) ==================
+  function genId(){
+    if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "id-" + Math.random().toString(36).slice(2) + Date.now();
   }
-  renderNameFields();
+  function genRoomCode(){
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let s = "";
+    for(let i=0;i<5;i++) s += chars[Math.floor(Math.random()*chars.length)];
+    return s;
+  }
 
-  document.getElementById("minus").addEventListener("click", ()=>{
-    if(playerCount>2){ playerCount--; countVal.textContent = playerCount; renderNameFields(); }
-  });
-  document.getElementById("plus").addEventListener("click", ()=>{
-    if(playerCount<10){ playerCount++; countVal.textContent = playerCount; renderNameFields(); }
+  let myId = localStorage.getItem("vocabRaceMyId");
+  if(!myId){ myId = genId(); localStorage.setItem("vocabRaceMyId", myId); }
+  let myName = "";
+  let roomCode = "";
+  let gameInitialized = false;
+  let rolling = false;
+  let players = [];       // mảng người chơi dựng lại mỗi khi có cập nhật từ phòng
+  let currentIndex = 0;
+  let tokenEls = {};      // playerId -> DOM element của quân cờ
+  let latestRoom = null;
+
+  function saveSession(){ localStorage.setItem("vocabRaceSession", JSON.stringify({roomCode})); }
+  function clearSession(){ localStorage.removeItem("vocabRaceSession"); }
+
+  // ================== ENTRY SCREEN ==================
+  const entryNameInput = document.getElementById("entryName");
+  const joinCodeInput  = document.getElementById("joinCode");
+  const entryError     = document.getElementById("entryError");
+  const createRoomBtn  = document.getElementById("createRoomBtn");
+  const joinRoomBtn    = document.getElementById("joinRoomBtn");
+
+  createRoomBtn.addEventListener("click", ()=>{
+    const name = entryNameInput.value.trim();
+    if(!name){ entryError.textContent = "Vui lòng nhập tên của bạn."; return; }
+    if(!mqttReady){ entryError.textContent = "Đang kết nối máy chủ online, vui lòng thử lại sau giây lát."; return; }
+    entryError.textContent = "";
+    myName = name.slice(0,16);
+    roomCode = genRoomCode();
+    const createdAt = Date.now();
+    latestRoom = emptyRoom();
+    latestRoom.hostId = myId; latestRoom.createdAt = createdAt; latestRoom.status = "lobby";
+    latestRoom.players[myId] = {name: myName, joinedAt: createdAt};
+    mqttClient.subscribe(roomBase(roomCode) + "/#", ()=>{
+      publishRetained("host", JSON.stringify({hostId: myId, createdAt}));
+      publishRetained("status", "lobby");
+      publishRetained("players/" + myId, JSON.stringify({name: myName, joinedAt: createdAt}));
+      saveSession();
+      screenEntry.style.display = "none";
+      scheduleRoomRender();
+    });
   });
 
-  document.getElementById("startBtn").addEventListener("click", ()=>{
-    players = [];
-    for(let i=0;i<playerCount;i++){
-      const input = document.getElementById("name-"+i);
-      const name = (input.value.trim() || ("Người chơi " + (i+1))).slice(0,16);
-      players.push({name, color: PLAYER_COLORS[i % PLAYER_COLORS.length], icon: PLAYER_ICONS[i % PLAYER_ICONS.length], pos:0, id:i, el:null});
-    }
-    currentIndex = 0;
-    document.getElementById("setup").style.display = "none";
-    document.getElementById("game").classList.add("active");
+  joinRoomBtn.addEventListener("click", async ()=>{
+    const name = entryNameInput.value.trim();
+    const code = joinCodeInput.value.trim().toUpperCase();
+    if(!name){ entryError.textContent = "Vui lòng nhập tên của bạn."; return; }
+    if(!code){ entryError.textContent = "Vui lòng nhập mã phòng."; return; }
+    if(!mqttReady){ entryError.textContent = "Đang kết nối máy chủ online, vui lòng thử lại sau giây lát."; return; }
+    entryError.textContent = "";
+    joinRoomBtn.disabled = true;
+    const probe = await probeRoom(code, 1000);
+    joinRoomBtn.disabled = false;
+    if(!probe.host){ entryError.textContent = "Không tìm thấy phòng này."; return; }
+    if(probe.status && probe.status !== "lobby"){ entryError.textContent = "Phòng đã bắt đầu chơi, không thể vào lúc này."; return; }
+    myName = name.slice(0,16);
+    roomCode = code;
+    latestRoom = emptyRoom();
+    latestRoom.hostId = probe.host.hostId; latestRoom.createdAt = probe.host.createdAt; latestRoom.status = probe.status || "lobby";
+    mqttClient.subscribe(roomBase(roomCode) + "/#", ()=>{
+      publishRetained("players/" + myId, JSON.stringify({name: myName, joinedAt: Date.now()}));
+      saveSession();
+      screenEntry.style.display = "none";
+      scheduleRoomRender();
+    });
+  });
+
+  // Thử tự khôi phục phiên chơi trước đó nếu người dùng tải lại trang
+  (function tryRestoreSession(){
+    const raw = localStorage.getItem("vocabRaceSession");
+    if(!raw) return;
+    let s; try{ s = JSON.parse(raw); }catch(e){ return; }
+    if(!s.roomCode) return;
+    whenMqttReady(async ()=>{
+      const probe = await probeRoom(s.roomCode, 1200);
+      if(!probe.host){ clearSession(); return; }
+      roomCode = s.roomCode;
+      latestRoom = emptyRoom();
+      latestRoom.hostId = probe.host.hostId; latestRoom.createdAt = probe.host.createdAt; latestRoom.status = probe.status || "lobby";
+      mqttClient.subscribe(roomBase(roomCode) + "/#", ()=>{
+        setTimeout(()=>{
+          const p = latestRoom.players[myId];
+          if(!p){ clearSession(); roomCode = ""; return; }
+          myName = p.name;
+          screenEntry.style.display = "none";
+          scheduleRoomRender();
+        }, 700);
+      });
+    });
+  })();
+
+  // ================== LOBBY SCREEN ==================
+  const roomCodeDisplay = document.getElementById("roomCodeDisplay");
+  const lobbyPlayersEl  = document.getElementById("lobbyPlayers");
+  const startGameBtn    = document.getElementById("startGameBtn");
+  const lobbyWaitText   = document.getElementById("lobbyWaitText");
+
+  document.getElementById("copyCodeBtn").addEventListener("click", ()=>{
+    navigator.clipboard.writeText(roomCode).then(()=>{
+      const btn = document.getElementById("copyCodeBtn");
+      const old = btn.textContent; btn.textContent = "Đã sao chép!";
+      setTimeout(()=> btn.textContent = old, 1400);
+    });
+  });
+
+  document.getElementById("leaveRoomBtn").addEventListener("click", ()=>{
+    publishRetained("players/" + myId, "");
+    clearSession();
+    location.reload();
+  });
+
+  startGameBtn.addEventListener("click", ()=>{
+    if(!latestRoom || latestRoom.hostId !== myId) return;
+    const pids = Object.keys(latestRoom.players || {});
+    if(pids.length < 2){ alert("Cần ít nhất 2 người chơi trong phòng để bắt đầu."); return; }
+    const order = pids.slice().sort((a,b)=> (latestRoom.players[a].joinedAt||0) - (latestRoom.players[b].joinedAt||0));
+    order.forEach(pid=> publishRetained("pos/" + pid, "0"));
+    publishRetained("order", JSON.stringify(order));
+    publishRetained("turnIndex", "0");
+    publishRetained("winnerId", "");
+    publishRetained("status", "playing");
+  });
+
+  function renderLobby(room){
+    roomCodeDisplay.textContent = roomCode;
+    const pids = Object.keys(room.players||{}).sort((a,b)=> (room.players[a].joinedAt||0)-(room.players[b].joinedAt||0));
+    lobbyPlayersEl.innerHTML = "";
+    pids.forEach((pid,idx)=>{
+      const p = room.players[pid];
+      const row = document.createElement("div");
+      row.className = "player-row";
+      const dot = document.createElement("div");
+      dot.className = "player-token-mini";
+      dot.style.background = PLAYER_COLORS[idx % PLAYER_COLORS.length];
+      dot.textContent = PLAYER_ICONS[idx % PLAYER_ICONS.length];
+      const name = document.createElement("div");
+      name.className = "player-name";
+      name.textContent = p.name + (pid===myId ? " (Bạn)" : "") + (pid===room.hostId ? " · Chủ phòng" : "");
+      row.appendChild(dot); row.appendChild(name);
+      lobbyPlayersEl.appendChild(row);
+    });
+    const isHost = room.hostId === myId;
+    startGameBtn.style.display = isHost ? "inline-flex" : "none";
+    lobbyWaitText.textContent = isHost
+      ? (pids.length<2 ? "Cần thêm ít nhất " + (2-pids.length) + " người nữa để bắt đầu." : "")
+      : "Đang chờ chủ phòng bắt đầu trò chơi...";
+  }
+
+  // ================== GAME INITIALIZATION ==================
+  function initGameUI(room){
+    gameSection.classList.add("active");
     buildBoard();
-    createTokenElements();
+    createTokenElementsFor(room.order);
     drawConnectors();
-    layoutAllTokens(false);
+    window.addEventListener("resize", ()=>{ drawConnectors(); layoutAllTokens(false); });
+    document.getElementById("youAreText").textContent = "Bạn: " + myName;
+  }
+
+  function createTokenElementsFor(order){
+    tokenLayer.innerHTML = "";
+    tokenEls = {};
+    order.forEach((pid, idx)=>{
+      const el = document.createElement("div");
+      el.className = "token-marker";
+      const color = PLAYER_COLORS[idx % PLAYER_COLORS.length];
+      el.style.background = "radial-gradient(circle at 35% 30%, #fff2, transparent 40%), " + color;
+      el.textContent = PLAYER_ICONS[idx % PLAYER_ICONS.length];
+      tokenLayer.appendChild(el);
+      tokenEls[pid] = el;
+    });
+  }
+
+  function applyRoomSnapshot(room){
+    const order = room.order || [];
+    players = order.map((pid, idx)=>({
+      id: pid,
+      name: (room.players[pid] && room.players[pid].name) || "?",
+      color: PLAYER_COLORS[idx % PLAYER_COLORS.length],
+      icon: PLAYER_ICONS[idx % PLAYER_ICONS.length],
+      pos: (room.pos && room.pos[pid]) || 0,
+      el: tokenEls[pid]
+    }));
+    currentIndex = room.turnIndex || 0;
+    rolling = false;
     renderPlayers();
     updateTurnInfo();
-    window.addEventListener("resize", ()=>{ drawConnectors(); layoutAllTokens(false); });
-  });
+    layoutAllTokens(true);
+    refreshRollAvailability();
+
+    if(room.status === "finished" && room.winnerId){
+      const w = players.find(p=> p.id === room.winnerId);
+      if(w) showWinner(w);
+    } else {
+      winnerModal.classList.remove("open");
+    }
+  }
+
+  function refreshRollAvailability(){
+    const active = players[currentIndex];
+    const myTurn = !!active && active.id === myId;
+    rollBtn.disabled = !myTurn || rolling;
+    rollBtn.textContent = myTurn ? "Lắc xúc xắc" : "Chờ đến lượt...";
+  }
+
+  function finishTurnAndSync(finalPos){
+    const order = latestRoom.order;
+    publishRetained("pos/" + myId, String(finalPos));
+    if(finalPos >= TOTAL_TILES){
+      publishRetained("winnerId", myId);
+      publishRetained("status", "finished");
+    } else {
+      publishRetained("turnIndex", String((currentIndex + 1) % order.length));
+    }
+  }
+
+  function hostReset(){
+    if(!latestRoom || latestRoom.hostId !== myId){ alert("Chỉ chủ phòng mới có thể bắt đầu ván mới."); return; }
+    const order = latestRoom.order;
+    order.forEach(pid=> publishRetained("pos/" + pid, "0"));
+    publishRetained("winnerId", "");
+    publishRetained("turnIndex", "0");
+    publishRetained("status", "playing");
+  }
+
 
   // ---------- Board building ----------
-  const boardEl = document.getElementById("board");
-  const boardStage = document.getElementById("boardStage");
-  const svgEl = document.getElementById("connectorSvg");
-  const tokenLayer = document.getElementById("tokenLayer");
+  const boardEl   = document.getElementById("board");
+  const boardStage= document.getElementById("boardStage");
+  const svgEl     = document.getElementById("connectorSvg");
+  const tokenLayer= document.getElementById("tokenLayer");
 
   function connectorFrom(n, type){
     return CONNECTORS.find(c => c.from === n && c.type === type) || null;
@@ -537,7 +864,7 @@
       if(type==="finish"){
         const wordEl = document.createElement("div");
         wordEl.className = "tile-word";
-        wordEl.textContent = "ĐÍCH — Vương Quốc Từ Vựng";
+        wordEl.textContent = "ĐÍCH — Nhà Hàng Từ Vựng";
         tile.appendChild(wordEl);
       }
 
@@ -623,20 +950,6 @@
     return s;
   }
 
-  // ---------- Player tokens ----------
-  function createTokenElements(){
-    tokenLayer.innerHTML = "";
-    players.forEach(p=>{
-      const el = document.createElement("div");
-      el.className = "token-marker";
-      el.style.background = "radial-gradient(circle at 35% 30%, #fff2, transparent 40%), " + p.color;
-      el.textContent = p.icon;
-      el.title = p.name;
-      tokenLayer.appendChild(el);
-      p.el = el;
-    });
-  }
-
   function lobbyAnchor(){
     const t1 = tileCenter(1);
     const stageRect = boardStage.getBoundingClientRect();
@@ -652,6 +965,7 @@
       const center = pos === 0 ? lobbyAnchor() : tileCenter(pos);
       const n = group.length;
       group.forEach((p, idx)=>{
+        if(!p.el) return;
         let ox=0, oy=0;
         if(n>1){
           const angle = (idx/n) * Math.PI*2;
@@ -671,6 +985,7 @@
   }
 
   function bounceToken(player){
+    if(!player.el) return;
     player.el.classList.remove("hop");
     void player.el.offsetWidth;
     player.el.classList.add("hop");
@@ -689,7 +1004,7 @@
       dot.textContent = p.icon;
       const name = document.createElement("div");
       name.className = "player-name";
-      name.textContent = p.name;
+      name.textContent = p.name + (p.id===myId ? " (Bạn)" : "");
       const pos = document.createElement("div");
       pos.className = "player-pos mono";
       pos.textContent = p.pos===0 ? "Khởi đầu" : ("#"+pad(p.pos));
@@ -699,6 +1014,7 @@
   }
 
   function updateTurnInfo(msg){
+    if(!players[currentIndex]) return;
     document.getElementById("turnInfo").textContent = msg || ("Đến lượt: " + players[currentIndex].name);
   }
 
@@ -725,40 +1041,34 @@
   showFace(1);
 
   // ---------- Weighted dice roll ----------
-  // Vẫn là random (Math.random), chỉ chỉnh TỈ LỆ để:
-  //  - Khó ra đúng số bước cần thiết để về đích hơn
-  //  - Khó rơi trúng ô thang (ô "may mắn") hơn
-  const FINISH_EXACT_WEIGHT = 0.35; // hệ số giảm khi mặt xúc xắc = đúng số bước còn lại để về đích
-  const LUCKY_TILE_WEIGHT   = 0.4;  // hệ số giảm khi mặt xúc xắc đưa người chơi đáp thẳng vào ô thang
+  const FINISH_EXACT_WEIGHT = 0.35;
+  const LUCKY_TILE_WEIGHT   = 0.4;
 
   function rollWeightedDice(player){
     const remaining = TOTAL_TILES - player.pos;
-    const weights = [1,1,1,1,1,1]; // trọng số ban đầu cho mặt 1..6, đều nhau
-
-    // Giảm trọng số của mặt xúc xắc trùng đúng số bước còn lại để về đích
+    const weights = [1,1,1,1,1,1];
     if(remaining >= 1 && remaining <= 6){
       weights[remaining-1] *= FINISH_EXACT_WEIGHT;
     }
-
-    // Giảm trọng số của mặt xúc xắc khiến người chơi đáp thẳng vào ô thang (ô may mắn)
     for(let v=1; v<=6; v++){
       const dest = player.pos + v;
       if(dest <= TOTAL_TILES && connectorFrom(dest, "ladder")){
         weights[v-1] *= LUCKY_TILE_WEIGHT;
       }
     }
-
     const total = weights.reduce((a,b)=>a+b, 0);
     let r = Math.random() * total;
     for(let i=0;i<6;i++){
       if(r < weights[i]) return i+1;
       r -= weights[i];
     }
-    return 6; // dự phòng, tránh lỗi làm tròn số thực
+    return 6;
   }
 
   rollBtn.addEventListener("click", ()=>{
     if(rolling) return;
+    const active = players[currentIndex];
+    if(!active || active.id !== myId) return;
     rolling = true;
     rollBtn.disabled = true;
     dieCube.classList.add("rolling");
@@ -770,7 +1080,7 @@
       if(ticks>=maxTicks){
         clearInterval(interval);
         dieCube.classList.remove("rolling");
-        const finalValue = rollWeightedDice(players[currentIndex]);
+        const finalValue = rollWeightedDice(active);
         showFace(finalValue);
         movePlayer(finalValue);
       }
@@ -778,8 +1088,6 @@
   });
 
   // ---------- Movement ----------
-  function wait(ms){ return new Promise(res=> setTimeout(res, ms)); }
-
   async function movePlayer(steps){
     const player = players[currentIndex];
     const remaining = TOTAL_TILES - player.pos;
@@ -790,7 +1098,7 @@
       return;
     }
 
-    const startPos = player.pos; // vị trí trước khi lắc xí ngầu — dùng để lùi về nếu trả lời sai
+    const startPos = player.pos;
     updateTurnInfo(player.name + " lắc được " + steps + " — đang di chuyển...");
     const target = player.pos + steps;
 
@@ -804,20 +1112,19 @@
 
     if(player.pos >= TOTAL_TILES){
       await wait(200);
-      showWinner(player);
+      finishTurnAndSync(player.pos);
       return;
     }
 
     const type = tileType(player.pos);
 
     if(type === "snake"){
-      // Ô rắn (ô lùi): tự động trượt xuống ngay, không cần trả lời câu hỏi
       const c = connectorFrom(player.pos, "snake");
       await wait(300);
       updateTurnInfo(player.name + " gặp rắn xanh, bị kéo tuột xuống chặng #" + pad(c.to) + "!");
       await wait(350);
       await slideToken(player, c.to);
-      nextTurn();
+      finishTurnAndSync(player.pos);
       return;
     }
 
@@ -829,7 +1136,7 @@
     }
   }
 
-  // ---------- Overshoot notice (must roll the exact remaining steps to finish) ----------
+  // ---------- Overshoot notice ----------
   const overshootModal = document.getElementById("overshootModal");
   const overshootText = document.getElementById("overshootText");
   const overshootContinueBtn = document.getElementById("overshootContinueBtn");
@@ -867,8 +1174,7 @@
       continueBtn.style.display = "inline-flex";
       continueBtn.onclick = ()=>{
         questionModal.classList.remove("open");
-        if(player.pos >= TOTAL_TILES){ showWinner(player); return; }
-        nextTurn();
+        finishTurnAndSync(player.pos);
       };
     });
     choicesEl.appendChild(btn);
@@ -901,11 +1207,11 @@
   }
 
   async function slideToken(player, destPos){
-    player.el.classList.add("slide");
+    if(player.el) player.el.classList.add("slide");
     player.pos = destPos;
     layoutAllTokens(true);
     await wait(650);
-    player.el.classList.remove("slide");
+    if(player.el) player.el.classList.remove("slide");
     renderPlayers();
   }
 
@@ -926,8 +1232,7 @@
   }
 
   let lastWordIdx = -1;
-  function buildQuestion(tileNum){
-    // Pick a random vocab word each time (avoid repeating the immediately previous one)
+  function buildQuestion(){
     let wordIdx;
     do{ wordIdx = Math.floor(Math.random()*VOCAB.length); } while(VOCAB.length>1 && wordIdx===lastWordIdx);
     lastWordIdx = wordIdx;
@@ -943,7 +1248,7 @@
   let currentQuestion = null;
 
   function openQuestion(tileNum, type, player, startPos){
-    currentQuestion = buildQuestion(tileNum);
+    currentQuestion = buildQuestion();
     modalBox.classList.remove("wrong-border");
     let tagText = "";
     if(type==="ladder") tagText = " · 🪜 Ô TRÈO CÂY";
@@ -978,7 +1283,7 @@
       else if(b === btnEl && !isCorrect) b.classList.add("wrong");
     });
 
-    let action = null; // {kind:'slide', dest} or {kind:'step', delta}
+    let action = null;
     let note = "";
 
     if(isCorrect){
@@ -992,17 +1297,14 @@
         action = {kind:"step", delta:+1};
         note = " Tiến thêm 1 chặng — sắp tới đích rồi!";
       }
-      // type === "normal": trả lời đúng thì được đứng nguyên ở ô vừa tới, không cần làm gì thêm
     } else {
       modalBox.classList.add("wrong-border");
       resultLine.textContent = "✗ Chưa đúng. Đáp án: " + currentQuestion.correct;
       resultLine.className = "result-line bad";
       if(type==="overshoot"){
-        // Overshoot: người chơi chưa hề di chuyển khỏi vị trí hiện tại, nên trả lời sai thì đứng yên
         action = null;
         note = " Bạn giữ nguyên vị trí hiện tại.";
       } else {
-        // normal / ladder: trả lời sai -> lùi về đúng vị trí trước khi lắc xí ngầu
         action = {kind:"slide", dest:startPos};
         note = " Lùi về lại chặng #" + pad(startPos) + " (vị trí trước khi lắc xí ngầu).";
       }
@@ -1018,17 +1320,8 @@
         const np = Math.max(0, player.pos + action.delta);
         await slideToken(player, np);
       }
-      if(player.pos >= TOTAL_TILES){ showWinner(player); return; }
-      nextTurn();
+      finishTurnAndSync(player.pos);
     };
-  }
-
-  function nextTurn(){
-    currentIndex = (currentIndex + 1) % players.length;
-    renderPlayers();
-    updateTurnInfo();
-    rolling = false;
-    rollBtn.disabled = false;
   }
 
   // ---------- Winner ----------
@@ -1044,22 +1337,11 @@
 
   document.getElementById("playAgainBtn").addEventListener("click", ()=>{
     winnerModal.classList.remove("open");
-    resetGame();
+    hostReset();
   });
   document.getElementById("restartBtn").addEventListener("click", ()=>{
-    if(confirm("Chơi lại từ đầu? Tiến trình hiện tại sẽ mất.")) resetGame();
+    if(confirm("Chơi lại từ đầu? Tiến trình hiện tại sẽ mất.")) hostReset();
   });
-
-  function resetGame(){
-    players.forEach(p=> p.pos = 0);
-    currentIndex = 0;
-    rolling = false;
-    rollBtn.disabled = false;
-    showFace(1);
-    layoutAllTokens(false);
-    renderPlayers();
-    updateTurnInfo();
-  }
 
 })();
 </script>
