@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Trạm Ôn Luyện</title>
+
+<link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3406/3406838.png">
+<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3406/3406838.png">
+
+<meta property="og:title" content="Trạm Ôn Luyện">
+<meta property="og:description" content="Ôn Đọc - Viết và Nghe lớp S3">
+<meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/3406/3406838.png">
+<meta property="og:type" content="website">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Trạm Ôn Luyện">
+<meta name="twitter:description" content="Ôn Đọc - Viết và Nghe tiếng Anh - Lớp Starters 3">
+<meta name="twitter:image" content="https://cdn-icons-png.flaticon.com/512/3406/3406838.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EAF5FF;
+    --ink:#1C3A5E;
+    --ink-soft:#5A7B9C;
+    --card:#FFFFFF;
+    --line: rgba(28,58,94,0.12);
+    --reading:#2E86EB;
+    --reading-bg:#DCEDFF;
+    --reading-deep:#1C63B8;
+    --listening:#1EA6A0;
+    --listening-bg:#D7F3EF;
+    --listening-deep:#137A75;
+    --sun:#FFC53D;
+    --sun-bg:#FFF2D2;
+    --sun-deep:#8A5800;
+    --coral:#FF7A66;
+    --coral-bg:#FFE1DA;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Quicksand', sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    min-height:100vh;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .shell{
+    max-width:520px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 20px 10px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .brand-icon{width:30px;height:30px;flex-shrink:0;}
+  .brand-mark{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:21px;
+    letter-spacing:-0.01em;
+    color:var(--reading-deep);
+  }
+  .back-btn{
+    display:none;
+    align-items:center;
+    gap:6px;
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-size:15px;
+    font-weight:600;
+    color:var(--ink);
+    padding:8px 10px 8px 4px;
+    cursor:pointer;
+  }
+  .back-btn svg{width:18px;height:18px;}
+  .view[data-view]:not([data-view="hub"]) ~ .topbar .back-btn,
+  body.view-detail .back-btn{display:inline-flex;}
+
+  /* ---------- views ---------- */
+  .view{
+    display:none;
+    flex:1;
+    flex-direction:column;
+    padding:4px 20px 100px;
+  }
+  .view.active{display:flex;}
+
+  /* ---------- hub ---------- */
+  .hub-intro{margin:6px 0 26px; text-align:center;}
+  .mascot{width:120px;height:100px;margin:0 auto 10px;display:block;}
+  .hub-intro h1{
+    font-family:'Baloo 2', sans-serif;
+    font-size:26px;
+    font-weight:700;
+    line-height:1.3;
+    margin:0 0 10px;
+    letter-spacing:-0.01em;
+    color:var(--reading-deep);
+  }
+  .hub-intro p{
+    margin:0 auto;
+    font-size:15px;
+    font-weight:500;
+    color:var(--ink-soft);
+    line-height:1.55;
+    max-width:32ch;
+  }
+
+  .skill-card{
+    background:var(--card);
+    border:2px solid var(--line);
+    border-radius:28px;
+    padding:22px;
+    margin-bottom:18px;
+    cursor:pointer;
+    text-align:left;
+    width:100%;
+    font-family:inherit;
+    display:block;
+    box-shadow:0 10px 0 -4px var(--line);
+  }
+  .skill-card.reading{box-shadow:0 10px 0 -4px var(--reading-bg); border-color:var(--reading-bg);}
+  .skill-card.listening{box-shadow:0 10px 0 -4px var(--listening-bg); border-color:var(--listening-bg);}
+  .skill-card .row-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:14px;
+  }
+  .skill-icon{
+    width:52px;height:52px;
+    border-radius:38% 62% 55% 45% / 45% 40% 60% 55%;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .skill-icon svg{width:26px;height:26px;}
+  .skill-card.reading .skill-icon{background:var(--reading-bg);color:var(--reading);}
+  .skill-card.listening .skill-icon{background:var(--listening-bg);color:var(--listening);}
+  .skill-tag{
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--sun-deep);
+    background:var(--sun);
+    padding:5px 12px;
+    border-radius:100px;
+    white-space:nowrap;
+  }
+  .skill-card h2{
+    font-family:'Baloo 2', sans-serif;
+    font-size:21px;
+    font-weight:700;
+    margin:0 0 6px;
+  }
+  .skill-card p{
+    margin:0 0 16px;
+    font-size:14px;
+    font-weight:500;
+    color:var(--ink-soft);
+    line-height:1.5;
+  }
+  .skill-cta{
+    font-size:14.5px;
+    font-weight:700;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .skill-card.reading .skill-cta{color:var(--reading);}
+  .skill-card.listening .skill-cta{color:var(--listening);}
+
+  /* ---------- activity view ---------- */
+  .activity-head{
+    padding:6px 0 16px;
+  }
+  .activity-head .kicker{
+    font-size:13px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .activity-head.reading .kicker{color:var(--reading);}
+  .activity-head.listening .kicker{color:var(--listening);}
+  .activity-head h2{
+    font-family:'Baloo 2', sans-serif;
+    font-size:24px;
+    font-weight:700;
+    margin:0;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+
+  .steps{
+    display:flex;
+    gap:8px;
+    margin:14px 0 4px;
+  }
+  .step-dot{
+    flex:1;
+    height:8px;
+    border-radius:100px;
+    background:var(--listening-bg);
+  }
+  .step-dot.done{background:var(--listening);}
+  .step-dot.now{background:var(--listening);opacity:0.5;}
+
+  .frame-wrap{
+    border-radius:26px;
+    overflow:hidden;
+    border:2px solid var(--line);
+    background:var(--card);
+    margin:16px 0 14px;
+    flex:1;
+    min-height:420px;
+    display:flex;
+    flex-direction:column;
+  }
+  .frame-wrap iframe{
+    width:100%;
+    flex:1;
+    border:none;
+    min-height:420px;
+  }
+
+  .launch-card{
+    border-radius:26px;
+    border:2px solid var(--line);
+    background:var(--card);
+    margin:16px 0 14px;
+    padding:30px 24px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+  }
+  .launch-card p{
+    margin:0;
+    font-size:14.5px;
+    font-weight:500;
+    color:var(--ink-soft);
+    line-height:1.6;
+    text-align:center;
+  }
+
+  .primary-btn{
+    border:none;
+    border-radius:14px;
+    padding:16px 18px;
+    font-family:'Baloo 2', sans-serif;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    width:100%;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:transform .08s ease, box-shadow .08s ease;
+  }
+  .primary-btn.reading{background:var(--reading); box-shadow:0 5px 0 var(--reading-deep);}
+  .primary-btn.listening{background:var(--listening); box-shadow:0 5px 0 var(--listening-deep);}
+  .primary-btn:active{transform:translateY(3px); box-shadow:0 2px 0 var(--reading-deep);}
+  .primary-btn.listening:active{box-shadow:0 2px 0 var(--listening-deep);}
+
+  .secondary-btn{
+    border:2px solid var(--line);
+    background:var(--card);
+    border-radius:14px;
+    padding:13px 18px;
+    font-family:'Quicksand', sans-serif;
+    font-size:15px;
+    font-weight:700;
+    color:var(--ink-soft);
+    cursor:pointer;
+    width:100%;
+    margin-top:10px;
+  }
+
+  /* ---------- floating skill switcher ---------- */
+  .switcher-fab{
+    position:fixed;
+    left:50%;
+    bottom:22px;
+    transform:translateX(-50%);
+    max-width:480px;
+    width:calc(100% - 40px);
+    background:var(--reading);
+    color:#fff;
+    border:none;
+    border-radius:100px;
+    padding:16px 20px;
+    font-family:'Baloo 2', sans-serif;
+    font-size:15.5px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    cursor:pointer;
+    z-index:40;
+    box-shadow:0 5px 0 var(--reading-deep);
+    transition:transform .08s ease, box-shadow .08s ease;
+  }
+  .switcher-fab:active{transform:translateX(-50%) translateY(3px); box-shadow:0 2px 0 var(--reading-deep);}
+  .switcher-fab svg{width:18px;height:18px;flex-shrink:0;}
+
+  /* ---------- sheets / modals ---------- */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(20,24,17,0.45);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:60;
+  }
+  .overlay.show{display:flex;}
+  .sheet{
+    background:var(--card);
+    width:100%;
+    max-width:520px;
+    border-radius:24px 24px 0 0;
+    padding:10px 20px 28px;
+  }
+  .sheet-grip{
+    width:36px;height:4px;
+    background:var(--line);
+    border-radius:100px;
+    margin:8px auto 18px;
+  }
+  .sheet h3{
+    font-family:'Baloo 2', sans-serif;
+    font-size:19px;
+    font-weight:700;
+    margin:0 0 14px;
+    color:var(--reading-deep);
+  }
+  .sheet-option{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:14px;
+    font-family:'Quicksand', sans-serif;
+    font-size:15px;
+    font-weight:700;
+    color:var(--ink);
+    margin-bottom:10px;
+    cursor:pointer;
+  }
+  .sheet-option .dot{
+    width:10px;height:10px;
+    border-radius:50%;
+    background:var(--line);
+    flex-shrink:0;
+  }
+  .sheet-option.active{border-color:var(--reading);}
+  .sheet-option.active .dot{background:var(--reading);}
+  .sheet-option .sub{
+    display:block;
+    font-size:12.5px;
+    font-weight:500;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
+
+  .modal{
+    position:fixed;
+    inset:0;
+    background:rgba(28,58,94,0.45);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:70;
+    padding:24px;
+  }
+  .modal.show{display:flex;}
+  .modal-card{
+    background:var(--card);
+    border-radius:28px;
+    padding:28px 24px 24px;
+    max-width:400px;
+    width:100%;
+    text-align:center;
+  }
+  .modal-badge{
+    width:58px;height:58px;
+    border-radius:50%;
+    background:var(--sun);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 14px;
+  }
+  .modal-badge svg{width:28px;height:28px;}
+  .modal-card h3{
+    font-family:'Baloo 2', sans-serif;
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 8px;
+    color:var(--ink);
+  }
+  .modal-card p{
+    font-size:14.5px;
+    font-weight:500;
+    color:var(--ink-soft);
+    line-height:1.55;
+    margin:0 0 20px;
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <button class="back-btn" id="backBtn" aria-label="Quay lại trang chính">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Trang chính
+    </button>
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="19" fill="#DCEDFF" stroke="#2E86EB" stroke-width="2"/>
+        <circle cx="14.5" cy="18" r="2.3" fill="#1C63B8"/>
+        <circle cx="25.5" cy="18" r="2.3" fill="#1C63B8"/>
+        <path d="M13 25c2 2.5 12 2.5 14 0" stroke="#1C63B8" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-mark">Trạm Ôn Luyện</span>
+    </div>
+  </div>
+
+  <!-- HUB -->
+  <section class="view active" data-view="hub">
+    <div class="hub-intro">
+      <svg class="mascot" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="60" cy="80" rx="46" ry="8" fill="#D3ECFF"/>
+        <path d="M25 55c-9 0-16-7-16-15s7-15 16-15c2-11 12-19 24-19 11 0 20 7 23 17 10 1 17 9 17 18 0 10-8 18-18 18H25z" fill="#2E86EB"/>
+        <circle cx="46" cy="46" r="5" fill="#fff"/>
+        <circle cx="70" cy="46" r="5" fill="#fff"/>
+        <circle cx="47.5" cy="47" r="2.4" fill="#1C3A5E"/>
+        <circle cx="71.5" cy="47" r="2.4" fill="#1C3A5E"/>
+        <path d="M50 58c4 4 12 4 16 0" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+        <path d="M14 30l4 4M100 28l-4 4" stroke="#FFC53D" stroke-width="3" stroke-linecap="round"/>
+        <path d="M96 20l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#FFC53D"/>
+      </svg>
+      <h1>Ôn tiếng Anh theo từng phần, không rối.</h1>
+      <p>Chọn một kỹ năng để bắt đầu. Bạn có thể đổi kỹ năng bất cứ lúc nào trong lúc làm bài.</p>
+    </div>
+
+    <button class="skill-card reading" data-goto="reading">
+      <div class="row-top">
+        <div class="skill-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <span class="skill-tag">1 bài</span>
+      </div>
+      <h2>Đọc &ndash; Viết</h2>
+      <p>Làm bài trên Wayground. Có thể trả lời trực tiếp trong trang này.</p>
+      <span class="skill-cta">Bắt đầu</span>
+    </button>
+
+    <button class="skill-card listening" data-goto="listening1">
+      <div class="row-top">
+        <div class="skill-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+        </div>
+        <span class="skill-tag">2 phần</span>
+      </div>
+      <h2>Nghe</h2>
+      <p>Hai bài trên Wordwall, làm nối tiếp nhau &ndash; xong phần 1 sẽ được mời sang phần 2.</p>
+      <span class="skill-cta">Bắt đầu</span>
+    </button>
+  </section>
+
+  <!-- READING -->
+  <section class="view" data-view="reading">
+    <div class="activity-head reading">
+      <p class="kicker">Đọc &ndash; Viết</p>
+      <h2>Bài trên Wayground</h2>
+    </div>
+    <div class="frame-wrap">
+      <iframe src="https://wayground.com/join?gc=16527749" title="Bài Đọc - Viết trên Wayground" allow="clipboard-write"></iframe>
+    </div>
+  </section>
+
+  <!-- LISTENING PART 1 -->
+  <section class="view" data-view="listening1">
+    <div class="activity-head listening">
+      <p class="kicker">Nghe &middot; Phần 1 trên 2</p>
+      <h2>Phần 1</h2>
+    </div>
+    <div class="steps">
+      <div class="step-dot now"></div>
+      <div class="step-dot"></div>
+    </div>
+    <div class="launch-card listening">
+      <p>Bấm nút bên dưới để sang trang làm bài. Làm xong, bấm nút Back của trình duyệt (hoặc vuốt lùi) để tự động quay lại đây.</p>
+      <button class="primary-btn listening" data-launch="listening1">Mở bài phần 1</button>
+    </div>
+    <button class="secondary-btn" id="finishPart1">
+      Đã nộp bài &ndash; sang phần 2
+    </button>
+  </section>
+
+  <!-- LISTENING PART 2 -->
+  <section class="view" data-view="listening2">
+    <div class="activity-head listening">
+      <p class="kicker">Nghe &middot; Phần 2 trên 2</p>
+      <h2>Phần 2</h2>
+    </div>
+    <div class="steps">
+      <div class="step-dot done"></div>
+      <div class="step-dot now"></div>
+    </div>
+    <div class="launch-card listening">
+      <p>Bấm nút bên dưới để sang trang làm bài. Làm xong, bấm nút Back của trình duyệt (hoặc vuốt lùi) để tự động quay lại đây.</p>
+      <button class="primary-btn listening" data-launch="listening2">Mở bài phần 2</button>
+    </div>
+    <button class="secondary-btn" id="finishPart2">
+      Đã nộp bài &ndash; hoàn thành
+    </button>
+  </section>
+
+  <button class="switcher-fab" id="switcherFab">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3L4 7l4 4"/><path d="M4 7h11a4 4 0 0 1 4 4v1"/><path d="M16 21l4-4-4-4"/><path d="M20 17H9a4 4 0 0 1-4-4v-1"/></svg>
+    Chọn kỹ năng
+  </button>
+
+  <!-- SKILL SWITCH SHEET -->
+  <div class="overlay" id="switchOverlay">
+    <div class="sheet">
+      <div class="sheet-grip"></div>
+      <h3>Chuyển kỹ năng</h3>
+      <button class="sheet-option" data-goto="reading">
+        <span class="dot"></span>
+        <span>Đọc &ndash; Viết<span class="sub">Bài trên Wayground</span></span>
+      </button>
+      <button class="sheet-option" data-goto="listening1">
+        <span class="dot"></span>
+        <span>Nghe &ndash; Phần 1<span class="sub">Wordwall, phần 1 trên 2</span></span>
+      </button>
+      <button class="sheet-option" data-goto="listening2">
+        <span class="dot"></span>
+        <span>Nghe &ndash; Phần 2<span class="sub">Wordwall, phần 2 trên 2</span></span>
+      </button>
+      <button class="sheet-option" data-goto="hub" style="margin-bottom:0;">
+        <span class="dot"></span>
+        <span>Trang chính<span class="sub">Xem cả hai kỹ năng</span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTINUE MODAL (part1 -> part2) -->
+  <div class="modal" id="continueModal">
+    <div class="modal-card">
+      <div class="modal-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h3>Xong phần 1</h3>
+      <p>Sẵn sàng chuyển sang phần 2 của bài nghe chưa?</p>
+      <button class="primary-btn listening" id="goPart2">Sang phần 2</button>
+      <button class="secondary-btn" id="stayPart1">Ở lại phần 1</button>
+    </div>
+  </div>
+
+  <!-- DONE MODAL (part2 finished) -->
+  <div class="modal" id="doneModal">
+    <div class="modal-card">
+      <div class="modal-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h3>Hoàn thành phần nghe</h3>
+      <p>Bạn đã làm xong cả 2 phần. Muốn ôn tiếp Đọc &ndash; Viết hay quay lại trang chính?</p>
+      <button class="primary-btn reading" id="goReadingFromDone">Sang Đọc &ndash; Viết</button>
+      <button class="secondary-btn" id="goHubFromDone">Về trang chính</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  var views = document.querySelectorAll('.view');
+  var backBtn = document.getElementById('backBtn');
+
+  var LINKS = {
+    reading: 'https://wayground.com/join?gc=16527749',
+    listening1: 'https://wordwall.net/play/118133/079/283?wwmethod=link',
+    listening2: 'https://wordwall.net/play/118133/805/943?wwmethod=link'
+  };
+
+  function showView(name){
+    views.forEach(function(v){
+      v.classList.toggle('active', v.getAttribute('data-view') === name);
+    });
+    backBtn.style.display = (name === 'hub') ? 'none' : 'inline-flex';
+    closeSwitcher();
+    window.scrollTo(0,0);
+  }
+
+  document.querySelectorAll('[data-goto]').forEach(function(el){
+    el.addEventListener('click', function(){
+      sessionStorage.removeItem('lastActivity');
+      showView(el.getAttribute('data-goto'));
+    });
+  });
+
+  document.querySelectorAll('[data-launch]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var name = el.getAttribute('data-launch');
+      sessionStorage.setItem('lastActivity', name);
+      window.location.href = LINKS[name];
+    });
+  });
+
+  backBtn.addEventListener('click', function(){
+    sessionStorage.removeItem('lastActivity');
+    showView('hub');
+  });
+
+  // Khi quay lại bằng nút Back của trình duyệt (kể cả từ bfcache),
+  // tự động hiện đúng màn hình đang làm dở.
+  window.addEventListener('pageshow', function(){
+    var last = sessionStorage.getItem('lastActivity');
+    if(last && LINKS[last]){
+      showView(last);
+    }
+  });
+
+  // switcher sheet
+  var switchOverlay = document.getElementById('switchOverlay');
+  document.getElementById('switcherFab').addEventListener('click', function(){
+    switchOverlay.classList.add('show');
+  });
+  switchOverlay.addEventListener('click', function(e){
+    if(e.target === switchOverlay) closeSwitcher();
+  });
+  function closeSwitcher(){ switchOverlay.classList.remove('show'); }
+
+  // continue modal (part 1 -> part 2)
+  var continueModal = document.getElementById('continueModal');
+  document.getElementById('finishPart1').addEventListener('click', function(){
+    continueModal.classList.add('show');
+  });
+  document.getElementById('goPart2').addEventListener('click', function(){
+    sessionStorage.removeItem('lastActivity');
+    continueModal.classList.remove('show');
+    showView('listening2');
+  });
+  document.getElementById('stayPart1').addEventListener('click', function(){
+    continueModal.classList.remove('show');
+  });
+
+  // done modal (part 2 finished)
+  var doneModal = document.getElementById('doneModal');
+  document.getElementById('finishPart2').addEventListener('click', function(){
+    doneModal.classList.add('show');
+  });
+  document.getElementById('goReadingFromDone').addEventListener('click', function(){
+    sessionStorage.removeItem('lastActivity');
+    doneModal.classList.remove('show');
+    showView('reading');
+  });
+  document.getElementById('goHubFromDone').addEventListener('click', function(){
+    sessionStorage.removeItem('lastActivity');
+    doneModal.classList.remove('show');
+    showView('hub');
+  });
+</script>
+</body>
+</html>
