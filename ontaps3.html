@@ -221,24 +221,6 @@
   .step-dot.done{background:var(--listening);}
   .step-dot.now{background:var(--listening);opacity:0.5;}
 
-  .frame-wrap{
-    border-radius:26px;
-    overflow:hidden;
-    border:2px solid var(--line);
-    background:var(--card);
-    margin:16px 0 14px;
-    flex:1;
-    min-height:420px;
-    display:flex;
-    flex-direction:column;
-  }
-  .frame-wrap iframe{
-    width:100%;
-    flex:1;
-    border:none;
-    min-height:420px;
-  }
-
   .launch-card{
     border-radius:26px;
     border:2px solid var(--line);
@@ -465,7 +447,7 @@
         <path d="M14 30l4 4M100 28l-4 4" stroke="#FFC53D" stroke-width="3" stroke-linecap="round"/>
         <path d="M96 20l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#FFC53D"/>
       </svg>
-      <h1>Ôn tiếng Anh lớp S3.</h1>
+      <h1>Ôn tiếng Anh lớp Starters 3</h1>
       <p>Chọn một kỹ năng để bắt đầu. Bạn có thể đổi kỹ năng bất cứ lúc nào trong lúc làm bài.</p>
     </div>
 
@@ -500,8 +482,9 @@
       <p class="kicker">Đọc &ndash; Viết</p>
       <h2>Bài trên Wayground</h2>
     </div>
-    <div class="frame-wrap">
-      <iframe src="https://wayground.com/join?gc=16527749" title="Bài Đọc - Viết trên Wayground" allow="clipboard-write"></iframe>
+    <div class="launch-card reading">
+      <p>Bấm nút bên dưới để sang trang làm bài. Làm xong, bấm nút Back của trình duyệt (hoặc vuốt lùi) để quay lại đây.</p>
+      <button class="primary-btn reading" data-launch="reading">Mở bài trên Wayground</button>
     </div>
   </section>
 
