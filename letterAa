@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Trace the Letter A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF7EA;
+    --paper:#FFFFFF;
+    --apple-red:#E8483A;
+    --apple-red-dark:#C23B2E;
+    --leaf-green:#5B8C3A;
+    --leaf-green-dark:#436B29;
+    --soft-yellow:#F6C453;
+    --ink:#4A3324;
+    --corridor:#FBD7B4;
+    --center-line:#E39A6B;
+    --track:#F0E2CE;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--cream);
+    font-family:'Nunito',sans-serif;
+    color:var(--ink);
+    overflow:hidden;
+    overscroll-behavior:none;
+  }
+  body{
+    display:flex;
+    justify-content:center;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  .app{
+    width:100%;
+    max-width:520px;
+    height:100dvh;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    padding: max(10px, env(safe-area-inset-top)) 14px max(10px, env(safe-area-inset-bottom));
+    gap:10px;
+  }
+
+  .topbar{ text-align:center; flex-shrink:0; }
+  .title-row{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    margin-bottom:10px;
+  }
+  .mini-apple{ font-size:26px; display:inline-block; animation: bob 2.4s ease-in-out infinite; }
+  h1{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:20px;
+    margin:0;
+    color:var(--apple-red-dark);
+  }
+
+  .tabs{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+  }
+  .tab{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    padding:10px 22px;
+    border-radius:999px;
+    border:3px solid var(--apple-red);
+    background:var(--paper);
+    color:var(--apple-red-dark);
+    cursor:pointer;
+    transition: transform .15s ease, background .15s ease, color .15s ease;
+  }
+  .tab:active{ transform:scale(0.94); }
+  .tab.active{
+    background:var(--apple-red);
+    color:#fff;
+  }
+
+  .progress-track{
+    flex-shrink:0;
+    height:14px;
+    background:var(--track);
+    border-radius:999px;
+    overflow:hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--leaf-green-dark), var(--leaf-green));
+    border-radius:999px;
+    transition: width .18s ease-out;
+  }
+
+  .stage-wrap{
+    flex:1;
+    min-height:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .stage-card{
+    position:relative;
+    width:100%;
+    max-width:420px;
+    height:100%;
+    max-height:560px;
+    background:var(--paper);
+    border-radius:32px;
+    box-shadow: 0 12px 0 rgba(0,0,0,0.05), 0 18px 30px rgba(200,90,60,0.18);
+    touch-action:none;
+    overflow:hidden;
+  }
+  #guideCanvas, #drawCanvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    touch-action:none;
+  }
+  .apple-sticker{
+    position:absolute;
+    top:10px;
+    right:14px;
+    font-size:26px;
+    transform:rotate(12deg);
+    animation: wiggle 3.2s ease-in-out infinite;
+    pointer-events:none;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.15));
+  }
+
+  .controls{
+    flex-shrink:0;
+    display:flex;
+    gap:12px;
+    justify-content:center;
+  }
+  .ctrl-btn{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    padding:12px 20px;
+    border-radius:18px;
+    border:none;
+    background:var(--soft-yellow);
+    color:var(--ink);
+    box-shadow: 0 4px 0 #D9A22E;
+    cursor:pointer;
+    transition: transform .1s ease, box-shadow .1s ease;
+  }
+  .ctrl-btn:active{
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #D9A22E;
+  }
+  #btnClear{
+    background:#FFFFFF;
+    color:var(--apple-red-dark);
+    border:3px solid var(--apple-red);
+    box-shadow: 0 4px 0 var(--apple-red);
+  }
+
+  .celebrate-overlay{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(74,51,36,0.45);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:10;
+  }
+  .celebrate-overlay.show{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .confetti-layer{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .confetti-piece{
+    position:absolute;
+    top:-10%;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count:1;
+    animation-fill-mode: forwards;
+  }
+  @keyframes fall{
+    from{ transform: translateY(-10vh) rotate(0deg); opacity:1;}
+    to{ transform: translateY(110vh) rotate(360deg); opacity:0.9;}
+  }
+  .celebrate-card{
+    background:var(--paper);
+    border-radius:28px;
+    padding:28px 26px;
+    text-align:center;
+    max-width:320px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    transform: scale(0.85);
+    animation: pop .35s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+  @keyframes pop{ to{ transform:scale(1); } }
+  .celebrate-apple{
+    font-size:64px;
+    animation: bounce 1s ease-in-out infinite;
+  }
+  .celebrate-card h2{
+    font-family:'Baloo 2', sans-serif;
+    color:var(--apple-red-dark);
+    margin:8px 0 4px;
+  }
+  .celebrate-card p{
+    margin:0 0 18px;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .ctrl-btn.big{
+    background:var(--leaf-green);
+    color:#fff;
+    box-shadow: 0 4px 0 var(--leaf-green-dark);
+    font-size:18px;
+    padding:14px 28px;
+  }
+
+  @keyframes bob{
+    0%,100%{ transform: translateY(0);}
+    50%{ transform: translateY(-4px);}
+  }
+  @keyframes wiggle{
+    0%,100%{ transform: rotate(12deg);}
+    50%{ transform: rotate(-6deg);}
+  }
+  @keyframes bounce{
+    0%,100%{ transform: translateY(0) scale(1);}
+    50%{ transform: translateY(-10px) scale(1.05);}
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="title-row">
+        <span class="mini-apple" aria-hidden="true">🍎</span>
+        <h1>Trace the Letter</h1>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="tab active" id="tabUpper" role="tab">Capital A</button>
+        <button class="tab" id="tabLower" role="tab">Lowercase a</button>
+      </div>
+    </header>
+
+    <div class="progress-track" aria-hidden="true">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <main class="stage-wrap">
+      <div class="stage-card" id="stageCard">
+        <canvas id="guideCanvas"></canvas>
+        <canvas id="drawCanvas"></canvas>
+        <div class="apple-sticker" aria-hidden="true">🍏</div>
+      </div>
+    </main>
+
+    <footer class="controls">
+      <button class="ctrl-btn" id="btnListen">🔊 Listen</button>
+      <button class="ctrl-btn" id="btnClear">↺ Clear</button>
+    </footer>
+  </div>
+
+  <div class="celebrate-overlay" id="celebrateOverlay">
+    <div class="confetti-layer" id="confettiLayer"></div>
+    <div class="celebrate-card">
+      <div class="celebrate-apple" aria-hidden="true">🍎</div>
+      <h2>Great job! 🎉</h2>
+      <p id="celebrateText">You traced the letter A!</p>
+      <button class="ctrl-btn big" id="btnContinue">Keep playing</button>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const guideCanvas = document.getElementById('guideCanvas');
+  const drawCanvas = document.getElementById('drawCanvas');
+  const gctx = guideCanvas.getContext('2d');
+  const dctx = drawCanvas.getContext('2d');
+  const stageCard = document.getElementById('stageCard');
+  const progressFill = document.getElementById('progressFill');
+  const tabUpper = document.getElementById('tabUpper');
+  const tabLower = document.getElementById('tabLower');
+  const btnClear = document.getElementById('btnClear');
+  const btnListen = document.getElementById('btnListen');
+  const celebrateOverlay = document.getElementById('celebrateOverlay');
+  const btnContinue = document.getElementById('btnContinue');
+  const confettiLayer = document.getElementById('confettiLayer');
+  const celebrateText = document.getElementById('celebrateText');
+
+  const BOX_W = 200, BOX_H = 240;
+  let currentLetter = 'A';
+  let transform = {scale:1, ox:0, oy:0};
+  let checkPoints = [];
+  let allStrokesDense = [];
+  let isDrawing = false;
+  let lastPoint = null;
+  let celebrated = false;
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+  function lerp(p1,p2,n){
+    const pts=[];
+    for(let i=0;i<n;i++){
+      const t = n===1 ? 0 : i/(n-1);
+      pts.push({x: p1.x+(p2.x-p1.x)*t, y: p1.y+(p2.y-p1.y)*t});
+    }
+    return pts;
+  }
+
+  function buildLetterA(){
+    const top = {x:100,y:16};
+    const footL = {x:26,y:222};
+    const footR = {x:174,y:222};
+    const barL = {x:56,y:150};
+    const barR = {x:144,y:150};
+    const left = lerp(top, footL, 60);
+    const right = lerp(top, footR, 60);
+    const bar = lerp(barL, barR, 26);
+    return [left, right, bar];
+  }
+
+  function buildLetterALower(){
+    const cx=98, cy=160, rx=46, ry=50;
+    const a0=-0.35, sweep=Math.PI*2.08;
+    const steps=90;
+    const bowl=[];
+    for(let i=0;i<steps;i++){
+      const t=i/(steps-1);
+      const ang=a0+sweep*t;
+      bowl.push({x: cx+rx*Math.cos(ang), y: cy+ry*Math.sin(ang)});
+    }
+    const last = bowl[bowl.length-1];
+    const stem = lerp(last, {x:last.x, y:222}, 26);
+    return [bowl.concat(stem)];
+  }
+
+  function setLetter(letter){
+    currentLetter = letter;
+    celebrated = false;
+    tabUpper.classList.toggle('active', letter==='A');
+    tabLower.classList.toggle('active', letter==='a');
+    allStrokesDense = letter==='A' ? buildLetterA() : buildLetterALower();
+    buildCheckPoints();
+    resizeCanvases();
+    clearDrawing();
+  }
+
+  function buildCheckPoints(){
+    checkPoints = [];
+    allStrokesDense.forEach((stroke, strokeIndex)=>{
+      for(let i=0;i<stroke.length;i+=3){
+        checkPoints.push({x:stroke[i].x, y:stroke[i].y, covered:false, strokeIndex});
+      }
+    });
+  }
+
+  function computeTransform(){
+    const rect = stageCard.getBoundingClientRect();
+    const pad = 20;
+    const availW = rect.width - pad*2;
+    const availH = rect.height - pad*2;
+    const scale = Math.min(availW/BOX_W, availH/BOX_H);
+    const ox = pad + (availW - BOX_W*scale)/2;
+    const oy = pad + (availH - BOX_H*scale)/2;
+    transform = {scale, ox, oy};
+    return rect;
+  }
+
+  function toCanvas(p){
+    return {x: transform.ox + p.x*transform.scale, y: transform.oy + p.y*transform.scale};
+  }
+
+  function resizeCanvases(){
+    const rect = computeTransform();
+    [guideCanvas, drawCanvas].forEach(c=>{
+      c.width = Math.max(1, Math.round(rect.width*dpr));
+      c.height = Math.max(1, Math.round(rect.height*dpr));
+      c.style.width = rect.width+'px';
+      c.style.height = rect.height+'px';
+    });
+    gctx.setTransform(dpr,0,0,dpr,0,0);
+    dctx.setTransform(dpr,0,0,dpr,0,0);
+    drawGuide();
+  }
+
+  function drawGuide(){
+    const w = guideCanvas.width/dpr, h = guideCanvas.height/dpr;
+    gctx.clearRect(0,0,w,h);
+
+    gctx.save();
+    gctx.globalAlpha = 0.07;
+    gctx.fillStyle = '#C23B2E';
+    gctx.font = `800 ${190*transform.scale}px 'Baloo 2', sans-serif`;
+    gctx.textAlign = 'center';
+    gctx.textBaseline = 'middle';
+    gctx.fillText(currentLetter, transform.ox+(BOX_W/2)*transform.scale, transform.oy+(BOX_H/2)*transform.scale + 10*transform.scale);
+    gctx.restore();
+
+    gctx.lineCap='round'; gctx.lineJoin='round';
+    allStrokesDense.forEach(stroke=>{
+      gctx.beginPath();
+      stroke.forEach((p,i)=>{
+        const c = toCanvas(p);
+        if(i===0) gctx.moveTo(c.x,c.y); else gctx.lineTo(c.x,c.y);
+      });
+      gctx.strokeStyle = '#FBD7B4';
+      gctx.lineWidth = 40*transform.scale;
+      gctx.stroke();
+    });
+
+    allStrokesDense.forEach(stroke=>{
+      gctx.beginPath();
+      stroke.forEach((p,i)=>{
+        const c = toCanvas(p);
+        if(i===0) gctx.moveTo(c.x,c.y); else gctx.lineTo(c.x,c.y);
+      });
+      gctx.setLineDash([10*transform.scale, 10*transform.scale]);
+      gctx.strokeStyle = '#E39A6B';
+      gctx.lineWidth = 3*transform.scale;
+      gctx.stroke();
+      gctx.setLineDash([]);
+    });
+
+    const startP = toCanvas(allStrokesDense[0][0]);
+    gctx.beginPath();
+    gctx.arc(startP.x, startP.y, 9*transform.scale, 0, Math.PI*2);
+    gctx.fillStyle = '#5B8C3A';
+    gctx.fill();
+    gctx.strokeStyle = '#fff';
+    gctx.lineWidth = 2;
+    gctx.stroke();
+
+    allStrokesDense.forEach(stroke=>drawStrokeArrows(stroke));
+  }
+
+  function drawArrowHead(centerCanvasPt, angle){
+    const size = 15*transform.scale;
+    gctx.save();
+    gctx.translate(centerCanvasPt.x, centerCanvasPt.y);
+    gctx.rotate(angle);
+    gctx.beginPath();
+    gctx.moveTo(size, 0);
+    gctx.lineTo(-size*0.6, size*0.6);
+    gctx.lineTo(-size*0.6, -size*0.6);
+    gctx.closePath();
+    gctx.fillStyle = 'rgba(91,140,58,0.9)';
+    gctx.strokeStyle = '#fff';
+    gctx.lineWidth = 1.5;
+    gctx.fill();
+    gctx.stroke();
+    gctx.restore();
+  }
+
+  function drawStrokeArrows(stroke){
+    const fracs = stroke.length>80 ? [0.28, 0.82] : [0.5];
+    fracs.forEach(f=>{
+      let idx = Math.floor(stroke.length*f);
+      idx = Math.max(1, Math.min(stroke.length-2, idx));
+      const before = toCanvas(stroke[idx-1]);
+      const after = toCanvas(stroke[idx+1]);
+      const angle = Math.atan2(after.y-before.y, after.x-before.x);
+      drawArrowHead(toCanvas(stroke[idx]), angle);
+    });
+  }
+
+  function clearDrawing(){
+    const w = drawCanvas.width/dpr, h = drawCanvas.height/dpr;
+    dctx.clearRect(0,0,w,h);
+    checkPoints.forEach(p=>p.covered=false);
+    celebrated = false;
+    updateProgress();
+  }
+
+  function updateProgress(){
+    const numStrokes = allStrokesDense.length;
+    let sumPct = 0;
+    let minPct = 100;
+    for(let s=0; s<numStrokes; s++){
+      const pts = checkPoints.filter(p=>p.strokeIndex===s);
+      const total = pts.length || 1;
+      const covered = pts.filter(p=>p.covered).length;
+      const pct = (covered/total)*100;
+      sumPct += pct;
+      minPct = Math.min(minPct, pct);
+    }
+    const avgPct = numStrokes ? sumPct/numStrokes : 0;
+    progressFill.style.width = Math.round(avgPct)+'%';
+    if(avgPct>=90 && minPct>=70 && !celebrated){
+      celebrated = true;
+      setTimeout(celebrate, 200);
+    }
+  }
+
+  function pointerPosToBox(clientX, clientY){
+    const rect = drawCanvas.getBoundingClientRect();
+    const cx = clientX-rect.left, cy = clientY-rect.top;
+    return {x:(cx-transform.ox)/transform.scale, y:(cy-transform.oy)/transform.scale};
+  }
+
+  function markCoverage(boxPt){
+    const tol = 15;
+    checkPoints.forEach(p=>{
+      if(!p.covered){
+        const dx=p.x-boxPt.x, dy=p.y-boxPt.y;
+        if(dx*dx+dy*dy <= tol*tol) p.covered = true;
+      }
+    });
+  }
+
+  function drawSegment(p1,p2){
+    dctx.lineCap='round'; dctx.lineJoin='round';
+    dctx.strokeStyle = '#E8483A';
+    dctx.lineWidth = 16*transform.scale;
+    dctx.beginPath();
+    dctx.moveTo(p1.x,p1.y);
+    dctx.lineTo(p2.x,p2.y);
+    dctx.stroke();
+  }
+
+  function startDraw(clientX, clientY){
+    isDrawing = true;
+    const rect = drawCanvas.getBoundingClientRect();
+    lastPoint = {x:clientX-rect.left, y:clientY-rect.top};
+    markCoverage(pointerPosToBox(clientX, clientY));
+    updateProgress();
+  }
+  function moveDraw(clientX, clientY){
+    if(!isDrawing) return;
+    const rect = drawCanvas.getBoundingClientRect();
+    const cur = {x:clientX-rect.left, y:clientY-rect.top};
+    drawSegment(lastPoint, cur);
+    lastPoint = cur;
+    markCoverage(pointerPosToBox(clientX, clientY));
+    updateProgress();
+  }
+  function endDraw(){ isDrawing = false; lastPoint = null; }
+
+  drawCanvas.addEventListener('pointerdown', e=>{
+    drawCanvas.setPointerCapture(e.pointerId);
+    startDraw(e.clientX, e.clientY);
+    e.preventDefault();
+  });
+  drawCanvas.addEventListener('pointermove', e=>{
+    if(isDrawing){ moveDraw(e.clientX, e.clientY); e.preventDefault(); }
+  });
+  window.addEventListener('pointerup', endDraw);
+  window.addEventListener('pointercancel', endDraw);
+
+  tabUpper.addEventListener('click', ()=>setLetter('A'));
+  tabLower.addEventListener('click', ()=>setLetter('a'));
+  btnClear.addEventListener('click', clearDrawing);
+
+  const appleSound = new Audio('aaaple.mp3');
+  appleSound.preload = 'auto';
+  let appleSoundFailed = false;
+  appleSound.addEventListener('error', ()=>{ appleSoundFailed = true; });
+
+  function speakFallback(){
+    try{
+      const text = currentLetter==='A'
+        ? 'Capital A. A is for Apple.'
+        : 'Lowercase a. a is for Apple.';
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US'; u.rate = 0.9; u.pitch = 1.1;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }catch(e){}
+  }
+
+  btnListen.addEventListener('click', ()=>{
+    if(appleSoundFailed){ speakFallback(); return; }
+    try{
+      appleSound.currentTime = 0;
+      const p = appleSound.play();
+      if(p && p.catch) p.catch(()=>speakFallback());
+    }catch(e){ speakFallback(); }
+  });
+
+  function playChime(){
+    try{
+      const AC = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AC();
+      const notes = [523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((f,i)=>{
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine'; o.frequency.value = f;
+        o.connect(g); g.connect(ctx.destination);
+        const t0 = ctx.currentTime + i*0.12;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(0.25, t0+0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+0.28);
+        o.start(t0); o.stop(t0+0.3);
+      });
+    }catch(e){}
+  }
+
+  function spawnConfetti(){
+    confettiLayer.innerHTML = '';
+    const emojis = ['🍎','⭐','🍏','✨'];
+    for(let i=0;i<26;i++){
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      el.style.left = Math.random()*100+'%';
+      el.style.animationDuration = (2+Math.random()*1.5)+'s';
+      el.style.animationDelay = (Math.random()*0.4)+'s';
+      el.style.fontSize = (16+Math.random()*18)+'px';
+      confettiLayer.appendChild(el);
+    }
+  }
+
+  function celebrate(){
+    celebrateText.textContent = currentLetter==='A'
+      ? 'You traced the letter A!'
+      : 'You traced the letter a!';
+    celebrateOverlay.classList.add('show');
+    spawnConfetti();
+    playChime();
+  }
+
+  btnContinue.addEventListener('click', ()=>{
+    celebrateOverlay.classList.remove('show');
+    setLetter(currentLetter==='A' ? 'a' : 'A');
+  });
+
+  let resizeTimer=null;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resizeCanvases, 80);
+  });
+  window.addEventListener('orientationchange', ()=>{
+    setTimeout(resizeCanvases, 300);
+  });
+
+  setLetter('A');
+})();
+</script>
+</body>
+</html>
