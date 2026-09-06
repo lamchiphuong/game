@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Trace the Letter A</title>
+<link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5243/5243372.png">
+<link rel="shortcut icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5243/5243372.png">
+<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5243/5243372.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Trace the Letter A">
+<meta property="og:description" content="A fun tracing game to help kids learn to write the letter A and a.">
+<meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/5243/5243372.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Trace the Letter A">
+<meta name="twitter:description" content="A fun tracing game to help kids learn to write the letter A and a.">
+<meta name="twitter:image" content="https://cdn-icons-png.flaticon.com/512/5243/5243372.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
@@ -122,12 +133,39 @@
     touch-action:none;
     overflow:hidden;
   }
-  #guideCanvas, #drawCanvas{
+  #guideCanvas, #demoCanvas, #drawCanvas{
     position:absolute;
     inset:0;
     width:100%;
     height:100%;
     touch-action:none;
+  }
+  #demoCanvas{ pointer-events:none; }
+
+  .demo-banner{
+    position:absolute;
+    left:50%;
+    top:10px;
+    transform:translateX(-50%);
+    background:var(--leaf-green);
+    color:#fff;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    padding:6px 16px;
+    border-radius:999px;
+    box-shadow:0 4px 0 var(--leaf-green-dark);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease;
+    z-index:3;
+    white-space:nowrap;
+  }
+  .demo-banner.show{ opacity:1; }
+
+  #btnDemo:disabled{
+    opacity:0.6;
+    cursor:default;
   }
   .apple-sticker{
     position:absolute;
@@ -143,21 +181,28 @@
   .controls{
     flex-shrink:0;
     display:flex;
-    gap:12px;
+    flex-wrap:wrap;
+    gap:8px 10px;
     justify-content:center;
   }
   .ctrl-btn{
     font-family:'Baloo 2', sans-serif;
     font-weight:700;
-    font-size:16px;
-    padding:12px 20px;
-    border-radius:18px;
+    font-size:14px;
+    padding:10px 12px;
+    border-radius:16px;
     border:none;
     background:var(--soft-yellow);
     color:var(--ink);
     box-shadow: 0 4px 0 #D9A22E;
     cursor:pointer;
     transition: transform .1s ease, box-shadow .1s ease;
+    flex:1 1 auto;
+    min-width:0;
+    max-width:150px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
   .ctrl-btn:active{
     transform: translateY(3px);
@@ -168,6 +213,9 @@
     color:var(--apple-red-dark);
     border:3px solid var(--apple-red);
     box-shadow: 0 4px 0 var(--apple-red);
+  }
+  @media (max-width: 360px){
+    .ctrl-btn{ font-size:12.5px; padding:9px 8px; }
   }
 
   .celebrate-overlay{
@@ -272,11 +320,14 @@
       <div class="stage-card" id="stageCard">
         <canvas id="guideCanvas"></canvas>
         <canvas id="drawCanvas"></canvas>
+        <canvas id="demoCanvas"></canvas>
+        <div class="demo-banner" id="demoBanner">👀 Watch first!</div>
         <div class="apple-sticker" aria-hidden="true">🍏</div>
       </div>
     </main>
 
     <footer class="controls">
+      <button class="ctrl-btn" id="btnDemo">▶️ Watch</button>
       <button class="ctrl-btn" id="btnListen">🔊 Listen</button>
       <button class="ctrl-btn" id="btnClear">↺ Clear</button>
     </footer>
@@ -295,8 +346,10 @@
 <script>
 (function(){
   const guideCanvas = document.getElementById('guideCanvas');
+  const demoCanvas = document.getElementById('demoCanvas');
   const drawCanvas = document.getElementById('drawCanvas');
   const gctx = guideCanvas.getContext('2d');
+  const mctx = demoCanvas.getContext('2d');
   const dctx = drawCanvas.getContext('2d');
   const stageCard = document.getElementById('stageCard');
   const progressFill = document.getElementById('progressFill');
@@ -304,6 +357,8 @@
   const tabLower = document.getElementById('tabLower');
   const btnClear = document.getElementById('btnClear');
   const btnListen = document.getElementById('btnListen');
+  const btnDemo = document.getElementById('btnDemo');
+  const demoBanner = document.getElementById('demoBanner');
   const celebrateOverlay = document.getElementById('celebrateOverlay');
   const btnContinue = document.getElementById('btnContinue');
   const confettiLayer = document.getElementById('confettiLayer');
@@ -317,6 +372,8 @@
   let isDrawing = false;
   let lastPoint = null;
   let celebrated = false;
+  let demoPlaying = false;
+  let demoGen = 0;
   const dpr = Math.max(1, window.devicePixelRatio || 1);
 
   function lerp(p1,p2,n){
@@ -341,8 +398,10 @@
   }
 
   function buildLetterALower(){
-    const cx=98, cy=160, rx=46, ry=50;
-    const a0=-0.35, sweep=Math.PI*2.08;
+    // Stroke 1: the round bowl - a single full loop (exactly 360°, no overlap)
+    // starting near the top-right, going all the way around and closing.
+    const cx=98, cy=158, rx=46, ry=48;
+    const a0=-0.35, sweep=Math.PI*2; // exactly one full turn, start === end
     const steps=90;
     const bowl=[];
     for(let i=0;i<steps;i++){
@@ -350,9 +409,14 @@
       const ang=a0+sweep*t;
       bowl.push({x: cx+rx*Math.cos(ang), y: cy+ry*Math.sin(ang)});
     }
-    const last = bowl[bowl.length-1];
-    const stem = lerp(last, {x:last.x, y:222}, 26);
-    return [bowl.concat(stem)];
+
+    // Stroke 2: the straight vertical stroke - a separate, distinct stroke
+    // that drops from the bowl's starting point straight down to the baseline.
+    const stemTop = {x: cx+rx*Math.cos(a0), y: cy+ry*Math.sin(a0)};
+    const stemBottom = {x: stemTop.x, y: 222};
+    const stem = lerp(stemTop, stemBottom, 34);
+
+    return [bowl, stem];
   }
 
   function setLetter(letter){
@@ -364,6 +428,7 @@
     buildCheckPoints();
     resizeCanvases();
     clearDrawing();
+    playDemo();
   }
 
   function buildCheckPoints(){
@@ -393,13 +458,14 @@
 
   function resizeCanvases(){
     const rect = computeTransform();
-    [guideCanvas, drawCanvas].forEach(c=>{
+    [guideCanvas, demoCanvas, drawCanvas].forEach(c=>{
       c.width = Math.max(1, Math.round(rect.width*dpr));
       c.height = Math.max(1, Math.round(rect.height*dpr));
       c.style.width = rect.width+'px';
       c.style.height = rect.height+'px';
     });
     gctx.setTransform(dpr,0,0,dpr,0,0);
+    mctx.setTransform(dpr,0,0,dpr,0,0);
     dctx.setTransform(dpr,0,0,dpr,0,0);
     drawGuide();
   }
@@ -484,6 +550,78 @@
     });
   }
 
+  function setDrawingEnabled(enabled){
+    drawCanvas.style.pointerEvents = enabled ? 'auto' : 'none';
+    if(btnDemo) btnDemo.disabled = !enabled && demoPlaying;
+  }
+
+  function playDemo(){
+    demoGen++;
+    const myGen = demoGen;
+    demoPlaying = true;
+    setDrawingEnabled(false);
+    if(btnDemo) btnDemo.disabled = true;
+    demoBanner.classList.add('show');
+
+    function clearDemo(){
+      const w = demoCanvas.width/dpr, h = demoCanvas.height/dpr;
+      mctx.clearRect(0,0,w,h);
+    }
+
+    function finish(){
+      if(myGen !== demoGen) return;
+      clearDemo();
+      demoPlaying = false;
+      demoBanner.classList.remove('show');
+      setDrawingEnabled(true);
+      if(btnDemo) btnDemo.disabled = false;
+    }
+
+    let strokeIdx = 0;
+    function playStroke(){
+      if(myGen !== demoGen) return;
+      if(strokeIdx >= allStrokesDense.length){ finish(); return; }
+      const stroke = allStrokesDense[strokeIdx];
+      const duration = Math.max(650, Math.min(1700, stroke.length*15));
+      const t0 = performance.now();
+
+      function frame(now){
+        if(myGen !== demoGen) return;
+        const t = Math.min(1, (now-t0)/duration);
+        const idx = Math.max(1, Math.min(stroke.length-1, Math.floor(t*(stroke.length-1))));
+        clearDemo();
+
+        mctx.lineCap='round'; mctx.lineJoin='round';
+        mctx.strokeStyle = '#5B8C3A';
+        mctx.lineWidth = 14*transform.scale;
+        mctx.beginPath();
+        for(let i=0;i<=idx;i++){
+          const c = toCanvas(stroke[i]);
+          if(i===0) mctx.moveTo(c.x,c.y); else mctx.lineTo(c.x,c.y);
+        }
+        mctx.stroke();
+
+        const cp = toCanvas(stroke[idx]);
+        mctx.beginPath();
+        mctx.arc(cp.x, cp.y, 10*transform.scale, 0, Math.PI*2);
+        mctx.fillStyle = '#F6C453';
+        mctx.strokeStyle = '#fff';
+        mctx.lineWidth = 2;
+        mctx.fill();
+        mctx.stroke();
+
+        if(t<1){
+          requestAnimationFrame(frame);
+        } else {
+          strokeIdx++;
+          setTimeout(playStroke, 320);
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+    playStroke();
+  }
+
   function clearDrawing(){
     const w = drawCanvas.width/dpr, h = drawCanvas.height/dpr;
     dctx.clearRect(0,0,w,h);
@@ -506,7 +644,7 @@
     }
     const avgPct = numStrokes ? sumPct/numStrokes : 0;
     progressFill.style.width = Math.round(avgPct)+'%';
-    if(avgPct>=90 && minPct>=70 && !celebrated){
+    if(avgPct>=90 && minPct>=90 && !celebrated){
       celebrated = true;
       setTimeout(celebrate, 200);
     }
@@ -539,6 +677,7 @@
   }
 
   function startDraw(clientX, clientY){
+    if(demoPlaying) return;
     isDrawing = true;
     const rect = drawCanvas.getBoundingClientRect();
     lastPoint = {x:clientX-rect.left, y:clientY-rect.top};
@@ -546,7 +685,7 @@
     updateProgress();
   }
   function moveDraw(clientX, clientY){
-    if(!isDrawing) return;
+    if(!isDrawing || demoPlaying) return;
     const rect = drawCanvas.getBoundingClientRect();
     const cur = {x:clientX-rect.left, y:clientY-rect.top};
     drawSegment(lastPoint, cur);
@@ -570,6 +709,7 @@
   tabUpper.addEventListener('click', ()=>setLetter('A'));
   tabLower.addEventListener('click', ()=>setLetter('a'));
   btnClear.addEventListener('click', clearDrawing);
+  btnDemo.addEventListener('click', ()=>{ if(!demoPlaying) playDemo(); });
 
   const appleSound = new Audio('aaaple.mp3');
   appleSound.preload = 'auto';
