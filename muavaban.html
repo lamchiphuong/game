@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buying and Selling – Commercial English</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#1f2540;--mut:#6b7392;--pri:#6c5ce7;--pri2:#a29bfe;--ok:#00b894;--bad:#e17055;--bd:#e3e7f3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12142a;--card:#1c2040;--tx:#eceffd;--mut:#9aa2c8;--bd:#2c3260}}
+:root[data-theme="dark"]{--bg:#12142a;--card:#1c2040;--tx:#eceffd;--mut:#9aa2c8;--bd:#2c3260}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+header{background:linear-gradient(135deg,#6c5ce7,#00b8d4);color:#fff;padding:36px 20px 70px;text-align:center}
+header small{letter-spacing:.15em;opacity:.85}header h1{margin:6px 0;font-size:clamp(26px,5vw,42px);animation:rise .8s both}
+header p{margin:0;opacity:.9}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:8px;overflow-x:auto;max-width:900px;margin:-34px auto 0;padding:8px;background:var(--card);border-radius:18px;box-shadow:0 8px 30px #0002}
+nav button{flex:1;white-space:nowrap;border:0;background:none;color:var(--mut);font:600 14px inherit;padding:10px 14px;border-radius:12px;cursor:pointer;transition:.2s}
+nav button.on{background:var(--pri);color:#fff;transform:translateY(-1px)}
+main{max-width:900px;margin:20px auto;padding:0 14px 60px}
+section{display:none}section.on{display:block;animation:rise .45s both}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes pop{50%{transform:scale(1.06)}}
+h2{margin:8px 0 4px}.sub{color:var(--mut);margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.fc{perspective:900px;height:190px;cursor:pointer;animation:rise .5s both}
+.fi{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.fc.flip .fi{transform:rotateY(180deg)}
+.fc .f,.fc .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 4px 14px #0001;border:1px solid var(--bd)}
+.f{background:var(--card)}.b{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;transform:rotateY(180deg)}
+.num{position:absolute;top:10px;left:14px;font-size:12px;color:var(--mut)}.b .num{color:#fffa}
+.w{font-size:22px;font-weight:800}.pos{font-size:12px;color:var(--mut)}.ipa{color:var(--pri);margin:4px 0}
+.b .vi{font-size:19px;font-weight:700}.b .ex{font-size:13px;margin-top:8px;opacity:.95}
+.spk{border:0;background:var(--pri);color:#fff;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;margin-top:6px;transition:.2s}
+.spk:hover{transform:scale(1.12)}.b .spk{background:#fff3}
+.tip{background:var(--card);border-left:5px solid var(--pri);padding:12px 16px;border-radius:12px;margin-top:18px}
+.item{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px 16px;margin-bottom:12px;animation:rise .5s both}
+.btn{border:0;border-radius:12px;padding:9px 16px;font:700 14px inherit;cursor:pointer;background:var(--pri);color:#fff;transition:.15s;box-shadow:0 3px 0 #4b3fb8}
+.btn:active{transform:translateY(3px);box-shadow:none}.btn.ghost{background:var(--bd);color:var(--tx);box-shadow:0 3px 0 #0002}
+.ans{display:none;margin-top:10px;padding:10px 14px;background:#00b8941f;border-left:4px solid var(--ok);border-radius:10px;font-weight:600}
+.ans.show{display:block;animation:rise .3s both}
+.bank{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 18px}.bank span{background:var(--card);border:1px solid var(--bd);padding:5px 12px;border-radius:20px;font-weight:600}
+input.fill{border:2px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:10px;padding:6px 10px;font:600 15px inherit;width:150px;transition:.2s}
+input.ok{border-color:var(--ok)}input.no{border-color:var(--bad);animation:shake .4s}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.zone{min-height:62px;border-bottom:2px solid var(--bd);display:flex;flex-wrap:wrap;gap:8px;padding:8px 0;margin:10px 0}
+.pool{min-height:54px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:8px 0}
+.tok{border:2px solid var(--bd);border-bottom-width:4px;background:var(--card);color:var(--tx);padding:8px 14px;border-radius:12px;font:600 16px inherit;cursor:pointer;animation:pop .25s;transition:.15s}
+.tok:hover{border-color:var(--pri)}.tok.used{opacity:.25;pointer-events:none;border-style:dashed}
+.fb{font-weight:800;margin-top:8px;min-height:24px}.fb.g{color:var(--ok);animation:pop .4s}.fb.r{color:var(--bad)}
+.item.done{border-color:var(--ok);box-shadow:0 0 0 2px #00b89444}
+.chat{display:flex;margin:14px 0;gap:10px;animation:rise .5s both}.chat.c{flex-direction:row-reverse}
+.av{width:42px;height:42px;border-radius:50%;background:var(--pri2);display:grid;place-items:center;font-size:20px;flex:none}.c .av{background:var(--ok)}
+.bub{background:var(--card);border:1px solid var(--bd);border-radius:6px 18px 18px 18px;padding:10px 14px;max-width:80%}.c .bub{border-radius:18px 6px 18px 18px}
+.bub b{font-size:12px;color:var(--mut)}.bub .spk{width:30px;height:30px;font-size:14px;margin:0 0 0 6px}
+.bub .vi{display:none;margin-top:6px;color:var(--pri);font-size:14px}.bub .vi.show{display:block;animation:rise .3s both}
+.bub a{font-size:12px;color:var(--mut);cursor:pointer;text-decoration:underline}
+.prog{height:8px;background:var(--bd);border-radius:8px;overflow:hidden;margin-bottom:12px}.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pri),var(--ok));transition:.5s}
+</style></head><body>
+<header><small>UNIT 04 • COMMERCIAL ENGLISH</small><h1>🛍️ Buying and Selling</h1><p>Mua sắm &amp; Thương mại • A2–B1 • 60 phút</p></header>
+<nav id="nav"></nav>
+<main>
+<section id="s0"><h2>Từ vựng cốt lõi</h2><p class="sub">Chạm vào thẻ để lật • bấm 🔊 để nghe phát âm (giọng Google US English nếu trình duyệt hỗ trợ)</p><div class="grid" id="vocab"></div>
+<div class="tip">💡 <b>Mẹo:</b> “On sale” = đang được giảm giá; “For sale” = có sẵn để bán (không nhất thiết giảm giá).</div></section>
+<section id="s1"><h2>Điền từ vào chỗ trống</h2><p class="sub">Chọn từ trong khung để điền. Nhập rồi nhấn Enter để kiểm tra.</p><div class="bank" id="bank"></div><div id="fill"></div></section>
+<section id="s2"><h2>Sắp xếp câu</h2><p class="sub">Chạm các từ theo đúng thứ tự như Duolingo. Chạm lại từ trong câu để gỡ ra.</p><div class="prog"><i id="pg"></i></div><div id="uns"></div></section>
+<section id="s3"><h2>Dịch hai chiều</h2><p class="sub">Tự dịch trước, rồi mới bấm xem đáp án gợi ý.</p><div id="tr"></div></section>
+<section id="s4"><h2>Hội thoại – Urban Chic</h2><p class="sub">Đóng vai Staff và Customer, luyện nói cùng bạn học.</p><div id="rp"></div></section>
+</main>
+<script>
+const $=s=>document.querySelector(s),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const V=[["Discount","n, v","/ˈdɪskaʊnt/","Chiết khấu, giảm giá","Give a 10% discount for cash payment."],["Bargain","n, v","/ˈbɑːrɡən/","Món hời / Mặc cả giá","This leather bag was a real bargain at $25."],["Receipt","n","/rɪˈsiːt/","Biên lai, phiếu tính tiền","Please retain your receipt for warranty claims."],["Refund","n, v","/ˈriːfʌnd/","Tiền hoàn lại / Trả tiền lại","Request a full refund for damaged cargo."],["Exchange","n, v","/ɪksˈtʃeɪndʒ/","Đổi hàng hóa khác","Exchange size M for size L within one week."],["Affordable","adj","/əˈfɔːrdəbl/","Giá phải chăng, hợp túi tiền","They provide quality products at affordable prices."],["Overpriced","adj","/ˌoʊvərˈpraɪst/","Quá đắt so với giá trị thật","Bottled water at the terminal is overpriced."],["In stock","prep ph","/ɪn stɑːk/","Còn hàng trong kho","Both silver and black editions are in stock."],["Out of stock","adj","/aʊt əv stɑːk/","Hết hàng tạm thời","The wireless mouse is currently out of stock."],["Checkout","n","/ˈtʃekaʊt/","Quầy thu ngân / Thanh toán","Please line up behind checkout counter number 2."],["Warranty","n","/ˈwɔːrənti/","Cam kết bảo hành","Comes standard with a 12-month warranty."],["Cashier","n","/kæˈʃɪr/","Nhân viên thu ngân","Hand the paper invoice directly to the cashier."],["Customer","n","/ˈkʌstəmər/","Khách hàng, người mua lẻ","Satisfied customers frequently return to shop."],["On sale","prep ph","/ɑːn seɪl/","Đang trong đợt hạ giá","Winter jackets are on sale at half price today."],["Price tag","n","/ˈpraɪs tæɡ/","Thẻ ghi giá niêm yết","Check the white price tag fastened to the sleeve."],["Rip-off","n","/ˈrɪp ɔːf/","Giá chém, bán đắt vô lý","Ten dollars for simple tea is an absolute rip-off."],["Browse","v","/braʊz/","Xem lướt, dạo quanh xem","No worries, I am merely browsing for gifts."],["Fitting room","n","/ˈfɪtɪŋ ruːm/","Phòng thử trang phục","The fitting room is adjacent to the mirror wall."],["Wholesale","adj, n","/ˈhoʊlseɪl/","Bán sỉ, giá phân phối buôn","Order wholesale quantities to secure high margins."],["Retail","adj, n","/ˈriːteɪl/","Bán lẻ đến người tiêu dùng","The retail price is always slightly higher."]];
+const F=["Excuse me, where is the ___? I would like to try this business suit on.","I bought this leather jacket for only $25; it was a real ___!","Make sure you keep your original ___ safely in case you need to return the item.","We are very sorry, but the 42-inch television monitor is temporarily ___ until next Monday.","All imported coats are marked 30% off this weekend because they are ___.","Can your sales shop offer me an extra ___ if I purchase in bulk with cash?","The glassware broke inside the box, so the buyer asked for an immediate full ___.","This high-end espresso coffee machine includes a reliable two-year official ___.","The polite ___ counted each bill carefully before returning my change.","A plain bottle of mineral water costs $12 here, which is completely ___!"];
+const FA=["fitting room","bargain","receipt","out of stock","on sale","discount","refund","warranty","cashier","overpriced"];
+const U=["Can I get a discount if I buy two?","Please pay at the checkout counter.","You cannot refund this item without a receipt.","Thank you, I am just browsing.","It is a rip-off because the quality is poor.","Can I exchange this for a larger size?","The price tag does not match the price in the system.","This store sells both wholesale and retail products.","The customer is always right according to store policy.","He offers affordable products and reasonable prices."];
+const T=[["Is this model available in stock right now?","Mẫu này hiện còn hàng trong kho không?"],["We offer free shipping on wholesale orders over $500.","Chúng tôi miễn phí giao hàng cho đơn hàng sỉ trên $500."],["The cashier forgot to remove the anti-theft tag.","Thu ngân quên tháo chip/thẻ chống trộm."],["Can I exchange this jacket for a darker color?","Tôi có thể đổi chiếc áo khoác này lấy màu tối hơn không?"],["Fifty dollars for a plain cotton t-shirt is a rip-off.","Năm mươi đô cho một chiếc áo thun trơn đúng là chém đẹp / đắt vô lý."],["Chiếc váy này giá bao nhiêu? Tôi không thấy thẻ giá.","How much is this dress? I don't see the price tag."],["Tôi muốn hoàn tiền vì sản phẩm này bị rách khi mở hộp.","I would like a refund because this item was torn when opened."],["Bạn muốn thanh toán bằng thẻ hay chuyển khoản?","Would you like to pay by card or bank transfer?"],["Cửa hàng có chính sách bảo hành 12 tháng không?","Does the store offer a 12-month warranty policy?"],["Quần áo ở đây vừa túi tiền mà chất lượng rất tốt.","Clothes here are affordable and the quality is very good."]];
+const R=[["Good afternoon! Welcome to Urban Chic. Are you looking for anything specific?","Xin chào quý khách! Bạn đang tìm món đồ nào cụ thể hôm nay không ạ?"],["Hi! I am just browsing for now, but do you have casual jackets on sale?","Chào bạn! Tôi chỉ đang xem quanh thôi, mà bên mình có áo khoác thông dụng đang giảm giá không?"],["Yes, all coats on this rack have an automatic 20% discount at the counter.","Dạ có, toàn bộ áo trên giá này đang được giảm 20% khi thanh toán tại quầy."],["I really like this brown one. Where can I find the fitting room?","Tôi thích chiếc màu nâu này. Phòng thử đồ ở phía nào vậy bạn?"],["It's straight ahead by the mirrors. Let me know if you need another size.","Dạ đi thẳng về phía trước cạnh hàng gương. Cần đổi cỡ áo thì cứ bảo tôi nhé."],["It fits well, but the price tag says $140. That feels a bit overpriced!","Áo vừa lắm, nhưng nhãn giá ghi $140. Giá đó hơi đắt quá!"],["If you buy today, I will include a complimentary scarf, making it a true bargain.","Nếu bạn mua hôm nay, tôi sẽ tặng kèm một khăn choàng cổ, như vậy là một món rất hời đấy ạ."],["That sounds reasonable! Does this coat include any stitching warranty?","Nghe hợp lý đấy! Chiếc áo này có bảo hành đường may và phụ kiện không?"],["Yes, keep your printed receipt to get 6 months of repair and 7 days to exchange.","Dạ có, bạn giữ hóa đơn này để được bảo hành sửa 6 tháng và quyền đổi hàng trong vòng 7 ngày."],["Fantastic! Let's head over to the checkout counter; I will settle by credit card.","Tuyệt vời! Ta lại quầy thu ngân nhé; tôi sẽ thanh toán qua thẻ tín dụng."]];
+// speech
+function speak(t){try{const s=speechSynthesis;s.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.9;const v=s.getVoices();u.voice=v.find(x=>/Google US English/i.test(x.name))||v.find(x=>x.lang==='en-US')||null;s.speak(u)}catch(e){}}
+const spk=(t,c)=>{const b=E('button','spk','🔊');b.title='Nghe phát âm';b.onclick=e=>{e.stopPropagation();speak(t)};return b};
+// reveal helper
+function reveal(box,html){const a=E('div','ans',html),b=E('button','btn ghost','👁 Hiện đáp án');b.onclick=()=>{const s=a.classList.toggle('show');b.innerHTML=s?'🙈 Ẩn đáp án':'👁 Hiện đáp án'};return[b,a]}
+// tabs
+const names=["📇 Từ vựng","✏️ Điền từ","🧩 Sắp xếp","🔁 Dịch","💬 Hội thoại"];
+names.forEach((n,i)=>{const b=E('button','',n);b.onclick=()=>{document.querySelectorAll('nav button').forEach((x,j)=>x.classList.toggle('on',i===j));document.querySelectorAll('section').forEach((x,j)=>x.classList.toggle('on',i===j));scrollTo({top:0,behavior:'smooth'})};$('#nav').append(b)});
+$('#nav').children[0].click();
+// vocab
+V.forEach((v,i)=>{const c=E('div','fc');c.style.animationDelay=i*.04+'s';
+const f=E('div','f',`<span class="num">#${i+1}</span><div class="w">${v[0]}</div><div class="pos">(${v[1]})</div><div class="ipa">${v[2]}</div>`);f.append(spk(v[0]));
+const b=E('div','b',`<span class="num">#${i+1}</span><div class="vi">${v[3]}</div><div class="ex">“${v[4]}”</div>`);b.append(spk(v[4]));
+const fi=E('div','fi');fi.append(f,b);c.append(fi);c.onclick=()=>c.classList.toggle('flip');$('#vocab').append(c)});
+// fill
+FA.slice().sort().forEach(w=>$('#bank').append(E('span','',w)));
+F.forEach((s,i)=>{const it=E('div','item');const [p,q]=s.split('___');const inp=E('input','fill');inp.placeholder='...';
+const chk=()=>{const ok=inp.value.trim().toLowerCase()===FA[i];inp.className='fill '+(ok?'ok':'no');if(ok)it.classList.add('done')};
+inp.onkeydown=e=>{if(e.key==='Enter')chk()};
+const p1=E('div','',`<b>${i+1}.</b> ${p}`);p1.append(inp);p1.append(document.createTextNode(q));
+const row=E('div','row');const cb=E('button','btn','Kiểm tra');cb.onclick=chk;const[rb,ra]=reveal(it,FA[i]);row.append(cb,rb);it.append(p1,row,ra);$('#fill').append(it)});
+// unscramble
+let solved=0;
+const shuf=a=>{let b;do{b=a.slice().sort(()=>Math.random()-.5)}while(b.map(o=>o.k).join()===a.map(o=>o.k).join()&&a.length>1);return b};
+U.forEach((s,i)=>{const it=E('div','item');const words=s.split(' ');const zone=E('div','zone'),pool=E('div','pool'),fb=E('div','fb');
+const order=[];const toks=shuf(words.map((w,k)=>({w,k}))).map(o=>{const t=E('button','tok',o.w);t.onclick=()=>{if(it.classList.contains('done'))return;if(t.parentNode===pool){t.classList.add('moved');zone.append(t);order.push(o)}else{pool.append(t);order.splice(order.indexOf(o),1)}fb.textContent='';fb.className='fb'};pool.append(t);return t});
+const ck=E('button','btn','Kiểm tra');ck.onclick=()=>{if(order.length<words.length){fb.className='fb r';fb.textContent='Hãy dùng hết các từ nhé!';return}
+const ok=order.map(o=>o.w).join(' ')===s;if(ok){fb.className='fb g';fb.textContent='🎉 Chính xác!';if(!it.classList.contains('done')){it.classList.add('done');$('#pg').style.width=++solved*10+'%'}}else{fb.className='fb r';fb.textContent='❌ Chưa đúng, thử lại nhé';zone.style.animation='none';zone.offsetWidth;zone.style.animation='shake .4s'}};
+const rs=E('button','btn ghost','↺ Làm lại');rs.onclick=()=>{order.length=0;toks.forEach(t=>pool.append(t));fb.textContent=''};
+const[rb,ra]=reveal(it,s);const sp=spk(s);
+const row=E('div','row');row.append(ck,rs,rb,sp);it.append(E('div','',`<b>Câu ${i+1}</b>`),zone,pool,fb,row,ra);$('#uns').append(it)});
+// translate
+T.forEach((t,i)=>{const it=E('div','item');it.append(E('div','',`<b>${i+1}.</b> ${t[0]} <small style="color:var(--mut)">${i<5?'(Anh → Việt)':'(Việt → Anh)'}</small>`));
+if(i<5)it.firstChild.append(spk(t[0]));
+const[rb,ra]=reveal(it,t[1]);if(i>=5)ra.append(spk(t[1]));const row=E('div','row');row.append(rb);it.append(row,ra);$('#tr').append(it)});
+// roleplay
+R.forEach((r,i)=>{const st=i%2===0;const c=E('div','chat'+(st?'':' c'));c.style.animationDelay=i*.05+'s';
+c.append(E('div','av',st?'🧑‍💼':'🛍️'));const b=E('div','bub',`<b>${i+1}. ${st?'Staff':'Customer'}</b><div style="font-size:16px;font-weight:600">${r[0]}</div>`);b.firstChild.append(spk(r[0]));
+const vi=E('div','vi',r[1]),a=E('a','','👁 Hiện đáp án (tiếng Việt)');a.onclick=()=>{const s=vi.classList.toggle('show');a.textContent=s?'🙈 Ẩn đáp án':'👁 Hiện đáp án (tiếng Việt)'};b.append(a,vi);c.append(b);$('#rp').append(c)});
+if(window.speechSynthesis)speechSynthesis.getVoices();
+</script></body></html>
