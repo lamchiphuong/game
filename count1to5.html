@@ -1,0 +1,530 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Quack Count</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@700;900&display=swap">
+<style>
+/* Layout: one-screen portrait game. Sky above, grass ground carries the basket,
+   duck and speech bubble in the middle, fruit tray between them. Single bright look by choice. */
+:root {
+  --sky-top: #9FD9F5;
+  --sky: #CDEEFB;
+  --grass: #86D06F;
+  --grass-deep: #5DB04F;
+  --duck: #FFD43B;
+  --duck-deep: #F2B705;
+  --beak: #FF8A2B;
+  --beak-deep: #E2661A;
+  --cheek: #FF9FA8;
+  --wicker: #D49A55;
+  --wicker-deep: #A9692B;
+  --ink: #1E3A5F;
+  --paper: #FFFFFF;
+  --stop: #E8505B;
+  --stop-deep: #B93843;
+  --go: #2E9E4F;
+  --go-deep: #1F7A3A;
+  --star: #FFB800;
+  --sky-deep: #6CBFEA;
+  --font-display: 'Baloo 2', 'Nunito', ui-rounded, system-ui, sans-serif;
+  --font-body: 'Nunito', ui-rounded, system-ui, sans-serif;
+  --emoji: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  --bw: min(78vw, 320px, 40vh);
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(var(--sky-top), var(--sky) 72%);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 700;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+button { font-family: inherit; touch-action: manipulation; }
+:focus-visible { outline: 4px solid var(--ink); outline-offset: 3px; }
+
+/* scenery */
+.sun { position: absolute; top: 28px; right: 7%; width: 74px; height: 74px; border-radius: 50%; background: #FFE680; box-shadow: 0 0 0 14px rgba(255, 230, 128, .35), 0 0 0 30px rgba(255, 230, 128, .18); }
+.cloud { position: absolute; left: 0; width: 92px; height: 28px; border-radius: 20px; background: rgba(255, 255, 255, .92); animation: drift 80s linear infinite; }
+.cloud::before, .cloud::after { content: ""; position: absolute; background: inherit; border-radius: 50%; }
+.cloud::before { width: 44px; height: 44px; left: 14px; top: -22px; }
+.cloud::after { width: 32px; height: 32px; left: 46px; top: -14px; }
+.c1 { top: 18%; }
+.c2 { top: 33%; transform: scale(.7); animation-delay: -38s; animation-duration: 105s; }
+@keyframes drift { from { translate: -140px 0; } to { translate: calc(100vw + 140px) 0; } }
+.ground { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--bw) * .767 * .7 + 26px); background: var(--grass); border-radius: 50% 50% 0 0 / 34px 34px 0 0; box-shadow: inset 0 8px 0 rgba(255, 255, 255, .18); }
+
+#app {
+  position: relative; z-index: 1; height: 100%;
+  max-width: 560px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 12px;
+  display: flex; flex-direction: column;
+}
+.screen { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.center { align-items: center; justify-content: center; gap: 14px; text-align: center; }
+
+/* start and end */
+.hero-duck { width: min(56vw, 230px); aspect-ratio: 1; max-height: 30vh; }
+.hero-duck svg { width: 100%; height: 100%; display: block; }
+h1, h2 { margin: 0; font: 800 clamp(46px, 14vw, 76px)/1 var(--font-display); color: var(--ink); text-wrap: balance; text-shadow: 0 4px 0 rgba(255, 255, 255, .7); }
+h2 { font-size: clamp(42px, 12vw, 64px); }
+.lead { margin: 0; font-size: clamp(18px, 5vw, 22px); max-width: 22ch; line-height: 1.3; }
+.hint { margin: 4px 0 0; font-size: 15px; color: rgba(30, 58, 95, .72); }
+.big {
+  display: inline-flex; align-items: center; gap: 14px; min-height: 72px; padding: 0 44px 0 38px;
+  border: 0; border-radius: 40px; cursor: pointer; color: #fff;
+  font: 800 30px var(--font-display);
+  background: var(--go); box-shadow: 0 7px 0 var(--go-deep);
+}
+.big:active { transform: translateY(4px); box-shadow: 0 3px 0 var(--go-deep); }
+.tri { width: 0; height: 0; border-left: 22px solid #fff; border-top: 14px solid transparent; border-bottom: 14px solid transparent; border-radius: 3px; }
+.total { display: inline-flex; align-items: center; gap: 10px; background: var(--paper); border-radius: 34px; padding: 6px 26px 6px 18px; font: 800 44px var(--font-display); box-shadow: 0 5px 0 rgba(30, 58, 95, .14); font-variant-numeric: tabular-nums; }
+.total svg { width: 40px; height: 40px; }
+
+/* play screen */
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.stop { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 22px 0 18px; border: 0; border-radius: 28px; background: var(--stop); color: #fff; font: 800 21px var(--font-display); box-shadow: 0 5px 0 var(--stop-deep); cursor: pointer; }
+.stop:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--stop-deep); }
+.stop i { width: 16px; height: 16px; border-radius: 3px; background: #fff; }
+.score { display: flex; align-items: center; gap: 6px; background: var(--paper); border-radius: 28px; padding: 4px 18px 4px 12px; font: 800 26px var(--font-display); box-shadow: 0 4px 0 rgba(30, 58, 95, .12); font-variant-numeric: tabular-nums; }
+.score svg { width: 30px; height: 30px; }
+
+.stage { flex: 1; min-height: 0; display: flex; flex-direction: column; padding-top: 10px; }
+.bubble {
+  --fruit: var(--stop);
+  align-self: center; position: relative; display: flex; align-items: center; gap: 14px;
+  padding: 8px 20px 8px 22px; border: 0; border-radius: 30px; background: var(--paper);
+  box-shadow: 0 6px 0 rgba(30, 58, 95, .14); cursor: pointer; color: var(--ink);
+}
+.bubble::after { content: ""; position: absolute; left: 50%; bottom: -9px; width: 22px; height: 22px; margin-left: -11px; background: var(--paper); transform: rotate(45deg); border-radius: 0 0 7px 0; }
+.num { font: 800 clamp(64px, 19vw, 96px)/1 var(--font-display); color: var(--fruit); min-width: .62em; text-align: center; }
+.say { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.05; }
+.word { font: 800 clamp(28px, 8vw, 40px)/1.05 var(--font-display); text-transform: capitalize; }
+.what { font: 800 clamp(18px, 5vw, 22px)/1.2 var(--font-body); color: var(--fruit); }
+.spk { width: 26px; height: 26px; opacity: .55; flex: none; }
+
+.duckWrap { flex: 1; min-height: 92px; position: relative; margin-top: 8px; }
+.duckWrap svg { position: absolute; inset: 0; margin: auto; width: 100%; height: 100%; max-height: 240px; overflow: visible; }
+.duck { animation: bob 2.6s ease-in-out infinite; }
+.duck.jump { animation: jump .8s ease-out; }
+@keyframes bob { 50% { transform: translateY(-6px); } }
+@keyframes jump { 0% { transform: translateY(0); } 30% { transform: translateY(-36px) rotate(-4deg); } 55% { transform: translateY(0) rotate(3deg); } 75% { transform: translateY(-14px); } 100% { transform: translateY(0); } }
+.d-shadow { fill: rgba(31, 58, 95, .14); }
+.d-body { fill: var(--duck); }
+.d-wing { fill: var(--duck-deep); }
+.d-beak, .d-foot { fill: var(--beak); }
+.d-beak2 { fill: var(--beak-deep); }
+.d-eye { fill: var(--ink); }
+.d-white { fill: #fff; }
+.d-cheek { fill: var(--cheek); opacity: .75; }
+.d-eyeg { transform-box: fill-box; transform-origin: center; animation: blink 4.5s infinite; }
+@keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
+.beakBot, .beakTop { transform-box: fill-box; }
+.beakBot { transform-origin: 0 0; }
+.beakTop { transform-origin: 0 100%; }
+.talking .beakBot { animation: chomp .24s ease-in-out infinite alternate; }
+.talking .beakTop { animation: chompTop .24s ease-in-out infinite alternate; }
+@keyframes chomp { to { transform: rotate(15deg); } }
+@keyframes chompTop { to { transform: rotate(-6deg); } }
+
+.tray { align-self: center; display: flex; gap: clamp(6px, 2vw, 12px); padding: 10px 14px; margin-top: 6px; background: rgba(255, 255, 255, .55); border-radius: 28px; }
+.slot { width: clamp(44px, 14vw, 64px); aspect-ratio: 1; border-radius: 50%; border: 3px dashed rgba(30, 58, 95, .3); display: grid; place-items: center; font: 400 clamp(26px, 8.4vw, 40px)/1 var(--emoji); }
+.slot.filled { border: 3px solid #fff; background: #fff; box-shadow: 0 3px 0 rgba(30, 58, 95, .12); }
+.slot span { display: block; animation: pop .32s ease-out; }
+@keyframes pop { from { transform: scale(.3); } 60% { transform: scale(1.22); } to { transform: scale(1); } }
+
+.basketZone { display: grid; place-items: center; padding-top: 12px; padding-bottom: 6px; }
+.basket { --fs: calc(var(--bw) * .2); position: relative; display: block; width: var(--bw); height: calc(var(--bw) * 230 / 300); padding: 0; border: 0; background: none; cursor: pointer; }
+.basket > * { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+.basket .back { z-index: 0; }
+.basket .pile { z-index: 1; display: block; }
+.basket .front { z-index: 2; }
+.basket.hint { animation: nudge 1.5s ease-in-out infinite; }
+@keyframes nudge { 50% { transform: scale(1.045); } }
+.pile i { position: absolute; font: 400 var(--fs)/1 var(--emoji); font-style: normal; transform: translate(-50%, -50%) rotate(var(--r)); animation: pile .4s ease-out both; animation-delay: var(--d); }
+@keyframes pile { from { opacity: 0; scale: .4; } to { opacity: 1; scale: 1; } }
+.w-base { fill: var(--wicker); }
+.w-dark { fill: var(--wicker-deep); }
+.w-line, .w-handle { stroke: var(--wicker-deep); }
+
+#fx { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
+.fly { position: absolute; left: 0; top: 0; font: 400 46px/1 var(--emoji); will-change: transform; }
+.bit { position: absolute; left: 0; top: 0; width: 10px; height: 14px; border-radius: 3px; will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+</style>
+
+<div class="sun"></div>
+<div class="cloud c1"></div>
+<div class="cloud c2"></div>
+<div class="ground"></div>
+
+<div id="app">
+  <section id="start" class="screen center">
+    <div id="startDuck" class="hero-duck"></div>
+    <h1>Quack Count</h1>
+    <p class="lead">Count with Duck! Tap the basket.</p>
+    <button id="playBtn" class="big" type="button"><span class="tri"></span>Play</button>
+    <p class="hint">Bật loa lên rồi bấm Play nhé.</p>
+  </section>
+
+  <section id="play" class="screen" hidden>
+    <header class="top">
+      <button id="stopBtn" class="stop" type="button" aria-label="Stop the game"><i></i>Stop</button>
+      <div class="score" role="status" aria-label="Rounds finished">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.2 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z" fill="var(--star)" stroke="#E09A00" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        <span id="scoreN">0</span>
+      </div>
+    </header>
+    <main class="stage">
+      <button id="bubble" class="bubble" type="button" aria-label="Hear Duck again" aria-live="polite">
+        <span class="num" id="numEl">1</span>
+        <span class="say"><span class="word" id="wordEl">one</span><span class="what" id="whatEl">apple</span></span>
+        <svg class="spk" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5v5h4l5 4v-13l-5 4z" fill="var(--ink)"/><path d="M15.5 9a4 4 0 010 6M18 6.5a8 8 0 010 11" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div id="playDuck" class="duckWrap"></div>
+      <div id="tray" class="tray" aria-hidden="true"></div>
+    </main>
+    <footer class="basketZone">
+      <button id="basket" class="basket hint" type="button" aria-label="Tap the basket">
+        <svg class="back" viewBox="0 0 300 230" aria-hidden="true">
+          <ellipse cx="150" cy="226" rx="120" ry="8" fill="rgba(31,58,95,.15)"/>
+          <path class="w-handle" d="M42 100C42 -30 258 -30 258 100" fill="none" stroke-width="12" stroke-linecap="round"/>
+        </svg>
+        <span class="pile" id="pile"></span>
+        <svg class="front" viewBox="0 0 300 230" aria-hidden="true">
+          <defs>
+            <pattern id="weave" width="30" height="24" patternUnits="userSpaceOnUse">
+              <rect class="w-base" width="30" height="24"/>
+              <path class="w-line" d="M0 12H30M7.5 0V12M22.5 12V24" fill="none" stroke-width="3"/>
+            </pattern>
+          </defs>
+          <path d="M26 106H274L248 212Q245 224 232 224H68Q55 224 52 212Z" fill="url(#weave)"/>
+          <rect class="w-dark" x="14" y="86" width="272" height="26" rx="13"/>
+          <rect x="22" y="91" width="256" height="6" rx="3" fill="rgba(255,255,255,.28)"/>
+        </svg>
+      </button>
+    </footer>
+  </section>
+
+  <section id="end" class="screen center" hidden>
+    <div id="endDuck" class="hero-duck"></div>
+    <h2>Bye bye!</h2>
+    <div class="total"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.2 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z" fill="var(--star)" stroke="#E09A00" stroke-width="1.2" stroke-linejoin="round"/></svg><span id="endN">0</span></div>
+    <p class="lead" id="endMsg">Great counting!</p>
+    <button id="againBtn" class="big" type="button"><span class="tri"></span>Play again</button>
+  </section>
+</div>
+
+<div id="fx" aria-hidden="true"></div>
+
+<template id="duck-tpl">
+  <svg class="duck" viewBox="0 0 200 200" aria-hidden="true">
+    <ellipse class="d-shadow" cx="100" cy="190" rx="64" ry="7"/>
+    <path class="d-body" d="M46 132Q22 118 24 98Q40 108 54 112Z"/>
+    <ellipse class="d-body" cx="100" cy="136" rx="58" ry="46"/>
+    <ellipse class="d-wing" cx="82" cy="140" rx="24" ry="17" transform="rotate(-12 82 140)"/>
+    <ellipse class="d-foot" cx="86" cy="183" rx="15" ry="6"/>
+    <ellipse class="d-foot" cx="118" cy="183" rx="15" ry="6"/>
+    <circle class="d-body" cx="112" cy="76" r="38"/>
+    <path class="d-body" d="M106 42Q103 26 115 23Q112 34 122 39Z"/>
+    <circle class="d-cheek" cx="132" cy="90" r="8"/>
+    <g class="d-eyeg"><ellipse class="d-eye" cx="124" cy="68" rx="6" ry="7"/><circle class="d-white" cx="126" cy="65.5" r="2.4"/></g>
+    <g class="beakBot"><path class="d-beak2" d="M142 86Q166 85 171 93Q161 102 142 98Z"/></g>
+    <g class="beakTop"><path class="d-beak" d="M140 74Q166 72 173 82Q168 88 142 88Z"/></g>
+  </svg>
+</template>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var NUM = ['one', 'two', 'three', 'four', 'five'];
+  var FRUITS = [
+    { e: '🍎', s: 'apple', p: 'apples', c: '#D7263D' },
+    { e: '🍌', s: 'banana', p: 'bananas', c: '#B87A00' },
+    { e: '🍊', s: 'orange', p: 'oranges', c: '#E06A00' },
+    { e: '🍓', s: 'strawberry', p: 'strawberries', c: '#D81B60' },
+    { e: '🍇', s: 'grape', p: 'grapes', c: '#7B3FB5' },
+    { e: '🍉', s: 'watermelon', p: 'watermelons', c: '#2A8F47' },
+    { e: '🍐', s: 'pear', p: 'pears', c: '#5F8A12' },
+    { e: '🍒', s: 'cherry', p: 'cherries', c: '#B3123F' },
+    { e: '🍋', s: 'lemon', p: 'lemons', c: '#A88B00' },
+    { e: '🍍', s: 'pineapple', p: 'pineapples', c: '#B8860B' },
+    { g: 'a', e: '🐶', s: 'dog', p: 'dogs', c: '#8A5A2B' },
+    { g: 'a', e: '🐱', s: 'cat', p: 'cats', c: '#D2691E' },
+    { g: 'a', e: '🐰', s: 'rabbit', p: 'rabbits', c: '#D6458A' },
+    { g: 'a', e: '🐻', s: 'bear', p: 'bears', c: '#7A4A21' },
+    { g: 'a', e: '🐸', s: 'frog', p: 'frogs', c: '#2E9E4F' },
+    { g: 'a', e: '🐥', s: 'chick', p: 'chicks', c: '#B88700' },
+    { g: 'a', e: '🐟', s: 'fish', p: 'fish', c: '#1E88C7' },
+    { g: 'a', e: '🐢', s: 'turtle', p: 'turtles', c: '#3F8F3A' },
+    { g: 'a', e: '🐷', s: 'pig', p: 'pigs', c: '#D6558A' },
+    { g: 'a', e: '🐮', s: 'cow', p: 'cows', c: '#3A4F6B' },
+    { g: 'a', e: '🐘', s: 'elephant', p: 'elephants', c: '#5B6C8F' },
+    { g: 'a', e: '🐝', s: 'bee', p: 'bees', c: '#B88700' },
+    { g: 'a', e: '🦋', s: 'butterfly', p: 'butterflies', c: '#7B3FB5' },
+    { g: 'a', e: '🐞', s: 'ladybug', p: 'ladybugs', c: '#D7263D' },
+    { g: 't', e: '🎈', s: 'balloon', p: 'balloons', c: '#E8505B' },
+    { g: 't', e: '🌸', s: 'flower', p: 'flowers', c: '#D6458A' },
+    { g: 't', e: '⚽', s: 'ball', p: 'balls', c: '#1E3A5F' },
+    { g: 't', e: '⭐', s: 'star', p: 'stars', c: '#B88700' },
+    { g: 't', e: '🚗', s: 'car', p: 'cars', c: '#D7263D' },
+    { g: 't', e: '🍪', s: 'cookie', p: 'cookies', c: '#A9692B' }
+  ];
+  var PRAISE = ['Great job!', 'Well done!', 'Hooray!', 'Yay, you did it!', 'Super!', 'Wonderful!'];
+  var PILE = [[28, 19, -12], [50, 15, 6], [72, 19, 14], [18, 31, -8], [39, 30, 10], [61, 30, -6], [82, 31, 12]];
+
+  var tpl = $('#duck-tpl');
+  ['startDuck', 'playDuck', 'endDuck'].forEach(function (id) { $('#' + id).appendChild(tpl.content.cloneNode(true)); });
+  var duckEl = $('#playDuck svg');
+  var basket = $('#basket'), pile = $('#pile'), tray = $('#tray'), fx = $('#fx');
+  var bubble = $('#bubble');
+  var slots = [];
+  for (var i = 0; i < 5; i++) { var sl = document.createElement('span'); sl.className = 'slot'; tray.appendChild(sl); slots.push(sl); }
+
+  function show(name) { ['start', 'play', 'end'].forEach(function (n) { $('#' + n).hidden = n !== name; }); }
+  function delay(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function cap(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
+
+  /* ---------- sound effects (Web Audio) ---------- */
+  var ac = null;
+  function audio() {
+    try {
+      if (!ac) { var C = window.AudioContext || window.webkitAudioContext; if (C) ac = new C(); }
+      if (ac && ac.state === 'suspended') ac.resume();
+    } catch (e) {}
+    return ac;
+  }
+  function tone(o) {
+    try {
+      var a = audio(); if (!a) return;
+      var t = a.currentTime + (o.delay || 0), dur = o.dur, vol = o.vol || 0.15;
+      var osc = a.createOscillator(), g = a.createGain(), out = g;
+      osc.type = o.type || 'sine';
+      osc.frequency.setValueAtTime(o.f0, t);
+      osc.frequency.exponentialRampToValueAtTime(o.f1, t + dur);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      osc.connect(g);
+      if (o.lp) { var f = a.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = o.lp; g.connect(f); out = f; }
+      out.connect(a.destination);
+      osc.start(t); osc.stop(t + dur + 0.03);
+    } catch (e) {}
+  }
+  var sfx = {
+    pop: function () { tone({ f0: 520, f1: 900, dur: 0.12, vol: 0.16 }); },
+    quack: function () { [0, 0.17].forEach(function (d) { tone({ f0: 560, f1: 300, dur: 0.14, type: 'sawtooth', vol: 0.08, delay: d, lp: 1400 }); }); },
+    chime: function () { [523, 659, 784, 1046].forEach(function (f, i) { tone({ f0: f, f1: f, dur: 0.3, vol: 0.13, delay: i * 0.1 }); }); }
+  };
+
+  /* ---------- voice (browser speech, Google voice when the device has one) ---------- */
+  var hasTTS = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+  var voice = null, spId = 0;
+  function pickVoice() {
+    if (!hasTTS) return;
+    var vs = speechSynthesis.getVoices() || [];
+    var en = vs.filter(function (v) { return /^en[-_]/i.test(v.lang); });
+    var us = en.filter(function (v) { return /^en[-_]US/i.test(v.lang); });
+    voice =
+      en.find(function (v) { return /google us english/i.test(v.name); }) ||
+      us.find(function (v) { return /google/i.test(v.name); }) ||
+      en.find(function (v) { return /google/i.test(v.name); }) ||
+      us.find(function (v) { return /(samantha|aria|jenny|zira|female)/i.test(v.name); }) ||
+      us[0] || en[0] || null;
+  }
+  if (hasTTS) {
+    pickVoice();
+    try { speechSynthesis.addEventListener('voiceschanged', pickVoice); } catch (e) { speechSynthesis.onvoiceschanged = pickVoice; }
+  }
+  function setTalking(on) { document.body.classList.toggle('talking', on); }
+  function speak(text) {
+    var id = ++spId;
+    return new Promise(function (resolve) {
+      var done = false;
+      var guard;
+      function fin() {
+        if (done) return; done = true; clearTimeout(guard);
+        if (id === spId) setTalking(false);
+        resolve();
+      }
+      guard = setTimeout(fin, 1800 + text.length * 120);
+      if (!hasTTS) { setTalking(true); setTimeout(fin, 900); return; }
+      try { speechSynthesis.cancel(); } catch (e) {}
+      setTimeout(function () {
+        if (id !== spId) { fin(); return; }
+        try {
+          var u = new SpeechSynthesisUtterance(text);
+          u.lang = 'en-US';
+          if (voice) u.voice = voice;
+          u.rate = 0.8; u.pitch = 1.15; u.volume = 1;
+          u.onstart = function () { if (id === spId) setTalking(true); };
+          u.onend = fin; u.onerror = fin;
+          speechSynthesis.speak(u);
+        } catch (e) { fin(); }
+      }, 70);
+    });
+  }
+
+  /* ---------- game state ---------- */
+  var S = { running: false, locked: false, target: 1, fruit: FRUITS[0], count: 0, rounds: 0, rid: 0, idle: null, lastNum: -1, lastFruit: -1, firstTap: true };
+
+  function rand(n, not) { var v; do { v = Math.floor(Math.random() * n); } while (v === not && n > 1); return v; }
+  function nameOf() { return S.target === 1 ? S.fruit.s : S.fruit.p; }
+  function simplePrompt() { return cap(NUM[S.target - 1]) + ' ' + nameOf() + '.'; }
+  function armIdle() {
+    clearTimeout(S.idle);
+    if (S.reminded) return;
+    S.idle = setTimeout(function () { if (S.running && !S.locked) { S.reminded = true; speak(simplePrompt()); } }, 20000);
+  }
+
+  function renderPile() {
+    pile.innerHTML = '';
+    PILE.forEach(function (p, i) {
+      var el = document.createElement('i');
+      el.textContent = S.fruit.e;
+      el.style.left = p[0] + '%'; el.style.top = p[1] + '%';
+      el.style.setProperty('--r', p[2] + 'deg');
+      el.style.setProperty('--d', (i * 45) + 'ms');
+      pile.appendChild(el);
+    });
+  }
+
+  function pickItem() {
+    var r = Math.random(), g = r < 0.35 ? 'f' : (r < 0.8 ? 'a' : 't');
+    var idxs = [];
+    FRUITS.forEach(function (x, i) { if ((x.g || 'f') === g && i !== S.lastFruit) idxs.push(i); });
+    return idxs[Math.floor(Math.random() * idxs.length)];
+  }
+
+  function startRound() {
+    S.rid++; S.locked = false; S.count = 0; S.reminded = false;
+    var ni = rand(5, S.lastNum), fi = pickItem();
+    S.lastNum = ni; S.lastFruit = fi;
+    S.target = ni + 1; S.fruit = FRUITS[fi];
+    $('#numEl').textContent = S.target;
+    $('#wordEl').textContent = NUM[ni];
+    $('#whatEl').textContent = nameOf();
+    bubble.style.setProperty('--fruit', S.fruit.c);
+    slots.forEach(function (s) { s.className = 'slot'; s.innerHTML = ''; });
+    renderPile();
+    if (!REDUCED) bubble.animate([{ transform: 'scale(.7)', opacity: 0 }, { transform: 'scale(1.06)', opacity: 1 }, { transform: 'scale(1)' }], { duration: 380, easing: 'ease-out' });
+    var rid = S.rid;
+    sfx.quack();
+    setTimeout(function () {
+      if (S.running && S.rid === rid) { speak(simplePrompt()); armIdle(); }
+    }, 300);
+  }
+
+  function ctr(el) { var r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
+  function basketPoint() { var r = basket.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height * 0.22 }; }
+
+  function fly(emoji, from, to) {
+    return new Promise(function (res) {
+      var el = document.createElement('span');
+      el.className = 'fly'; el.textContent = emoji; fx.appendChild(el);
+      var t = function (x, y, s) { return 'translate(' + x + 'px,' + y + 'px) translate(-50%,-50%) scale(' + s + ')'; };
+      var mx = (from.x + to.x) / 2, my = Math.min(from.y, to.y) - 70;
+      var frames = [
+        { transform: t(from.x, from.y, 0.9), offset: 0, easing: 'cubic-bezier(.2,.7,.4,1)' },
+        { transform: t(mx, my, 1.25), offset: 0.5, easing: 'cubic-bezier(.6,0,.8,.5)' },
+        { transform: t(to.x, to.y, 0.9), offset: 1 }
+      ];
+      setTimeout(function () { el.remove(); res(); }, (REDUCED ? 250 : 650) + 500);
+      try {
+        var a = el.animate(frames, { duration: REDUCED ? 250 : 650, fill: 'forwards' });
+        a.onfinish = function () { el.remove(); res(); };
+      } catch (e) { el.remove(); res(); }
+    });
+  }
+
+  function tap() {
+    if (!S.running || S.locked) return;
+    audio();
+    var rid = S.rid, idx = S.count;
+    S.count++;
+    if (S.count >= S.target) { S.locked = true; clearTimeout(S.idle); } else { armIdle(); }
+    basket.classList.remove('hint');
+    sfx.pop();
+    if (!REDUCED) basket.animate([{ transform: 'scale(.93)' }, { transform: 'scale(1.03)' }, { transform: 'scale(1)' }], { duration: 230 });
+    var slot = slots[idx], emoji = S.fruit.e;
+    fly(emoji, basketPoint(), ctr(slot)).then(function () {
+      if (!S.running || rid !== S.rid) return;
+      slot.classList.add('filled');
+      slot.innerHTML = '<span>' + emoji + '</span>';
+      if (idx + 1 === S.target) success(rid); else speak(NUM[idx]);
+    });
+  }
+
+  function confetti() {
+    var r = $('#playDuck').getBoundingClientRect();
+    var cx = r.left + r.width / 2, cy = r.top + r.height * 0.4;
+    var cols = ['var(--duck)', 'var(--stop)', 'var(--sky-deep)', 'var(--grass-deep)', 'var(--beak)', 'var(--star)'];
+    var n = REDUCED ? 8 : 30;
+    for (var i = 0; i < n; i++) {
+      (function (i) {
+        var b = document.createElement('i');
+        b.className = 'bit'; b.style.background = cols[i % cols.length]; fx.appendChild(b);
+        var ang = Math.random() * Math.PI * 2, d = 90 + Math.random() * 140;
+        var x = cx + Math.cos(ang) * d, y = cy + Math.sin(ang) * d * 0.8 - 40;
+        var rot = Math.random() * 540;
+        try {
+          b.animate([
+            { transform: 'translate(' + cx + 'px,' + cy + 'px) rotate(0deg)', opacity: 1 },
+            { transform: 'translate(' + x + 'px,' + y + 'px) rotate(' + rot + 'deg)', opacity: 1, offset: 0.6 },
+            { transform: 'translate(' + x + 'px,' + (y + 80) + 'px) rotate(' + (rot + 200) + 'deg)', opacity: 0 }
+          ], { duration: 1100 + Math.random() * 500, easing: 'ease-out' }).onfinish = function () { b.remove(); };
+        } catch (e) { b.remove(); }
+      })(i);
+    }
+  }
+
+  function success(rid) {
+    S.rounds++;
+    $('#scoreN').textContent = S.rounds;
+    if (!REDUCED) $('.score').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.25)' }, { transform: 'scale(1)' }], { duration: 400 });
+    duckEl.classList.remove('jump'); void duckEl.getBoundingClientRect(); duckEl.classList.add('jump');
+    duckEl.addEventListener('animationend', function h(e) { if (e.animationName === 'jump') { duckEl.classList.remove('jump'); duckEl.removeEventListener('animationend', h); } });
+    confetti(); sfx.chime();
+    var text = cap(NUM[S.target - 1]) + '! ' + PRAISE[rand(PRAISE.length, -1)];
+    Promise.all([speak(text), delay(2400)]).then(function () {
+      if (S.running && S.rid === rid) startRound();
+    });
+  }
+
+  function stop() {
+    if (!S.running) return;
+    S.running = false; S.rid++; clearTimeout(S.idle);
+    fx.innerHTML = '';
+    $('#endN').textContent = S.rounds;
+    $('#endMsg').textContent = S.rounds === 0 ? 'Come back and count with me!' : (S.rounds === 1 ? 'You counted 1 time. Great job!' : 'You counted ' + S.rounds + ' times. Great job!');
+    show('end');
+    speak('Bye bye!');
+  }
+
+  function begin() {
+    audio();
+    S.running = true; S.rounds = 0; S.lastNum = -1; S.lastFruit = -1;
+    $('#scoreN').textContent = '0';
+    basket.classList.add('hint');
+    show('play');
+    startRound();
+  }
+
+  $('#playBtn').addEventListener('click', begin);
+  $('#againBtn').addEventListener('click', begin);
+  $('#stopBtn').addEventListener('click', stop);
+  basket.addEventListener('click', tap);
+  bubble.addEventListener('click', function () { if (S.running && !S.locked) { audio(); speak(simplePrompt()); armIdle(); } });
+})();
+</script>
+
+</body></html>
