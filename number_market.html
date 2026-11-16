@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mom's Market Helper</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --sky-top: #7DD3FC;
+            --sky-bottom: #E0F2FE;
+            --grass-light: #A3E635;
+            --grass-dark: #65A30D;
+            --road-color: #E7C697;
+            --road-border: #C89F65;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #1E293B;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .font-display {
+            font-family: 'Baloo 2', cursive;
+        }
+
+        /* Khung sân khấu chính phong cách sách tranh */
+        #game-stage {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 1280px;
+            max-height: 760px;
+            background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 52%, var(--grass-light) 52%, var(--grass-dark) 100%);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (min-width: 1281px) {
+            #game-stage {
+                border-radius: 24px;
+                border: 6px solid #FDE68A;
+            }
+        }
+
+        /* Con đường làng chạy ngang màn hình */
+        .village-road {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 27%;
+            background: linear-gradient(180deg, #F3D5A5 0%, #DFB77B 40%, #C79958 100%);
+            border-top: 6px solid #B08142;
+            z-index: 5;
+        }
+
+        /* Các viên đá cuội trang trí đường làng */
+        .road-pebbles {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(ellipse 14px 6px at 15% 35%, rgba(139, 90, 43, 0.25) 0%, transparent 70%),
+                radial-gradient(ellipse 20px 8px at 45% 65%, rgba(139, 90, 43, 0.2) 0%, transparent 70%),
+                radial-gradient(ellipse 12px 5px at 75% 30%, rgba(139, 90, 43, 0.25) 0%, transparent 70%),
+                radial-gradient(ellipse 18px 7px at 88% 75%, rgba(139, 90, 43, 0.2) 0%, transparent 70%);
+            background-size: 400px 100%;
+        }
+
+        /* Mái lá sạp hàng & nhà tranh */
+        .thatched-roof {
+            background: repeating-linear-gradient(
+                90deg,
+                #D9A05B,
+                #D9A05B 14px,
+                #BD8442 14px,
+                #BD8442 28px
+            );
+            border-bottom: 6px solid #855221;
+            position: relative;
+        }
+        .thatched-roof::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background-image: radial-gradient(circle at 14px 0, #D9A05B 11px, transparent 12px);
+            background-size: 28px 12px;
+        }
+
+        /* Mẹt tre */
+        .bamboo-tray {
+            background: radial-gradient(circle, #FDF0C7 55%, #E8C77B 100%);
+            border: 6px solid #9C6635;
+            box-shadow: inset 0 3px 8px rgba(120, 72, 28, 0.35), 0 6px 12px rgba(0,0,0,0.2);
+            background-image: 
+                repeating-linear-gradient(45deg, rgba(156, 102, 53, 0.08) 0px, rgba(156, 102, 53, 0.08) 2px, transparent 2px, transparent 8px),
+                repeating-linear-gradient(-45deg, rgba(156, 102, 53, 0.08) 0px, rgba(156, 102, 53, 0.08) 2px, transparent 2px, transparent 8px);
+        }
+
+        /* =========================================================
+           HỆ THỐNG DIỄN HOẠT TƯ THẾ NHÂN VẬT (CHARACTER POSES)
+           ========================================================= */
+        .character-wrapper {
+            transition: left 1.8s cubic-bezier(0.45, 0.05, 0.55, 0.95), transform 0.3s ease;
+            will-change: left, transform;
+        }
+
+        /* 1. Tư thế Đứng thở (Idle) */
+        .pose-idle .char-body {
+            animation: idleBreath 2.2s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+        .pose-idle .char-arm-basket {
+            animation: idleBasketSwing 2.2s ease-in-out infinite;
+            transform-origin: 68px 68px;
+        }
+
+        @keyframes idleBreath {
+            0%, 100% { transform: scaleY(1) translateY(0); }
+            50% { transform: scaleY(1.03) translateY(-2px); }
+        }
+        @keyframes idleBasketSwing {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-3deg); }
+        }
+
+        /* 2. Tư thế Bước đi (Walking) */
+        .pose-walking .char-body {
+            animation: walkBounce 0.36s ease-in-out infinite;
+        }
+        .pose-walking .leg-left {
+            animation: legSwingLeft 0.36s ease-in-out infinite alternate;
+            transform-origin: 42px 98px;
+        }
+        .pose-walking .leg-right {
+            animation: legSwingRight 0.36s ease-in-out infinite alternate;
+            transform-origin: 58px 98px;
+        }
+        .pose-walking .char-arm-left {
+            animation: armSwingLeft 0.36s ease-in-out infinite alternate;
+            transform-origin: 32px 68px;
+        }
+        .pose-walking .char-arm-basket {
+            animation: armSwingRight 0.36s ease-in-out infinite alternate;
+            transform-origin: 68px 68px;
+        }
+
+        @keyframes walkBounce {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-7px) rotate(2deg); }
+        }
+        @keyframes legSwingLeft {
+            0% { transform: rotate(-24deg); }
+            100% { transform: rotate(24deg); }
+        }
+        @keyframes legSwingRight {
+            0% { transform: rotate(24deg); }
+            100% { transform: rotate(-24deg); }
+        }
+        @keyframes armSwingLeft {
+            0% { transform: rotate(20deg); }
+            100% { transform: rotate(-20deg); }
+        }
+        @keyframes armSwingRight {
+            0% { transform: rotate(-12deg); }
+            100% { transform: rotate(12deg); }
+        }
+
+        /* 3. Tư thế Nhặt đồ / Đưa tay (Picking / Reaching) */
+        .pose-picking .char-body {
+            transform: rotate(6deg) translateY(3px);
+            transition: transform 0.2s;
+        }
+        .pose-picking .char-arm-left {
+            transform: rotate(-65deg) translate(-4px, -6px);
+            transform-origin: 32px 68px;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .pose-picking .char-arm-basket {
+            transform: rotate(-18deg) translateY(-4px);
+            transform-origin: 68px 68px;
+            transition: transform 0.2s;
+        }
+
+        /* 4. Tư thế Vui mừng (Happy / Cheering) */
+        .pose-happy .char-body {
+            animation: happyJump 0.55s ease-in-out infinite;
+        }
+        .pose-happy .char-arm-left {
+            transform: rotate(-135deg);
+            transform-origin: 32px 68px;
+        }
+        .pose-happy .char-arm-basket {
+            transform: rotate(-35deg);
+            transform-origin: 68px 68px;
+        }
+
+        @keyframes happyJump {
+            0%, 100% { transform: translateY(0) scale(1); }
+            45% { transform: translateY(-18px) scale(1.04); }
+        }
+
+        /* 5. Tư thế Suy nghĩ / Lắng nghe (Thinking) */
+        .pose-thinking .char-head {
+            transform: rotate(-6deg);
+            transform-origin: 50px 55px;
+            transition: transform 0.3s;
+        }
+        .pose-thinking .char-arm-left {
+            transform: rotate(-110deg) translate(4px, 2px);
+            transform-origin: 32px 68px;
+        }
+
+        /* 6. Tư thế Bối rối / Gãi đầu (Confused) */
+        .pose-confused .char-body {
+            animation: confusedShake 0.45s ease-in-out;
+        }
+        .pose-confused .char-arm-left {
+            transform: rotate(-145deg) translate(6px, 4px);
+            transform-origin: 32px 68px;
+        }
+
+        @keyframes confusedShake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-6deg); }
+            75% { transform: rotate(6deg); }
+        }
+
+        /* Diễn hoạt Người bán hàng & Mẹ */
+        .vendor-idle {
+            animation: vendorSway 2.6s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+        @keyframes vendorSway {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.025); }
+        }
+        .vendor-wave .vendor-arm {
+            animation: waveHand 0.6s ease-in-out infinite alternate;
+            transform-origin: 28px 68px;
+        }
+        @keyframes waveHand {
+            0% { transform: rotate(-10deg); }
+            100% { transform: rotate(-55deg); }
+        }
+
+        /* Vật phẩm kéo thả */
+        .stall-item {
+            cursor: grab;
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+            touch-action: none;
+            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.22));
+        }
+        .stall-item:hover {
+            transform: scale(1.18) rotate(5deg);
+        }
+        .stall-item:active {
+            cursor: grabbing;
+        }
+
+        .dragging-ghost {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%) scale(1.3);
+            filter: drop-shadow(0 12px 14px rgba(0,0,0,0.35));
+        }
+
+        /* Vùng thả vào giỏ của bé */
+        .basket-drop-highlight {
+            filter: drop-shadow(0 0 14px #FACC15) brightness(1.12);
+            transform: scale(1.08);
+        }
+
+        /* Nút bấm nổi 3D */
+        .btn-3d {
+            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.22);
+        }
+        .btn-3d:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.22);
+        }
+
+        @keyframes popScale {
+            0% { transform: scale(0.4); opacity: 0; }
+            75% { transform: scale(1.12); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop {
+            animation: popScale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes floatCloud {
+            0% { transform: translateX(-120px); }
+            100% { transform: translateX(1350px); }
+        }
+        .cloud-move-1 { animation: floatCloud 48s linear infinite; }
+        .cloud-move-2 { animation: floatCloud 65s linear infinite; animation-delay: -22s; }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); }
+            50% { box-shadow: 0 0 0 6px rgba(251, 191, 36, 0); }
+        }
+        .speaking-ring {
+            animation: pulseGlow 1s infinite;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-stage">
+    <!-- =========================================================
+         BACKGROUND VILLAGE SCENERY
+         ========================================================= -->
+    <div class="absolute inset-0 pointer-events-none z-0">
+        <!-- Warm Sun -->
+        <div class="absolute top-6 right-12 w-16 h-16 md:w-20 md:h-20 bg-amber-300 rounded-full shadow-[0_0_45px_#FDE047] flex items-center justify-center">
+            <div class="w-12 h-12 md:w-14 md:h-14 bg-yellow-200 rounded-full opacity-70"></div>
+        </div>
+        <!-- Fluffy Clouds -->
+        <div class="cloud-move-1 absolute top-8 left-10 w-24 h-8 bg-white/85 rounded-full shadow-xs"></div>
+        <div class="cloud-move-2 absolute top-16 left-1/3 w-32 h-9 bg-white/75 rounded-full shadow-xs"></div>
+    </div>
+
+    <!-- Canvas for dust puffs & sparkles -->
+    <canvas id="fx-canvas" class="absolute inset-0 pointer-events-none z-30"></canvas>
+
+    <!-- Village Road -->
+    <div class="village-road">
+        <div class="road-pebbles" id="road-pebbles"></div>
+    </div>
+
+    <!-- =========================================================
+         TOP HUD BAR (100% ENGLISH)
+         ========================================================= -->
+    <header class="relative z-40 px-3 md:px-5 pt-2.5 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 bg-white/90 backdrop-blur-md px-3 py-1 rounded-2xl border-2 border-amber-300 shadow-sm">
+            <span id="chapter-icon" class="text-lg">🏡</span>
+            <div>
+                <div class="text-[10px] font-bold text-amber-600 uppercase leading-none" id="chapter-subtitle">Prologue</div>
+                <div class="font-display font-extrabold text-gray-800 text-xs md:text-sm leading-tight" id="chapter-title">Cozy Village Home</div>
+            </div>
+        </div>
+
+        <!-- 6-Stage Journey Map -->
+        <div class="hidden md:flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-3.5 py-1 rounded-2xl border-2 border-amber-300 shadow-sm" id="journey-map">
+            <!-- Rendered by JS -->
+        </div>
+
+        <div class="flex items-center gap-1.5">
+            <!-- Shopping Bag Button -->
+            <button onclick="toggleShoppingListModal()" class="btn-3d bg-amber-100 hover:bg-amber-200 text-amber-900 border-2 border-amber-400 px-2.5 py-1 rounded-xl font-bold text-xs flex items-center gap-1 cursor-pointer">
+                <span>🧺</span>
+                <span class="hidden sm:inline">Basket</span>
+                <span id="total-collected-badge" class="bg-amber-500 text-white px-1.5 rounded-full text-[11px]">0</span>
+            </button>
+
+            <!-- Sound Toggle -->
+            <button id="sound-toggle-btn" onclick="toggleAudio()" class="btn-3d bg-sky-100 hover:bg-sky-200 text-sky-800 border-2 border-sky-300 px-2.5 py-1 rounded-xl text-xs font-bold cursor-pointer" title="Toggle Sound">
+                🔊
+            </button>
+
+            <!-- Home / Restart -->
+            <button onclick="resetToTitle()" class="btn-3d bg-rose-100 hover:bg-rose-200 text-rose-800 border-2 border-rose-300 px-2.5 py-1 rounded-xl text-xs font-bold cursor-pointer" title="Main Menu">
+                🏠
+            </button>
+        </div>
+    </header>
+
+    <!-- =========================================================
+         COMPACT FLOATING SPEECH BAR (SLIM & NON-INTRUSIVE)
+         ========================================================= -->
+    <div id="dialogue-box" class="relative z-30 mx-auto mt-2 w-[95%] max-w-3xl bg-white/95 backdrop-blur-md border-2 border-rose-400 rounded-2xl px-3 py-2 shadow-lg transition-all duration-300">
+        <div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+            
+            <!-- Left: Google AI Voice Buttons + Short English Command -->
+            <div class="flex items-center gap-2.5 flex-1 min-w-0">
+                <div class="flex items-center gap-1 flex-shrink-0">
+                    <button id="btn-listen-normal" onclick="replayCurrentSpeech(1.0)" class="btn-3d bg-amber-400 hover:bg-amber-500 text-amber-950 px-2.5 py-1.5 rounded-xl flex items-center gap-1 text-xs font-extrabold cursor-pointer" title="Listen (Google AI Voice)">
+                        <span>🔊</span>
+                        <span class="hidden md:inline">Listen</span>
+                    </button>
+                    <button id="btn-listen-slow" onclick="replayCurrentSpeech(0.75)" class="btn-3d bg-sky-100 hover:bg-sky-200 text-sky-800 px-2 py-1.5 rounded-xl text-xs font-extrabold cursor-pointer" title="Slow Speed">
+                        🐢
+                    </button>
+                </div>
+
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-1.5">
+                        <span id="speaker-name-badge" class="bg-rose-100 text-rose-700 font-extrabold text-[11px] px-2 py-0.2 rounded-full">
+                            👩🏻‍🌾 Mom
+                        </span>
+                        <span id="ai-voice-tag" class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.2 rounded-full">
+                            ✨ Google AI
+                        </span>
+                    </div>
+                    <p id="english-dialogue" class="font-display font-bold text-gray-800 text-base sm:text-lg md:text-xl leading-tight truncate">
+                        "Help Mom buy food at the market!"
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right: Compact Target Badges + Action Button -->
+            <div class="flex items-center gap-2 ml-auto flex-shrink-0">
+                <div id="target-pills" class="hidden items-center gap-1.5">
+                    <!-- e.g. 🥕 3 carrots -->
+                </div>
+                <div id="dialogue-actions" class="flex items-center">
+                    <!-- Action button rendered by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         MAIN STAGE SCENES (HOME & MARKET STALLS)
+         ========================================================= -->
+    <main id="scene-container" class="relative z-10 w-full h-[calc(100%-118px)]">
+
+        <!-- 1. HOME SCENE (Prologue & Ending) -->
+        <div id="home-scene" class="absolute inset-0 flex items-end justify-between px-4 md:px-14 pb-[15%] transition-opacity duration-500">
+            <!-- Cozy Thatched House -->
+            <div class="relative w-52 sm:w-68 md:w-76 flex flex-col items-center">
+                <div class="w-full h-22 md:h-24 thatched-roof rounded-t-[60px] shadow-xl flex items-center justify-center">
+                    <span class="bg-[#5C3A21] text-amber-100 font-display font-bold px-3.5 py-0.5 rounded-full text-xs border border-amber-400/40">
+                        🏡 SWEET HOME
+                    </span>
+                </div>
+                <div class="w-[88%] h-32 md:h-40 bg-[#FEF3C7] border-x-8 border-[#92400E] flex items-end justify-around px-4 pb-0 relative shadow-inner">
+                    <div class="w-12 h-14 bg-[#78350F] rounded-t-lg border-4 border-[#B45309] mb-10 grid grid-cols-2 gap-1 p-1">
+                        <div class="bg-amber-200/80"></div><div class="bg-amber-200/80"></div>
+                    </div>
+                    <div class="w-18 h-24 md:h-28 bg-[#451A03] rounded-t-xl border-t-4 border-x-4 border-[#92400E] flex items-center justify-center">
+                        <div class="w-2 h-2 bg-yellow-400 rounded-full ml-10"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dining Table (Shown at Ending) -->
+            <div id="kitchen-table-area" class="hidden md:flex flex-col items-center mb-1">
+                <div id="feast-platter" class="min-w-[250px] min-h-[82px] bg-white/95 border-4 border-amber-400 rounded-3xl p-2.5 shadow-xl flex flex-wrap items-center justify-center gap-2 mb-1">
+                    <span class="text-xs font-bold text-amber-700">🍲 Lunch Feast</span>
+                </div>
+                <div class="w-60 h-5 bg-[#92400E] rounded-t-lg shadow-md"></div>
+                <div class="w-52 flex justify-between px-4">
+                    <div class="w-4 h-14 bg-[#78350F]"></div>
+                    <div class="w-4 h-14 bg-[#78350F]"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. MARKET STALL SCENE -->
+        <div id="market-stall-scene" class="hidden absolute inset-0 flex flex-col justify-start pt-3 pb-[15%] px-3 md:px-10">
+            
+            <!-- Stall Roof + Bamboo Tray -->
+            <div class="w-full max-w-3xl mx-auto">
+                <div class="bg-[#FFFBEB] rounded-3xl border-4 border-[#9C6635] shadow-xl overflow-hidden">
+                    <!-- Thatched Stall Header -->
+                    <div class="thatched-roof h-9 md:h-10 flex items-center justify-between px-4">
+                        <span class="text-amber-100 text-[11px] font-bold hidden sm:inline">🌿 Village Market</span>
+                        <div id="stall-banner-title" class="bg-[#5C3A21] text-amber-100 font-display font-extrabold px-4 py-0.5 rounded-full text-xs md:text-base border border-amber-300/40 mx-auto">
+                            🍎 FRUIT STALL
+                        </div>
+                        <button onclick="clearCurrentBasket()" class="bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full cursor-pointer shadow">
+                            ↺ Reset
+                        </button>
+                    </div>
+
+                    <!-- Bamboo Tray Items -->
+                    <div class="p-2.5 md:p-3.5 pt-4 flex flex-col items-center">
+                        <div id="bamboo-tray-items" class="bamboo-tray w-full max-w-2xl min-h-[105px] md:min-h-[125px] rounded-full px-6 py-2.5 flex flex-wrap items-center justify-center gap-3 md:gap-4">
+                            <!-- Items rendered by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================
+             CHARACTERS ON STAGE (KID WITH BASKET + MOM / VENDOR)
+             ========================================================= -->
+        
+        <!-- KID CHARACTER -->
+        <div id="kid-character" class="character-wrapper pose-idle absolute bottom-[11%] z-20 flex flex-col items-center" style="left: 24%;">
+            <!-- Compact Thought Bubble -->
+            <div id="kid-thought-bubble" class="hidden mb-1 bg-white border-2 border-sky-400 rounded-2xl px-2.5 py-0.5 shadow-md text-xs font-extrabold text-sky-700 animate-bounce">
+                💭 <span id="thought-content">3 🍎</span>
+            </div>
+
+            <!-- SVG Character + Basket -->
+            <div id="kid-drop-target" class="relative w-28 h-36 md:w-32 md:h-40 transition-transform duration-200">
+                <svg id="kid-svg" viewBox="0 0 120 140" class="w-full h-full overflow-visible">
+                    <!-- Bóng đổ dưới chân -->
+                    <ellipse cx="55" cy="132" rx="26" ry="6" fill="rgba(0,0,0,0.22)"/>
+
+                    <!-- Chân trái & Chân phải -->
+                    <g class="leg-left">
+                        <rect x="40" y="96" width="10" height="26" rx="5" fill="#FDBA74"/>
+                        <path d="M36,120 Q45,116 52,122 L52,127 L35,127 Z" fill="#EF4444"/>
+                    </g>
+                    <g class="leg-right">
+                        <rect x="58" y="96" width="10" height="26" rx="5" fill="#FDBA74"/>
+                        <path d="M55,120 Q64,116 71,122 L71,127 L54,127 Z" fill="#EF4444"/>
+                    </g>
+
+                    <!-- Thân người -->
+                    <g class="char-body">
+                        <!-- Tay trái (Tay tự do dùng để vẫy, chỉ, gãi đầu, nhặt đồ) -->
+                        <g class="char-arm-left">
+                            <rect x="26" y="64" width="10" height="26" rx="5" fill="#FDBA74" transform="rotate(15 31 64)"/>
+                            <circle cx="26" cy="89" r="5.5" fill="#FDBA74"/>
+                        </g>
+
+                        <!-- Áo & Quần yếm -->
+                        <path d="M34,62 Q54,56 74,62 L78,100 L30,100 Z" id="kid-shirt" fill="#38BDF8"/>
+                        <!-- Yếm xanh/đỏ -->
+                        <path d="M36,75 L72,75 L75,102 L33,102 Z" id="kid-overalls" fill="#0284C7"/>
+                        <rect x="40" y="62" width="5" height="15" fill="#0284C7"/>
+                        <rect x="63" y="62" width="5" height="15" fill="#0284C7"/>
+                        <circle cx="42.5" cy="76" r="2" fill="#FACC15"/>
+                        <circle cx="65.5" cy="76" r="2" fill="#FACC15"/>
+
+                        <!-- Đầu nhân vật -->
+                        <g class="char-head">
+                            <!-- Tóc bé gái (2 bím tóc) - Ẩn nếu chọn bé trai -->
+                            <g id="girl-pigtails" class="hidden">
+                                <circle cx="24" cy="36" r="9" fill="#1E293B"/>
+                                <circle cx="84" cy="36" r="9" fill="#1E293B"/>
+                                <circle cx="29" cy="38" r="3" fill="#F43F5E"/>
+                                <circle cx="79" cy="38" r="3" fill="#F43F5E"/>
+                            </g>
+
+                            <!-- Khuôn mặt -->
+                            <circle cx="54" cy="38" r="23" fill="#FDBA74"/>
+
+                            <!-- Mái tóc -->
+                            <path d="M31,35 Q33,13 54,13 Q75,13 77,35 Q65,24 54,27 Q43,24 31,35 Z" fill="#1E293B"/>
+                            <!-- Chỏm tóc bé trai -->
+                            <path id="boy-tuft" d="M50,14 Q54,3 61,13" fill="none" stroke="#1E293B" stroke-width="4.5" stroke-linecap="round"/>
+
+                            <!-- Mắt (Thay đổi theo biểu cảm) -->
+                            <g id="kid-eyes-normal">
+                                <circle cx="45" cy="38" r="3.5" fill="#1E293B"/>
+                                <circle cx="63" cy="38" r="3.5" fill="#1E293B"/>
+                                <circle cx="46" cy="37" r="1.2" fill="#FFF"/>
+                                <circle cx="64" cy="37" r="1.2" fill="#FFF"/>
+                            </g>
+                            <g id="kid-eyes-happy" class="hidden">
+                                <path d="M41,38 Q45,32 49,38" fill="none" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
+                                <path d="M59,38 Q63,32 67,38" fill="none" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
+                            </g>
+
+                            <!-- Má hồng -->
+                            <circle cx="39" cy="44" r="3.5" fill="#FB7185" opacity="0.65"/>
+                            <circle cx="69" cy="44" r="3.5" fill="#FB7185" opacity="0.65"/>
+
+                            <!-- Miệng (Cười / Ngạc nhiên / Mếu nhẹ) -->
+                            <path id="kid-mouth-smile" d="M47,47 Q54,55 61,47 Z" fill="#EF4444"/>
+                            <circle id="kid-mouth-wow" class="hidden" cx="54" cy="49" r="4.5" fill="#EF4444"/>
+                            <path id="kid-mouth-oops" class="hidden" d="M48,51 Q54,46 60,51" fill="none" stroke="#991B1B" stroke-width="2.5" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- Tay phải + CHIẾC GIỎ ĐI CHỢ TRÊN TAY BÉ -->
+                        <g class="char-arm-basket">
+                            <rect x="70" y="64" width="10" height="24" rx="5" fill="#FDBA74" transform="rotate(-18 75 64)"/>
+                            <!-- Quai giỏ mây -->
+                            <path d="M74,84 Q92,66 110,84" fill="none" stroke="#78350F" stroke-width="4" stroke-linecap="round"/>
+                            <!-- Thân giỏ mây -->
+                            <path d="M70,84 L114,84 L107,112 Q92,116 77,112 Z" fill="#D97706" stroke="#78350F" stroke-width="3"/>
+                            <!-- Nan đan giỏ -->
+                            <line x1="73" y1="93" x2="111" y2="93" stroke="#92400E" stroke-width="2"/>
+                            <line x1="75" y1="102" x2="109" y2="102" stroke="#92400E" stroke-width="2"/>
+                        </g>
+                    </g>
+                </svg>
+
+                <!-- Items inside Kid's Basket -->
+                <div id="basket-visual-items" class="absolute right-[-12px] top-[52px] w-16 h-12 flex flex-wrap-reverse items-center justify-center pointer-events-none text-base leading-none">
+                </div>
+
+                <!-- Basket Counter Badge -->
+                <div id="basket-count-badge" class="hidden absolute -right-4 top-10 bg-rose-600 text-white border-2 border-white w-7 h-7 rounded-full flex items-center justify-center font-display font-extrabold text-sm shadow-md">
+                    0
+                </div>
+            </div>
+
+            <span id="kid-name-tag" class="bg-sky-600 text-white text-xs font-extrabold px-3 py-0.5 rounded-full shadow border border-white">
+                👦🏻 Tim
+            </span>
+        </div>
+
+        <!-- NPC CHARACTER (MOM / MARKET VENDOR) -->
+        <div id="npc-character" class="vendor-idle absolute bottom-[11%] right-[14%] md:right-[18%] z-20 flex flex-col items-center transition-all duration-500">
+            <div class="w-28 h-36 md:w-32 md:h-40">
+                <svg id="npc-svg" viewBox="0 0 120 140" class="w-full h-full overflow-visible">
+                    <!-- Bóng đổ -->
+                    <ellipse cx="60" cy="132" rx="28" ry="6" fill="rgba(0,0,0,0.22)"/>
+
+                    <!-- Tay vẫy chào -->
+                    <g class="vendor-arm">
+                        <rect x="24" y="66" width="11" height="28" rx="5.5" fill="#FDBA74" transform="rotate(20 29 66)"/>
+                        <circle cx="22" cy="92" r="6" fill="#FDBA74"/>
+                    </g>
+                    <rect x="85" y="66" width="11" height="28" rx="5.5" fill="#FDBA74" transform="rotate(-15 90 66)"/>
+
+                    <!-- Áo bà ba truyền thống (Đổi màu theo từng nhân vật) -->
+                    <path id="npc-outfit" d="M32,64 Q60,56 88,64 L94,126 L26,126 Z" fill="#F43F5E"/>
+                    <!-- Khăn rằn quàng cổ -->
+                    <path d="M44,62 Q60,72 76,62 L72,78 Q60,84 48,78 Z" fill="#FFF" stroke="#1E293B" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+                    <!-- Đầu nhân vật -->
+                    <circle cx="60" cy="40" r="23" fill="#FDBA74"/>
+                    <!-- Tóc búi sau -->
+                    <circle cx="82" cy="36" r="9" fill="#1F2937"/>
+                    <path d="M37,36 Q39,18 60,18 Q81,18 83,36 Q60,26 37,36 Z" fill="#1F2937"/>
+
+                    <!-- Nón lá Việt Nam (Có thể ẩn/hiện tùy nhân vật) -->
+                    <g id="npc-conical-hat">
+                        <polygon points="60,2 14,26 106,26" fill="#FDE68A" stroke="#D97706" stroke-width="2.5"/>
+                        <line x1="60" y1="2" x2="36" y2="26" stroke="#D97706" stroke-width="1"/>
+                        <line x1="60" y1="2" x2="84" y2="26" stroke="#D97706" stroke-width="1"/>
+                    </g>
+
+                    <!-- Mắt cười hiền hậu -->
+                    <path d="M48,38 Q52,33 56,38" fill="none" stroke="#1F2937" stroke-width="2.8" stroke-linecap="round"/>
+                    <path d="M64,38 Q68,33 72,38" fill="none" stroke="#1F2937" stroke-width="2.8" stroke-linecap="round"/>
+                    <!-- Má hồng -->
+                    <circle cx="45" cy="44" r="3.5" fill="#FB7185" opacity="0.55"/>
+                    <circle cx="75" cy="44" r="3.5" fill="#FB7185" opacity="0.55"/>
+                    <!-- Miệng cười -->
+                    <path d="M53,49 Q60,57 67,49" fill="none" stroke="#991B1B" stroke-width="2.8" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <span id="npc-name-tag" class="bg-rose-600 text-white text-xs font-extrabold px-3 py-0.5 rounded-full shadow border border-white">
+                👩🏻‍🌾 Mom
+            </span>
+        </div>
+
+    </main>
+
+    <!-- =========================================================
+         TITLE & CHARACTER SELECTION MODAL (100% ENGLISH)
+         ========================================================= -->
+    <div id="title-modal" class="fixed inset-0 z-50 bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-[#FFFDF7] border-8 border-amber-400 rounded-3xl max-w-lg w-full p-6 md:p-7 text-center shadow-2xl animate-pop">
+            <div class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 font-extrabold px-3 py-1 rounded-full text-xs mb-2 border border-emerald-300">
+                <span>✨</span>
+                <span>Google AI Voice • Village Market Story</span>
+            </div>
+            <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-amber-600 mb-2 drop-shadow-sm">
+                MOM'S MARKET HELPER
+            </h1>
+            <p class="text-gray-600 text-sm font-semibold mb-5">
+                Walk through the village market, listen to English commands, and fill your basket for Mom!
+            </p>
+
+            <!-- Choose Character -->
+            <div class="mb-5">
+                <p class="text-xs font-extrabold text-gray-500 uppercase tracking-wider mb-2">
+                    Choose Your Helper:
+                </p>
+                <div class="grid grid-cols-2 gap-4 max-w-xs mx-auto">
+                    <button id="select-boy-btn" onclick="selectCharacter('boy')" class="border-4 border-sky-500 bg-sky-50 rounded-2xl p-3 flex flex-col items-center cursor-pointer transition transform scale-105 shadow-md">
+                        <span class="text-4xl mb-1">👦🏻</span>
+                        <span class="font-display font-extrabold text-sky-800 text-lg">Tim</span>
+                    </button>
+                    <button id="select-girl-btn" onclick="selectCharacter('girl')" class="border-4 border-gray-200 bg-white hover:border-rose-300 rounded-2xl p-3 flex flex-col items-center cursor-pointer transition">
+                        <span class="text-4xl mb-1">👧🏻</span>
+                        <span class="font-display font-extrabold text-rose-700 text-lg">Lily</span>
+                    </button>
+                </div>
+            </div>
+
+            <button onclick="startStoryAdventure()" class="btn-3d w-full bg-gradient-to-b from-emerald-400 to-emerald-600 hover:from-emerald-500 hover:to-emerald-700 text-white font-display text-2xl font-extrabold py-3.5 rounded-2xl cursor-pointer">
+                START ADVENTURE 🧺
+            </button>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         BASKET SUMMARY MODAL (100% ENGLISH)
+         ========================================================= -->
+    <div id="list-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-[#FFFBEB] border-4 border-amber-500 rounded-3xl max-w-sm w-full p-5 shadow-2xl animate-pop">
+            <div class="flex items-center justify-between border-b-2 border-amber-200 pb-2 mb-3">
+                <h3 class="font-display font-extrabold text-xl text-amber-800">🧺 My Market Basket</h3>
+                <button onclick="toggleShoppingListModal()" class="bg-rose-100 text-rose-700 w-8 h-8 rounded-full font-bold cursor-pointer">✕</button>
+            </div>
+            <div id="collected-list-content" class="space-y-2 max-h-60 overflow-y-auto text-sm font-bold text-gray-700">
+                <p class="text-gray-400 text-center py-4">Your basket is empty. Visit the stalls!</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // =========================================================================
+    // 1. CONCISE ENGLISH STORYLINE DATA (SHORT & PUNCHY COMMANDS)
+    // =========================================================================
+    const STORY_CHAPTERS = [
+        {
+            id: 'intro',
+            type: 'cutscene_intro',
+            subtitle: 'Prologue',
+            title: "Mom's Kitchen",
+            icon: '🏡',
+            speaker: '👩🏻‍🌾 Mom',
+            npcColor: '#F43F5E',
+            hasHat: true,
+            englishText: "Please go to the market and buy lunch food!",
+            actionLabel: "Yes, Mom! 🏃‍♂️"
+        },
+        {
+            id: 'stall_1',
+            type: 'market_stall',
+            subtitle: 'Stop 1 / 4',
+            title: 'Fruit Stall',
+            icon: '🍎',
+            speaker: '👵🏻 Auntie Nam',
+            npcColor: '#D97706',
+            hasHat: true,
+            introEnglish: "Pick 4 apples, please!",
+            trayItems: [
+                { key: 'apple', emoji: '🍎', singular: 'apple', plural: 'apples' },
+                { key: 'banana', emoji: '🍌', singular: 'banana', plural: 'bananas' },
+                { key: 'orange', emoji: '🍊', singular: 'orange', plural: 'oranges' },
+                { key: 'mango', emoji: '🥭', singular: 'mango', plural: 'mangoes' }
+            ],
+            trayPool: ['apple','apple','apple','apple','apple','apple','banana','banana','orange','mango'],
+            requirements: [
+                { key: 'apple', count: 4, emoji: '🍎', label: '4 apples' }
+            ],
+            dishResult: { emoji: '🥗', name: 'Fresh Fruit Salad' }
+        },
+        {
+            id: 'stall_2',
+            type: 'market_stall',
+            subtitle: 'Stop 2 / 4',
+            title: 'Veggie Stall',
+            icon: '🥕',
+            speaker: '👩🏻‍🌾 Auntie Ba',
+            npcColor: '#10B981',
+            hasHat: true,
+            introEnglish: "Pick 3 carrots and 2 tomatoes!",
+            trayItems: [
+                { key: 'carrot', emoji: '🥕', singular: 'carrot', plural: 'carrots' },
+                { key: 'tomato', emoji: '🍅', singular: 'tomato', plural: 'tomatoes' },
+                { key: 'corn', emoji: '🌽', singular: 'corn', plural: 'corns' },
+                { key: 'eggplant', emoji: '🍆', singular: 'eggplant', plural: 'eggplants' }
+            ],
+            trayPool: ['carrot','carrot','carrot','carrot','carrot','tomato','tomato','tomato','tomato','corn','eggplant'],
+            requirements: [
+                { key: 'carrot', count: 3, emoji: '🥕', label: '3 carrots' },
+                { key: 'tomato', count: 2, emoji: '🍅', label: '2 tomatoes' }
+            ],
+            dishResult: { emoji: '🍲', name: 'Healthy Veggie Soup' }
+        },
+        {
+            id: 'stall_3',
+            type: 'market_stall',
+            subtitle: 'Stop 3 / 4',
+            title: 'Farm Stall',
+            icon: '🥚',
+            speaker: '👨🏻‍🌾 Uncle Tu',
+            npcColor: '#0284C7',
+            hasHat: false,
+            introEnglish: "Get 5 eggs and 1 milk!",
+            trayItems: [
+                { key: 'egg', emoji: '🥚', singular: 'egg', plural: 'eggs' },
+                { key: 'milk', emoji: '🥛', singular: 'milk', plural: 'milks' },
+                { key: 'chicken', emoji: '🐥', singular: 'chick', plural: 'chicks' }
+            ],
+            trayPool: ['egg','egg','egg','egg','egg','egg','egg','milk','milk','chicken','chicken'],
+            requirements: [
+                { key: 'egg', count: 5, emoji: '🥚', label: '5 eggs' },
+                { key: 'milk', count: 1, emoji: '🥛', label: '1 milk' }
+            ],
+            dishResult: { emoji: '🍳', name: 'Golden Omelette' }
+        },
+        {
+            id: 'stall_4',
+            type: 'market_stall',
+            subtitle: 'Stop 4 / 4',
+            title: 'Bakery Stall',
+            icon: '🧁',
+            speaker: '👩🏻 Auntie Sau',
+            npcColor: '#9333EA',
+            hasHat: false,
+            introEnglish: "Take 2 cupcakes and 3 cookies!",
+            trayItems: [
+                { key: 'cake', emoji: '🧁', singular: 'cupcake', plural: 'cupcakes' },
+                { key: 'cookie', emoji: '🍪', singular: 'cookie', plural: 'cookies' },
+                { key: 'candy', emoji: '🍬', singular: 'candy', plural: 'candies' }
+            ],
+            trayPool: ['cake','cake','cake','cake','cookie','cookie','cookie','cookie','cookie','candy','candy'],
+            requirements: [
+                { key: 'cake', count: 2, emoji: '🧁', label: '2 cupcakes' },
+                { key: 'cookie', count: 3, emoji: '🍪', label: '3 cookies' }
+            ],
+            dishResult: { emoji: '🍰', name: 'Sweet Dessert Plate' }
+        },
+        {
+            id: 'homecoming',
+            type: 'cutscene_ending',
+            subtitle: 'Finale',
+            title: 'Family Lunch',
+            icon: '🍲',
+            speaker: '👩🏻‍🌾 Mom',
+            npcColor: '#F43F5E',
+            hasHat: true,
+            englishText: "Great job! Let's enjoy our lunch!",
+            actionLabel: "Play Again 🔄"
+        }
+    ];
+
+    const NUMBER_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+
+    // =========================================================================
+    // 2. GAME STATE
+    // =========================================================================
+    let selectedGender = 'boy';
+    let currentChapterIdx = 0;
+    let currentBasket = {};
+    let completedDishes = [];
+    let totalItemsBought = 0;
+    let isMuted = false;
+    let isWalking = false;
+    let currentSpeechText = "";
+
+    // =========================================================================
+    // 3. GOOGLE AI VOICE (GEMINI 2.5 FLASH TTS) + SMART CACHE & FALLBACK
+    // =========================================================================
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+    let stepInterval = null;
+    let activeAudioPlayer = null;
+    const aiVoiceCache = new Map(); // Cache generated WAV URLs for instant replay
+
+    function ensureAudioContext() {
+        if (!audioCtx) audioCtx = new AudioCtx();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playSFX(type) {
+        if (isMuted) return;
+        ensureAudioContext();
+        const now = audioCtx.currentTime;
+
+        if (type === 'pick') {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(540, now);
+            osc.frequency.exponentialRampToValueAtTime(920, now + 0.12);
+            gain.gain.setValueAtTime(0.22, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.14);
+            osc.start(now);
+            osc.stop(now + 0.14);
+        } else if (type === 'step') {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(140, now);
+            osc.frequency.exponentialRampToValueAtTime(65, now + 0.07);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+            osc.start(now);
+            osc.stop(now + 0.08);
+        } else if (type === 'success') {
+            [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.2, now + i * 0.09);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.09 + 0.35);
+                osc.start(now + i * 0.09);
+                osc.stop(now + i * 0.09 + 0.35);
+            });
+        } else if (type === 'oops') {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(240, now);
+            osc.frequency.linearRampToValueAtTime(170, now + 0.25);
+            gain.gain.setValueAtTime(0.14, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
+            osc.start(now);
+            osc.stop(now + 0.28);
+        }
+    }
+
+    // Convert raw PCM16 base64 from Gemini TTS to playable WAV Blob
+    function pcmBase64ToWavUrl(base64Data, sampleRate = 24000) {
+        const binaryString = atob(base64Data);
+        const len = binaryString.length;
+        const pcmBytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+            pcmBytes[i] = binaryString.charCodeAt(i);
+        }
+
+        const wavHeader = new ArrayBuffer(44);
+        const view = new DataView(wavHeader);
+        const writeStr = (offset, str) => {
+            for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+        };
+
+        writeStr(0, 'RIFF');
+        view.setUint32(4, 36 + pcmBytes.length, true);
+        writeStr(8, 'WAVE');
+        writeStr(12, 'fmt ');
+        view.setUint32(16, 16, true); // PCM chunk size
+        view.setUint16(20, 1, true);  // Audio format 1 = PCM
+        view.setUint16(22, 1, true);  // Mono
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * 2, true); // Byte rate
+        view.setUint16(32, 2, true);  // Block align
+        view.setUint16(34, 16, true); // Bits per sample
+        writeStr(36, 'data');
+        view.setUint32(40, pcmBytes.length, true);
+
+        const wavBlob = new Blob([wavHeader, pcmBytes], { type: 'audio/wav' });
+        return URL.createObjectURL(wavBlob);
+    }
+
+    // Fetch Google AI Voice via Gemini 2.5 Flash TTS with strict timeout & safe error handling
+    async function fetchGeminiTTS(text, voiceName = "Aoede") {
+        const cacheKey = `${voiceName}:${text}`;
+        if (aiVoiceCache.has(cacheKey)) return aiVoiceCache.get(cacheKey);
+
+        const apiKey = ""; // Provided automatically at runtime
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+        const payload = {
+            contents: [{
+                parts: [{ text: `Say warmly and clearly to a child learning English: ${text}` }]
+            }],
+            generationConfig: {
+                responseModalities: ["AUDIO"],
+                speechConfig: {
+                    voiceConfig: {
+                        prebuiltVoiceConfig: { voiceName }
+                    }
+                }
+            },
+            model: "gemini-2.5-flash-preview-tts"
+        };
+
+        let delay = 500;
+        for (let attempt = 0; attempt < 2; attempt++) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3500);
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType || "audio/L16;rate=24000";
+
+                if (audioData) {
+                    const rateMatch = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
+                    const wavUrl = pcmBase64ToWavUrl(audioData, sampleRate);
+                    aiVoiceCache.set(cacheKey, wavUrl);
+                    return wavUrl;
+                }
+            } catch (err) {
+                clearTimeout(timeoutId);
+                if (attempt < 1) {
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+            }
+        }
+        return null;
+    }
+
+    // Fallback to Google US/UK English browser voice if API is unavailable
+    function speakBrowserFallback(text, rate = 0.95) {
+        try {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'en-US';
+            utter.rate = Math.max(0.6, Math.min(1.5, rate));
+            utter.pitch = 1.08;
+
+            const voices = window.speechSynthesis.getVoices();
+            const googleVoice = voices.find(v => v.name.includes('Google US English') || v.name.includes('Google UK English Female'))
+                             || voices.find(v => v.lang && v.lang.includes('en-US'));
+            if (googleVoice) utter.voice = googleVoice;
+
+            window.speechSynthesis.speak(utter);
+        } catch (e) {
+            // Safely ignore speechSynthesis restrictions
+        }
+    }
+
+    // Main Voice Controller (Google AI Voice first, instant fallback)
+    async function speakText(text, playbackRate = 1.0, voiceName = "Aoede") {
+        currentSpeechText = text;
+        if (isMuted) return;
+
+        if (activeAudioPlayer) {
+            try { activeAudioPlayer.pause(); } catch (e) {}
+            activeAudioPlayer = null;
+        }
+        if ('speechSynthesis' in window) {
+            try { window.speechSynthesis.cancel(); } catch (e) {}
+        }
+
+        const listenBtn = document.getElementById('btn-listen-normal');
+        if (listenBtn) listenBtn.classList.add('speaking-ring');
+
+        try {
+            const wavUrl = await fetchGeminiTTS(text, voiceName);
+            if (isMuted) {
+                if (listenBtn) listenBtn.classList.remove('speaking-ring');
+                return;
+            }
+
+            if (wavUrl) {
+                const audio = new Audio(wavUrl);
+                audio.playbackRate = playbackRate;
+                activeAudioPlayer = audio;
+                audio.onended = () => {
+                    if (listenBtn) listenBtn.classList.remove('speaking-ring');
+                };
+                audio.onerror = () => {
+                    if (listenBtn) listenBtn.classList.remove('speaking-ring');
+                    speakBrowserFallback(text, playbackRate);
+                };
+                await audio.play();
+                return;
+            }
+        } catch (e) {
+            // Fall through to browser Google voice
+        }
+
+        if (listenBtn) listenBtn.classList.remove('speaking-ring');
+        speakBrowserFallback(text, playbackRate);
+    }
+
+    function replayCurrentSpeech(rate = 1.0) {
+        if (currentSpeechText) {
+            const chap = STORY_CHAPTERS[currentChapterIdx];
+            const voice = chap?.id === 'stall_3' ? 'Puck' : 'Aoede';
+            speakText(currentSpeechText, rate, voice);
+        }
+    }
+
+    function toggleAudio() {
+        isMuted = !isMuted;
+        document.getElementById('sound-toggle-btn').textContent = isMuted ? '🔇' : '🔊';
+        if (isMuted) {
+            if (activeAudioPlayer) activeAudioPlayer.pause();
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+    }
+
+    // =========================================================================
+    // 4. PARTICLE FX CANVAS
+    // =========================================================================
+    const fxCanvas = document.getElementById('fx-canvas');
+    const fxCtx = fxCanvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+        const stage = document.getElementById('game-stage');
+        fxCanvas.width = stage.clientWidth;
+        fxCanvas.height = stage.clientHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function spawnParticles(x, y, color, count = 8, type = 'dust') {
+        for (let i = 0; i < count; i++) {
+            particles.push({
+                x,
+                y,
+                vx: (Math.random() - 0.5) * (type === 'sparkle' ? 5 : 3),
+                vy: -Math.random() * (type === 'sparkle' ? 5 : 2.5) - 0.5,
+                size: Math.random() * 5 + 3,
+                alpha: 1,
+                color,
+                type
+            });
+        }
+    }
+
+    function updateAndDrawParticles() {
+        fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.alpha -= 0.025;
+            if (p.alpha <= 0) {
+                particles.splice(i, 1);
+                continue;
+            }
+            fxCtx.save();
+            fxCtx.globalAlpha = p.alpha;
+            fxCtx.fillStyle = p.color;
+            fxCtx.beginPath();
+            fxCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            fxCtx.fill();
+            fxCtx.restore();
+        }
+        requestAnimationFrame(updateAndDrawParticles);
+    }
+    updateAndDrawParticles();
+
+    // =========================================================================
+    // 5. CHARACTER POSES & MOVEMENT
+    // =========================================================================
+    function setKidPose(poseName, expression = 'normal') {
+        const kidEl = document.getElementById('kid-character');
+        kidEl.classList.remove('pose-idle', 'pose-walking', 'pose-picking', 'pose-happy', 'pose-thinking', 'pose-confused');
+        kidEl.classList.add(`pose-${poseName}`);
+
+        const eyesNormal = document.getElementById('kid-eyes-normal');
+        const eyesHappy = document.getElementById('kid-eyes-happy');
+        const mouthSmile = document.getElementById('kid-mouth-smile');
+        const mouthWow = document.getElementById('kid-mouth-wow');
+        const mouthOops = document.getElementById('kid-mouth-oops');
+
+        eyesNormal.classList.toggle('hidden', expression === 'happy');
+        eyesHappy.classList.toggle('hidden', expression !== 'happy');
+
+        mouthSmile.classList.add('hidden');
+        mouthWow.classList.add('hidden');
+        mouthOops.classList.add('hidden');
+
+        if (expression === 'happy') mouthSmile.classList.remove('hidden');
+        else if (expression === 'wow') mouthWow.classList.remove('hidden');
+        else if (expression === 'oops') mouthOops.classList.remove('hidden');
+        else mouthSmile.classList.remove('hidden');
+    }
+
+    function walkKidToPosition(targetLeftPercent, onArriveCallback) {
+        const kidEl = document.getElementById('kid-character');
+        isWalking = true;
+        setKidPose('walking', 'normal');
+        document.getElementById('kid-thought-bubble').classList.add('hidden');
+
+        clearInterval(stepInterval);
+        stepInterval = setInterval(() => {
+            playSFX('step');
+            const rect = kidEl.getBoundingClientRect();
+            const stageRect = document.getElementById('game-stage').getBoundingClientRect();
+            spawnParticles(rect.left - stageRect.left + rect.width * 0.45, rect.bottom - stageRect.top - 15, '#D6A86E', 4, 'dust');
+        }, 260);
+
+        kidEl.style.left = `${targetLeftPercent}%`;
+
+        setTimeout(() => {
+            clearInterval(stepInterval);
+            isWalking = false;
+            setKidPose('idle', 'normal');
+            if (onArriveCallback) onArriveCallback();
+        }, 1700);
+    }
+
+    // =========================================================================
+    // 6. CHARACTER SELECTION & START
+    // =========================================================================
+    function selectCharacter(gender) {
+        selectedGender = gender;
+        const boyBtn = document.getElementById('select-boy-btn');
+        const girlBtn = document.getElementById('select-girl-btn');
+
+        if (gender === 'boy') {
+            boyBtn.className = 'border-4 border-sky-500 bg-sky-50 rounded-2xl p-3 flex flex-col items-center cursor-pointer transition transform scale-105 shadow-md';
+            girlBtn.className = 'border-4 border-gray-200 bg-white hover:border-rose-300 rounded-2xl p-3 flex flex-col items-center cursor-pointer transition';
+            document.getElementById('girl-pigtails').classList.add('hidden');
+            document.getElementById('boy-tuft').classList.remove('hidden');
+            document.getElementById('kid-shirt').setAttribute('fill', '#38BDF8');
+            document.getElementById('kid-overalls').setAttribute('fill', '#0284C7');
+            document.getElementById('kid-name-tag').textContent = '👦🏻 Tim';
+            document.getElementById('kid-name-tag').className = 'bg-sky-600 text-white text-xs font-extrabold px-3 py-0.5 rounded-full shadow border border-white';
+        } else {
+            girlBtn.className = 'border-4 border-rose-500 bg-rose-50 rounded-2xl p-3 flex flex-col items-center cursor-pointer transition transform scale-105 shadow-md';
+            boyBtn.className = 'border-4 border-gray-200 bg-white hover:border-sky-300 rounded-2xl p-3 flex flex-col items-center cursor-pointer transition';
+            document.getElementById('girl-pigtails').classList.remove('hidden');
+            document.getElementById('boy-tuft').classList.add('hidden');
+            document.getElementById('kid-shirt').setAttribute('fill', '#F472B6');
+            document.getElementById('kid-overalls').setAttribute('fill', '#DB2777');
+            document.getElementById('kid-name-tag').textContent = '👧🏻 Lily';
+            document.getElementById('kid-name-tag').className = 'bg-rose-600 text-white text-xs font-extrabold px-3 py-0.5 rounded-full shadow border border-white';
+        }
+    }
+
+    function startStoryAdventure() {
+        ensureAudioContext();
+        document.getElementById('title-modal').classList.add('hidden');
+        currentChapterIdx = 0;
+        completedDishes = [];
+        totalItemsBought = 0;
+        document.getElementById('total-collected-badge').textContent = '0';
+        loadChapter(0);
+    }
+
+    function resetToTitle() {
+        clearInterval(stepInterval);
+        if (activeAudioPlayer) activeAudioPlayer.pause();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        document.getElementById('title-modal').classList.remove('hidden');
+    }
+
+    // =========================================================================
+    // 7. CHAPTER PROGRESSION CONTROLLER
+    // =========================================================================
+    function renderJourneyMap() {
+        const mapEl = document.getElementById('journey-map');
+        mapEl.innerHTML = '';
+        STORY_CHAPTERS.forEach((chap, idx) => {
+            const node = document.createElement('div');
+            if (idx < currentChapterIdx) {
+                node.className = 'w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shadow';
+                node.textContent = '✓';
+            } else if (idx === currentChapterIdx) {
+                node.className = 'w-7 h-7 rounded-full bg-amber-400 border-2 border-amber-700 flex items-center justify-center text-xs shadow scale-110';
+                node.textContent = chap.icon;
+            } else {
+                node.className = 'w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs';
+                node.textContent = chap.icon;
+            }
+            mapEl.appendChild(node);
+
+            if (idx < STORY_CHAPTERS.length - 1) {
+                const line = document.createElement('div');
+                line.className = `w-3 h-1 rounded ${idx < currentChapterIdx ? 'bg-emerald-400' : 'bg-gray-200'}`;
+                mapEl.appendChild(line);
+            }
+        });
+    }
+
+    function updateNPCAppearance(chap) {
+        document.getElementById('npc-outfit').setAttribute('fill', chap.npcColor);
+        document.getElementById('npc-conical-hat').style.display = chap.hasHat ? 'block' : 'none';
+        document.getElementById('npc-name-tag').textContent = chap.speaker;
+
+        const npcEl = document.getElementById('npc-character');
+        npcEl.classList.add('vendor-wave');
+        setTimeout(() => npcEl.classList.remove('vendor-wave'), 2000);
+    }
+
+    function loadChapter(index) {
+        currentChapterIdx = index;
+        const chap = STORY_CHAPTERS[index];
+
+        document.getElementById('chapter-icon').textContent = chap.icon;
+        document.getElementById('chapter-subtitle').textContent = chap.subtitle;
+        document.getElementById('chapter-title').textContent = chap.title;
+        renderJourneyMap();
+        updateNPCAppearance(chap);
+
+        const homeScene = document.getElementById('home-scene');
+        const marketScene = document.getElementById('market-stall-scene');
+        const targetPills = document.getElementById('target-pills');
+        const actionsDiv = document.getElementById('dialogue-actions');
+        const basketBadge = document.getElementById('basket-count-badge');
+
+        if (chap.type === 'cutscene_intro') {
+            homeScene.classList.remove('hidden');
+            marketScene.classList.add('hidden');
+            document.getElementById('kitchen-table-area').classList.add('hidden');
+            targetPills.classList.add('hidden');
+            basketBadge.classList.add('hidden');
+
+            const kidEl = document.getElementById('kid-character');
+            kidEl.style.left = '34%';
+            setKidPose('idle', 'happy');
+
+            document.getElementById('speaker-name-badge').textContent = chap.speaker;
+            document.getElementById('english-dialogue').textContent = `"${chap.englishText}"`;
+
+            actionsDiv.innerHTML = `
+                <button onclick="goToNextChapter()" class="btn-3d bg-gradient-to-b from-emerald-400 to-emerald-600 text-white font-display font-extrabold px-4 py-1.5 rounded-xl text-sm md:text-base cursor-pointer">
+                    ${chap.actionLabel}
+                </button>
+            `;
+
+            speakText(chap.englishText, 1.0, "Aoede");
+
+        } else if (chap.type === 'market_stall') {
+            homeScene.classList.add('hidden');
+            marketScene.classList.remove('hidden');
+            currentBasket = {};
+            updateBasketVisuals();
+            basketBadge.classList.remove('hidden');
+
+            document.getElementById('stall-banner-title').textContent = `${chap.icon} ${chap.title.toUpperCase()}`;
+
+            const kidEl = document.getElementById('kid-character');
+            kidEl.style.transition = 'none';
+            kidEl.style.left = '-10%';
+            void kidEl.offsetWidth;
+            kidEl.style.transition = 'left 1.7s cubic-bezier(0.45, 0.05, 0.55, 0.95), transform 0.3s ease';
+
+            renderStallTray(chap);
+
+            document.getElementById('speaker-name-badge').textContent = chap.speaker;
+            document.getElementById('english-dialogue').textContent = `"${chap.introEnglish}"`;
+
+            // Compact Target Pills (Icon + English Label only)
+            targetPills.classList.remove('hidden');
+            targetPills.classList.add('flex');
+            targetPills.innerHTML = chap.requirements.map(req => `
+                <span class="bg-amber-100 border border-amber-400 text-amber-950 font-extrabold px-2.5 py-1 rounded-xl text-xs flex items-center gap-1">
+                    <span class="text-base leading-none">${req.emoji}</span>
+                    <span>${req.label}</span>
+                </span>
+            `).join('');
+
+            actionsDiv.innerHTML = `
+                <button onclick="verifyStallPurchase()" class="btn-3d bg-gradient-to-b from-emerald-400 to-emerald-600 hover:from-emerald-500 hover:to-emerald-700 text-white font-display font-extrabold px-4 py-1.5 rounded-xl text-sm md:text-base flex items-center gap-1 cursor-pointer">
+                    <span>✅</span>
+                    <span>Done!</span>
+                </button>
+            `;
+
+            const voiceName = chap.id === 'stall_3' ? 'Puck' : 'Aoede';
+            walkKidToPosition(16, () => {
+                setKidPose('thinking', 'normal');
+                const thoughtBubble = document.getElementById('kid-thought-bubble');
+                thoughtBubble.classList.remove('hidden');
+                document.getElementById('thought-content').textContent = chap.requirements.map(r => `${r.count}${r.emoji}`).join(' + ');
+                speakText(chap.introEnglish, 1.0, voiceName);
+            });
+
+        } else if (chap.type === 'cutscene_ending') {
+            homeScene.classList.remove('hidden');
+            marketScene.classList.add('hidden');
+            targetPills.classList.add('hidden');
+            basketBadge.classList.add('hidden');
+            document.getElementById('kid-thought-bubble').classList.add('hidden');
+
+            const kitchenArea = document.getElementById('kitchen-table-area');
+            kitchenArea.classList.remove('hidden');
+            kitchenArea.classList.add('flex');
+
+            const kidEl = document.getElementById('kid-character');
+            kidEl.style.transition = 'none';
+            kidEl.style.left = '-8%';
+            void kidEl.offsetWidth;
+            kidEl.style.transition = 'left 1.7s cubic-bezier(0.45, 0.05, 0.55, 0.95), transform 0.3s ease';
+
+            document.getElementById('speaker-name-badge').textContent = chap.speaker;
+            document.getElementById('english-dialogue').textContent = `"${chap.englishText}"`;
+
+            actionsDiv.innerHTML = `
+                <button onclick="startStoryAdventure()" class="btn-3d bg-gradient-to-b from-amber-400 to-amber-600 text-white font-display font-extrabold px-4 py-1.5 rounded-xl text-sm md:text-base cursor-pointer">
+                    ${chap.actionLabel}
+                </button>
+            `;
+
+            walkKidToPosition(28, () => {
+                setKidPose('happy', 'happy');
+                playSFX('success');
+                speakText(chap.englishText, 1.0, "Aoede");
+
+                const platter = document.getElementById('feast-platter');
+                platter.innerHTML = completedDishes.map(d => `
+                    <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl px-2.5 py-1 flex items-center gap-1.5 animate-pop shadow-xs">
+                        <span class="text-xl">${d.emoji}</span>
+                        <span class="text-xs font-extrabold text-amber-900">${d.name}</span>
+                    </div>
+                `).join('');
+
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 110, spread: 80, origin: { y: 0.55 } });
+                }
+            });
+        }
+    }
+
+    function goToNextChapter() {
+        if (isWalking) return;
+        if (currentChapterIdx + 1 < STORY_CHAPTERS.length) {
+            loadChapter(currentChapterIdx + 1);
+        }
+    }
+
+    // =========================================================================
+    // 8. BAMBOO TRAY & DRAG-DROP INTO BASKET
+    // =========================================================================
+    function renderStallTray(chap) {
+        const trayEl = document.getElementById('bamboo-tray-items');
+        trayEl.innerHTML = '';
+
+        const shuffled = [...chap.trayPool].sort(() => Math.random() - 0.5);
+
+        shuffled.forEach((itemKey) => {
+            const meta = chap.trayItems.find(i => i.key === itemKey);
+            const itemBtn = document.createElement('div');
+            itemBtn.className = 'stall-item text-3xl sm:text-4xl md:text-5xl p-1 rounded-xl select-none';
+            itemBtn.textContent = meta.emoji;
+            itemBtn.dataset.key = itemKey;
+            itemBtn.title = `Drag or tap ${meta.singular}`;
+
+            itemBtn.addEventListener('pointerdown', (e) => startItemDrag(e, itemBtn, meta));
+            trayEl.appendChild(itemBtn);
+        });
+    }
+
+    function startItemDrag(e, sourceEl, meta) {
+        if (isWalking) return;
+        e.preventDefault();
+
+        const startX = e.clientX;
+        const startY = e.clientY;
+        let hasMoved = false;
+        let ghost = null;
+
+        const kidTarget = document.getElementById('kid-drop-target');
+
+        function onMove(ev) {
+            const dx = ev.clientX - startX;
+            const dy = ev.clientY - startY;
+
+            if (!hasMoved && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+                hasMoved = true;
+                sourceEl.style.opacity = '0.3';
+                setKidPose('picking', 'wow');
+
+                ghost = document.createElement('div');
+                ghost.className = 'dragging-ghost text-5xl';
+                ghost.textContent = meta.emoji;
+                document.body.appendChild(ghost);
+            }
+
+            if (hasMoved && ghost) {
+                ghost.style.left = `${ev.clientX}px`;
+                ghost.style.top = `${ev.clientY}px`;
+
+                const kidRect = kidTarget.getBoundingClientRect();
+                const isOverKid = (
+                    ev.clientX >= kidRect.left - 35 &&
+                    ev.clientX <= kidRect.right + 35 &&
+                    ev.clientY >= kidRect.top - 35 &&
+                    ev.clientY <= kidRect.bottom + 35
+                );
+                kidTarget.classList.toggle('basket-drop-highlight', isOverKid);
+            }
+        }
+
+        function onUp(ev) {
+            document.removeEventListener('pointermove', onMove);
+            document.removeEventListener('pointerup', onUp);
+            kidTarget.classList.remove('basket-drop-highlight');
+
+            if (ghost) ghost.remove();
+            sourceEl.style.opacity = '1';
+
+            if (!hasMoved) {
+                collectItemIntoBasket(sourceEl, meta);
+                return;
+            }
+
+            const kidRect = kidTarget.getBoundingClientRect();
+            const droppedOnKid = (
+                ev.clientX >= kidRect.left - 40 &&
+                ev.clientX <= kidRect.right + 40 &&
+                ev.clientY >= kidRect.top - 40 &&
+                ev.clientY <= kidRect.bottom + 40
+            );
+
+            if (droppedOnKid) {
+                collectItemIntoBasket(sourceEl, meta);
+            } else {
+                setKidPose('idle', 'normal');
+            }
+        }
+
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp);
+    }
+
+    function collectItemIntoBasket(sourceEl, meta) {
+        sourceEl.remove();
+
+        currentBasket[meta.key] = (currentBasket[meta.key] || 0) + 1;
+        const count = currentBasket[meta.key];
+
+        setKidPose('picking', 'happy');
+        setTimeout(() => setKidPose('idle', 'normal'), 450);
+
+        playSFX('pick');
+
+        const kidRect = document.getElementById('kid-drop-target').getBoundingClientRect();
+        const stageRect = document.getElementById('game-stage').getBoundingClientRect();
+        spawnParticles(kidRect.right - stageRect.left - 15, kidRect.top - stageRect.top + 70, '#FACC15', 10, 'sparkle');
+
+        const word = count === 1 ? meta.singular : meta.plural;
+        speakText(`${NUMBER_WORDS[count]} ${word}!`, 1.05, "Puck");
+
+        updateBasketVisuals();
+    }
+
+    function updateBasketVisuals() {
+        const visualContainer = document.getElementById('basket-visual-items');
+        const badge = document.getElementById('basket-count-badge');
+        const chap = STORY_CHAPTERS[currentChapterIdx];
+
+        if (!chap || chap.type !== 'market_stall') return;
+
+        let total = 0;
+        let emojisHtml = '';
+
+        Object.entries(currentBasket).forEach(([key, qty]) => {
+            total += qty;
+            const meta = chap.trayItems.find(i => i.key === key);
+            if (meta) {
+                for (let i = 0; i < qty; i++) {
+                    emojisHtml += `<span onclick="removeOneItemFromBasket('${key}')" title="Tap to put back 1 ${meta.singular}" class="pointer-events-auto cursor-pointer hover:scale-125 transition-transform animate-pop -mx-0.5">${meta.emoji}</span>`;
+                }
+            }
+        });
+
+        visualContainer.innerHTML = emojisHtml;
+        badge.textContent = total;
+    }
+
+    function removeOneItemFromBasket(itemKey) {
+        if (isWalking) return;
+        const chap = STORY_CHAPTERS[currentChapterIdx];
+        if (!chap || chap.type !== 'market_stall') return;
+        if (!currentBasket[itemKey] || currentBasket[itemKey] <= 0) return;
+
+        currentBasket[itemKey]--;
+        updateBasketVisuals();
+
+        const meta = chap.trayItems.find(i => i.key === itemKey);
+        if (meta) {
+            const trayEl = document.getElementById('bamboo-tray-items');
+            const itemBtn = document.createElement('div');
+            itemBtn.className = 'stall-item text-3xl sm:text-4xl md:text-5xl p-1 rounded-xl select-none animate-pop';
+            itemBtn.textContent = meta.emoji;
+            itemBtn.dataset.key = itemKey;
+            itemBtn.title = `Drag or tap ${meta.singular}`;
+            itemBtn.addEventListener('pointerdown', (e) => startItemDrag(e, itemBtn, meta));
+            trayEl.appendChild(itemBtn);
+        }
+        playSFX('step');
+    }
+
+    function clearCurrentBasket() {
+        if (isWalking) return;
+        const chap = STORY_CHAPTERS[currentChapterIdx];
+        if (!chap || chap.type !== 'market_stall') return;
+        currentBasket = {};
+        updateBasketVisuals();
+        renderStallTray(chap);
+        setKidPose('idle', 'normal');
+        playSFX('step');
+    }
+
+    // =========================================================================
+    // 9. VERIFY PURCHASE (CONCISE ENGLISH FEEDBACK)
+    // =========================================================================
+    function verifyStallPurchase() {
+        if (isWalking) return;
+        const chap = STORY_CHAPTERS[currentChapterIdx];
+
+        let isPerfect = true;
+        let feedbackEn = "";
+
+        for (const [key, qty] of Object.entries(currentBasket)) {
+            if (qty > 0 && !chap.requirements.some(r => r.key === key)) {
+                const wrongMeta = chap.trayItems.find(i => i.key === key);
+                isPerfect = false;
+                feedbackEn = `Oops! No ${wrongMeta.plural}, please!`;
+                break;
+            }
+        }
+
+        if (isPerfect) {
+            for (const req of chap.requirements) {
+                const got = currentBasket[req.key] || 0;
+                if (got < req.count) {
+                    isPerfect = false;
+                    feedbackEn = `Too few! Need ${req.label}!`;
+                    break;
+                } else if (got > req.count) {
+                    isPerfect = false;
+                    feedbackEn = `Too many! Only ${req.label}!`;
+                    break;
+                }
+            }
+        }
+
+        const voiceName = chap.id === 'stall_3' ? 'Puck' : 'Aoede';
+
+        if (isPerfect) {
+            setKidPose('happy', 'happy');
+            playSFX('success');
+
+            const praiseEn = `Awesome! You got ${chap.requirements.map(r => r.label).join(' and ')}!`;
+            document.getElementById('english-dialogue').textContent = `"${praiseEn}"`;
+            speakText(praiseEn, 1.0, voiceName);
+
+            completedDishes.push(chap.dishResult);
+            Object.values(currentBasket).forEach(q => totalItemsBought += q);
+            document.getElementById('total-collected-badge').textContent = totalItemsBought;
+            updateCollectedListModal();
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 60, spread: 60, origin: { y: 0.65 } });
+            }
+
+            const isLastStall = currentChapterIdx === STORY_CHAPTERS.length - 2;
+            document.getElementById('dialogue-actions').innerHTML = `
+                <button onclick="goToNextChapter()" class="btn-3d bg-gradient-to-b from-amber-400 to-amber-600 text-white font-display font-extrabold px-4 py-1.5 rounded-xl text-sm md:text-base cursor-pointer animate-bounce">
+                    ${isLastStall ? 'Go Home 🏡' : 'Next Stall ➔'}
+                </button>
+            `;
+        } else {
+            setKidPose('confused', 'oops');
+            playSFX('oops');
+            document.getElementById('english-dialogue').textContent = `"${feedbackEn}"`;
+            speakText(feedbackEn, 1.0, voiceName);
+        }
+    }
+
+    // =========================================================================
+    // 10. BASKET MODAL
+    // =========================================================================
+    function toggleShoppingListModal() {
+        const modal = document.getElementById('list-modal');
+        modal.classList.toggle('hidden');
+    }
+
+    function updateCollectedListModal() {
+        const container = document.getElementById('collected-list-content');
+        if (completedDishes.length === 0) return;
+
+        container.innerHTML = completedDishes.map((dish) => `
+            <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-amber-200 shadow-xs">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">${dish.emoji}</span>
+                    <span>${dish.name}</span>
+                </div>
+                <span class="text-emerald-600 text-xs font-extrabold bg-emerald-50 px-2 py-0.5 rounded-full">✓ Done</span>
+            </div>
+        `).join('');
+    }
+
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+</script>
+</body>
+</html>
