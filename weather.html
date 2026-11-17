@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Weather Words</title>
+<style>
+:root{--bg:#fff8e7;--card:#fff;--ink:#2b2b3a;--acc:#ff7a45;--line:#ffd9a8;--ok:#2fb36b;--bad:#e5484d;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1f2233;--card:#2c3047;--ink:#f4f1ea;--line:#4a4f72;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1f2233;--card:#2c3047;--ink:#f4f1ea;--line:#4a4f72;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Baloo 2","Comic Sans MS","Segoe UI",system-ui,sans-serif;min-height:100vh}
+main{max-width:900px;margin:0 auto;padding:14px}
+h1{font-size:1.5rem;margin:6px 0 10px;text-align:center}
+.panel{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:10px 12px;margin-bottom:12px}
+.panel b{display:block;margin-bottom:6px}
+.chips,.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg{justify-content:center;margin-bottom:12px}
+.chip,.sb{cursor:pointer;user-select:none;padding:8px 14px;border-radius:999px;border:2px solid var(--line);font:inherit;font-weight:700;font-size:1rem;background:var(--card);color:var(--ink)}
+.chip input{display:none}
+.chip.on,.sb.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tab{flex:1;padding:12px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer}
+.tab.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.card{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:10px;text-align:center;cursor:pointer;font:inherit;color:var(--ink);transition:transform .15s}
+.card:active{transform:scale(.98)}
+.card svg{width:100%;height:auto;border-radius:14px;display:block}
+.word{font-size:2rem;font-weight:900;margin-top:6px;text-transform:capitalize}
+.sent{opacity:.7;font-size:1rem}
+.slide{display:flex;align-items:center;gap:8px}
+.slide .card{flex:1}
+.slide .word{font-size:3rem}
+.nav{width:52px;height:52px;border-radius:50%;border:0;background:var(--acc);color:#fff;font-size:2rem;cursor:pointer;flex:none}
+.dots{text-align:center;margin-top:10px;font-size:1.6rem;letter-spacing:6px}
+.dots span{opacity:.3;cursor:pointer}.dots .cur{opacity:1}
+.q{text-align:center}
+.q h2{margin:4px 0 10px;font-size:1.4rem}
+.btn{padding:10px 18px;border-radius:14px;border:0;background:var(--acc);color:#fff;font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer}
+.opt.ok{border-color:var(--ok);box-shadow:0 0 0 4px var(--ok)}
+.opt.no{border-color:var(--bad);animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.stars{font-size:2.2rem;margin:10px 0}
+.msg{text-align:center;padding:20px;font-weight:700}
+.foot{text-align:center;font-size:.8rem;opacity:.65;margin-top:14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rays{transform-origin:150px 32px;animation:spin 30s linear infinite}
+@keyframes fall{from{transform:translate(0,0);opacity:0}15%{opacity:.8}to{transform:translate(-14px,95px);opacity:0}}
+.drop{animation:fall .8s linear infinite}
+@keyframes sway{from{transform:rotate(-4deg)}to{transform:rotate(10deg)}}
+.sway{animation:sway 1.3s ease-in-out infinite alternate}
+@keyframes gust{from{transform:translateX(-60px);opacity:0}30%{opacity:.9}to{transform:translateX(240px);opacity:0}}
+.gust{animation:gust 2.4s linear infinite}
+@keyframes drift{from{transform:translateX(-14px)}to{transform:translateX(14px)}}
+.drift{animation:drift 5s ease-in-out infinite alternate}
+@keyframes leaf{from{transform:translate(-20px,10px) rotate(0)}to{transform:translate(240px,-40px) rotate(600deg)}}
+.leaf{animation:leaf 3.2s linear infinite}
+@keyframes bob{from{transform:translate(0,0) rotate(-6deg)}to{transform:translate(8px,-8px) rotate(6deg)}}
+.kite{transform-origin:70px 60px;animation:bob 1.6s ease-in-out infinite alternate}
+@keyframes rip{from{transform:scale(.3);opacity:.9}to{transform:scale(1.2);opacity:0}}
+.rip{transform-box:fill-box;transform-origin:center;animation:rip 1.2s ease-out infinite}
+</style>
+</head>
+<body>
+<main>
+<h1>☀️ Weather Words 🌧️</h1>
+<div class="panel"><b>👩‍🏫 Teacher: pick today’s words</b><div class="chips" id="chips"></div></div>
+<div class="tabs"><button class="tab on" data-tab="learn">🖼️ Pictures</button><button class="tab" data-tab="quiz">🎮 Game</button></div>
+<div id="view"></div>
+<div class="foot" id="foot"></div>
+</main>
+<script>
+var WORDS=[{k:"sunny",s:"It’s sunny!"},{k:"rainy",s:"It’s rainy!"},{k:"windy",s:"It’s windy!"},{k:"cloudy",s:"It’s cloudy!"}];
+var sel=new Set(WORDS.map(function(w){return w.k})),tab="learn",mode="all",si=0,Q=null;
+
+function lg(id,a,b){return `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`}
+function base(k,t,b,c1,c2,g1,g2){return `<defs>${lg(k+"s",t,b)}${lg(k+"c",c1,c2)}${lg(k+"g",g1,g2)}<radialGradient id="${k}r"><stop offset="0" stop-color="#fffbd0"/><stop offset=".3" stop-color="#ffe869" stop-opacity=".9"/><stop offset="1" stop-color="#ffe869" stop-opacity="0"/></radialGradient></defs><rect width="200" height="150" fill="url(#${k}s)"/>`}
+function cloud(x,y,s,k,d){return `<g class="drift" style="animation-delay:${d||0}s"><g transform="translate(${x} ${y}) scale(${s})" fill="url(#${k}c)"><ellipse cx="17" cy="12" rx="30" ry="9"/><circle cx="6" cy="7" r="10"/><circle cx="22" cy="0" r="14"/><circle cx="37" cy="7" r="10"/></g></g>`}
+function house(x,y,w,lit){return `<rect x="${x+w*.7}" y="${y-w*.5}" width="5" height="12" fill="#a0522d"/><rect x="${x}" y="${y}" width="${w}" height="${w*.6}" fill="#f1d6a8"/><rect x="${x}" y="${y+w*.5}" width="${w}" height="${w*.1}" fill="#00000018"/><polygon points="${x-4},${y} ${x+w/2},${y-w*.42} ${x+w+4},${y}" fill="#b8482f"/><rect x="${x+w*.12}" y="${y+w*.14}" width="${w*.24}" height="${w*.22}" fill="${lit}" stroke="#fff" stroke-width="1"/><rect x="${x+w*.58}" y="${y+w*.22}" width="${w*.22}" height="${w*.38}" fill="#7a4a2b"/>`}
+function tree(x,y,s,c1,c2){return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-3" y="-4" width="6" height="26" fill="#7a4a2b"/><circle cx="0" cy="-16" r="19" fill="${c1}"/><circle cx="-11" cy="-6" r="13" fill="${c2}"/><circle cx="11" cy="-7" r="13" fill="${c2}"/><circle cx="-4" cy="-22" r="10" fill="#ffffff22"/></g>`}
+function hills(k,far,lit){return `<path d="M0 98Q40 76 90 96T200 86V150H0Z" fill="${far}"/><path d="M0 118Q55 98 120 116T200 108V150H0Z" fill="url(#${k}g)"/>`+house(24,98,36,lit)}
+function scene(k){var h='<svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+k+'">',i;
+if(k=="sunny"){
+h+=base(k,"#2f95f5","#c2e9ff","#ffffff","#e3edf6","#7fd46d","#3d9a48")+`<circle cx="150" cy="32" r="52" fill="url(#${k}r)"/><g class="rays" stroke="#fff1a0" stroke-linecap="round" stroke-width="3" opacity=".8">`;
+for(i=0;i<12;i++){var a=i*Math.PI/6;h+=`<line x1="${(150+27*Math.cos(a)).toFixed(1)}" y1="${(32+27*Math.sin(a)).toFixed(1)}" x2="${(150+40*Math.cos(a)).toFixed(1)}" y2="${(32+40*Math.sin(a)).toFixed(1)}"/>`}
+h+=`</g><circle cx="150" cy="32" r="18" fill="#fff6b0"/><circle cx="150" cy="32" r="14" fill="#ffd93b"/>`+cloud(40,28,1,k,0)+hills(k,"#9bd98f","#a9dcff")+tree(152,104,1,"#3f9a4a","#56b35a")+`<circle cx="92" cy="132" r="3" fill="#ff5d8f"/><circle cx="104" cy="138" r="3" fill="#ffd23f"/><circle cx="180" cy="134" r="3" fill="#fff"/><circle cx="72" cy="140" r="3" fill="#ff8a3d"/>`;
+}else if(k=="rainy"){
+h+=base(k,"#3c4859","#8d9db0","#78879a","#3f4b5c","#4f8a5b","#2c5a3b")+cloud(-4,22,2.1,k,0)+cloud(62,12,2.5,k,1)+cloud(128,24,2.1,k,.5)+hills(k,"#5d7a6a","#ffd96b");
+h+=tree(152,106,1,"#2f6b3c","#3a7d49");
+for(i=0;i<22;i++){h+=`<line class="drop" style="animation-delay:${(i*.07).toFixed(2)}s" x1="${(i*9+(i%3)*4)%200}" y1="${44+(i%4)*6}" x2="${(i*9+(i%3)*4)%200-2}" y2="${54+(i%4)*6}" stroke="#d6ecff" stroke-width="1.6" stroke-linecap="round"/>`}
+h+=`<ellipse cx="95" cy="136" rx="22" ry="5" fill="#9fc4e6" opacity=".8"/><ellipse class="rip" cx="95" cy="136" rx="18" ry="4" fill="none" stroke="#fff" stroke-width="1"/><ellipse cx="160" cy="140" rx="16" ry="4" fill="#9fc4e6" opacity=".8"/><ellipse class="rip" style="animation-delay:.5s" cx="160" cy="140" rx="14" ry="3" fill="none" stroke="#fff" stroke-width="1"/>`;
+}else if(k=="windy"){
+h+=base(k,"#59b4ff","#e4f5ff","#ffffff","#dce8f3","#86d672","#3f9d4a")+cloud(20,20,.9,k,0)+cloud(120,34,.8,k,2)+hills(k,"#a2dc94","#a9dcff");
+h+=`<g style="transform-origin:116px 112px" class="sway">${tree(116,112,.8,"#3f9a4a","#56b35a")}</g><g style="transform-origin:160px 112px" class="sway">${tree(160,112,1.1,"#3a8f45","#52ad57")}</g>`;
+h+=`<g class="kite"><line x1="70" y1="60" x2="48" y2="126" stroke="#fff" stroke-width=".8"/><polygon points="70,34 82,52 70,72 58,52" fill="#ff4d4d"/><polygon points="70,34 82,52 70,52" fill="#ffd23f"/><polygon points="70,72 58,52 70,52" fill="#ffd23f"/><path d="M70 72q-8 8 0 14t0 12t-4 10" stroke="#ff4d4d" stroke-width="2" fill="none"/></g>`;
+h+=`<g stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"><path class="gust" d="M20 50h50q10 0 10-8"/><path class="gust" style="animation-delay:.8s" d="M10 82h70q12 0 12 9"/><path class="gust" style="animation-delay:1.6s" d="M30 104h40q9 0 9-7"/></g><ellipse class="leaf" cx="10" cy="90" rx="5" ry="2.5" fill="#ff9f1c"/><ellipse class="leaf" style="animation-delay:1.4s" cx="10" cy="70" rx="5" ry="2.5" fill="#d9534f"/>`;
+}else{
+h+=base(k,"#7f93a6","#cfd9e2","#f7f9fb","#b9c5d1","#8fb08c","#4f7d57")+`<circle cx="150" cy="40" r="40" fill="url(#${k}r)" opacity=".5"/>`+hills(k,"#8aa88c","#cfe3f1")+tree(152,106,1,"#4d7f55","#5e9264")+cloud(-6,20,2.4,k,0)+cloud(60,6,2.8,k,1.2)+cloud(120,22,2.4,k,.6)+cloud(30,52,2,k,2)+cloud(110,56,2.2,k,.3);
+}
+return h+'</svg>'}
+
+var voice=null,male=false;
+function pick(){var v=(window.speechSynthesis?speechSynthesis.getVoices():[]).filter(function(x){return /^en/i.test(x.lang)});
+var f=function(r){return v.filter(function(x){return r.test(x.name)})[0]};
+var m=f(/Google UK English Male/i);male=!!m;
+if(!m){m=f(/\b(male|david|daniel|guy|mark|james|alex|fred|aaron|arthur|george)\b/i);male=!!m}
+if(!m)m=f(/Google US English/i)||v[0];
+voice=m||null;
+document.getElementById("foot").textContent=voice?"🔊 Voice: "+voice.name+(male?" (male)":" (pitch lowered)"):"No English voice found in this browser."}
+if(window.speechSynthesis){pick();speechSynthesis.onvoiceschanged=pick}
+function say(t){if(!window.speechSynthesis)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="en-US";if(voice)u.voice=voice;u.rate=.8;u.pitch=male?1:.7;speechSynthesis.speak(u)}
+
+function words(){return WORDS.filter(function(w){return sel.has(w.k)})}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function chips(){document.getElementById("chips").innerHTML=WORDS.map(function(w){return `<label class="chip ${sel.has(w.k)?"on":""}"><input type="checkbox" data-k="${w.k}" ${sel.has(w.k)?"checked":""}>${w.k}</label>`}).join("")}
+function cardHtml(w){return `<button class="card" data-say="${w.k}">${scene(w.k)}<div class="word">${w.k} 🔊</div><div class="sent">${w.s}</div></button>`}
+function learn(){var ws=words(),v=document.getElementById("view");
+if(!ws.length){v.innerHTML='<div class="msg">Pick at least 1 word above 👆</div>';return}
+if(si>=ws.length)si=0;
+var seg=`<div class="seg"><button class="sb ${mode=="all"?"on":""}" data-mode="all">Show all</button><button class="sb ${mode=="slide"?"on":""}" data-mode="slide">Slideshow</button></div>`;
+if(mode=="all"){v.innerHTML=seg+'<div class="grid">'+ws.map(cardHtml).join("")+'</div>';return}
+v.innerHTML=seg+`<div class="slide"><button class="nav" data-act="prev" aria-label="Previous">‹</button>${cardHtml(ws[si])}<button class="nav" data-act="next" aria-label="Next">›</button></div><div class="dots">${ws.map(function(w,i){return `<span class="${i==si?"cur":""}" data-dot="${i}">●</span>`}).join("")}</div>`}
+function go(d){var ws=words();if(!ws.length)return;si=(si+d+ws.length)%ws.length;learn();var w=ws[si];say(w.k+". "+w.s)}
+function quiz(){var ws=words(),v=document.getElementById("view");
+if(ws.length<2){v.innerHTML='<div class="msg">Pick at least 2 words to play 👆</div>';return}
+var o=[];while(o.length<6)o=o.concat(shuffle(ws.map(function(w){return w.k})));
+Q={qs:o.slice(0,6),i:0,score:0,tried:false};ask()}
+function ask(){var v=document.getElementById("view");
+if(Q.i>=Q.qs.length){var s="";for(var n=0;n<Q.qs.length;n++)s+=n<Q.score?"⭐":"☆";
+v.innerHTML=`<div class="q"><h2>Well done! 🎉</h2><div class="stars">${s}</div><button class="btn" data-act="again">Play again 🔁</button></div>`;say("Well done!");return}
+var t=Q.qs[Q.i];Q.tried=false;
+v.innerHTML=`<div class="q"><h2>Question ${Q.i+1}/${Q.qs.length} – Which one is “${t}”?</h2><button class="btn" data-act="hear">🔊 Hear again</button><div class="grid" style="margin-top:12px">`+shuffle(words()).map(function(w){return `<button class="card opt" data-pick="${w.k}">${scene(w.k)}</button>`}).join("")+'</div></div>';
+say("Which one is "+t+"?")}
+function render(){chips();document.querySelectorAll(".tab").forEach(function(b){b.classList.toggle("on",b.dataset.tab==tab)});tab=="learn"?learn():quiz()}
+
+document.addEventListener("click",function(e){
+var t=e.target.closest("[data-tab],[data-mode],[data-dot],[data-say],[data-pick],[data-act]");if(!t)return;
+var d=t.dataset;
+if(d.tab){tab=d.tab;render()}
+else if(d.mode){mode=d.mode;learn()}
+else if(d.dot){si=+d.dot;learn();say(words()[si].k)}
+else if(d.say){var w=WORDS.filter(function(x){return x.k==d.say})[0];say(w.k+". "+w.s)}
+else if(d.act=="prev")go(-1);
+else if(d.act=="next")go(1);
+else if(d.act=="hear")say("Which one is "+Q.qs[Q.i]+"?");
+else if(d.act=="again")quiz();
+else if(d.pick){if(t.classList.contains("ok"))return;
+if(d.pick==Q.qs[Q.i]){t.classList.add("ok");if(!Q.tried)Q.score++;say("Great job! "+Q.qs[Q.i]+"!");Q.i++;setTimeout(ask,1700)}
+else{Q.tried=true;t.classList.add("no");say("Oops! Try again!");setTimeout(function(){t.classList.remove("no")},450)}}});
+document.addEventListener("change",function(e){var k=e.target.dataset&&e.target.dataset.k;if(!k)return;e.target.checked?sel.add(k):sel.delete(k);render()});
+document.addEventListener("keydown",function(e){if(tab=="learn"&&mode=="slide"){if(e.key=="ArrowRight")go(1);if(e.key=="ArrowLeft")go(-1)}});
+render();
+</script>
+</body>
+</html>
