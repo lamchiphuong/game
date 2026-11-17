@@ -8,42 +8,48 @@
 :root{--bg:#fff8e7;--card:#fff;--ink:#2b2b3a;--acc:#ff7a45;--line:#ffd9a8;--ok:#2fb36b;--bad:#e5484d;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1f2233;--card:#2c3047;--ink:#f4f1ea;--line:#4a4f72;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#1f2233;--card:#2c3047;--ink:#f4f1ea;--line:#4a4f72;color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;height:100dvh}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Baloo 2","Comic Sans MS","Segoe UI",system-ui,sans-serif;min-height:100vh}
-main{max-width:900px;margin:0 auto;padding:14px}
-h1{font-size:1.5rem;margin:6px 0 10px;text-align:center}
-.panel{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:10px 12px;margin-bottom:12px}
-.panel b{display:block;margin-bottom:6px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Baloo 2","Comic Sans MS","Segoe UI",system-ui,sans-serif;height:100%;overflow:hidden}
+main{max-width:1000px;height:100%;margin:0 auto;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+h1{font-size:1.2rem;margin:0;text-align:center}
+.panel{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:6px 10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.panel b{font-size:.9rem}
 .chips,.seg{display:flex;flex-wrap:wrap;gap:8px}
-.seg{justify-content:center;margin-bottom:12px}
-.chip,.sb{cursor:pointer;user-select:none;padding:8px 14px;border-radius:999px;border:2px solid var(--line);font:inherit;font-weight:700;font-size:1rem;background:var(--card);color:var(--ink)}
+.seg{justify-content:center;margin-bottom:6px}
+.chip,.sb{cursor:pointer;user-select:none;padding:5px 12px;border-radius:999px;border:2px solid var(--line);font:inherit;font-weight:700;font-size:1rem;background:var(--card);color:var(--ink)}
 .chip input{display:none}
 .chip.on,.sb.on{background:var(--acc);border-color:var(--acc);color:#fff}
-.tabs{display:flex;gap:8px;margin-bottom:12px}
-.tab{flex:1;padding:12px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer}
+.tabs{display:flex;gap:8px}
+.tab{flex:1;padding:8px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer}
 .tab.on{background:var(--acc);border-color:var(--acc);color:#fff}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
-.card{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:10px;text-align:center;cursor:pointer;font:inherit;color:var(--ink);transition:transform .15s}
+#view{flex:1;min-height:0;display:flex;flex-direction:column}
+.grid{flex:1;min-height:0;display:grid;gap:8px;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(0,1fr)}
+.g1{grid-template-columns:minmax(0,1fr)}
+@media(max-aspect-ratio:1/1){.g2{grid-template-columns:minmax(0,1fr)}}
+@media(min-aspect-ratio:7/5){.g3,.g4{grid-template-columns:repeat(var(--n),minmax(0,1fr))}}
+@media(max-height:520px){h1{display:none}}
+.card{background:var(--card);border:3px solid var(--line);border-radius:20px;padding:6px;display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden;text-align:center;cursor:pointer;font:inherit;color:var(--ink);transition:transform .15s}
 .card:active{transform:scale(.98)}
-.card svg{width:100%;height:auto;border-radius:14px;display:block}
-.word{font-size:2rem;font-weight:900;margin-top:6px;text-transform:capitalize}
-.sent{opacity:.7;font-size:1rem}
-.slide{display:flex;align-items:center;gap:8px}
+.card svg{flex:1;min-height:0;width:100%;height:100%;display:block}
+.word{font-size:clamp(1.1rem,5vmin,2rem);font-weight:900;line-height:1.1;margin-top:4px;text-transform:capitalize}
+.sent{opacity:.7;font-size:clamp(.75rem,2.6vmin,1rem)}
+.slide{flex:1;min-height:0;display:flex;align-items:stretch;gap:8px}
 .slide .card{flex:1}
-.slide .word{font-size:3rem}
-.nav{width:52px;height:52px;border-radius:50%;border:0;background:var(--acc);color:#fff;font-size:2rem;cursor:pointer;flex:none}
-.dots{text-align:center;margin-top:10px;font-size:1.6rem;letter-spacing:6px}
+.slide .word{font-size:clamp(1.4rem,7vmin,3rem)}
+.nav{align-self:center;width:44px;height:44px;border-radius:50%;border:0;background:var(--acc);color:#fff;font-size:2rem;cursor:pointer;flex:none}
+.dots{text-align:center;margin-top:2px;font-size:1.1rem;letter-spacing:6px}
 .dots span{opacity:.3;cursor:pointer}.dots .cur{opacity:1}
-.q{text-align:center}
-.q h2{margin:4px 0 10px;font-size:1.4rem}
+.q{text-align:center;flex:1;min-height:0;display:flex;flex-direction:column;gap:6px}
+.q .btn{align-self:center;padding:6px 14px}
+.q h2{margin:0;font-size:clamp(1rem,3.5vmin,1.4rem)}
 .btn{padding:10px 18px;border-radius:14px;border:0;background:var(--acc);color:#fff;font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer}
 .opt.ok{border-color:var(--ok);box-shadow:0 0 0 4px var(--ok)}
 .opt.no{border-color:var(--bad);animation:shake .4s}
 @keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 .stars{font-size:2.2rem;margin:10px 0}
 .msg{text-align:center;padding:20px;font-weight:700}
-.foot{text-align:center;font-size:.8rem;opacity:.65;margin-top:14px}
+.foot{text-align:center;font-size:.7rem;opacity:.65}
 @keyframes spin{to{transform:rotate(360deg)}}
 .rays{transform-origin:150px 32px;animation:spin 30s linear infinite}
 @keyframes fall{from{transform:translate(0,0);opacity:0}15%{opacity:.8}to{transform:translate(-14px,95px);opacity:0}}
@@ -119,7 +125,7 @@ function learn(){var ws=words(),v=document.getElementById("view");
 if(!ws.length){v.innerHTML='<div class="msg">Pick at least 1 word above 👆</div>';return}
 if(si>=ws.length)si=0;
 var seg=`<div class="seg"><button class="sb ${mode=="all"?"on":""}" data-mode="all">Show all</button><button class="sb ${mode=="slide"?"on":""}" data-mode="slide">Slideshow</button></div>`;
-if(mode=="all"){v.innerHTML=seg+'<div class="grid">'+ws.map(cardHtml).join("")+'</div>';return}
+if(mode=="all"){v.innerHTML=seg+`<div class="grid g${ws.length}" style="--n:${ws.length}">`+ws.map(cardHtml).join("")+'</div>';return}
 v.innerHTML=seg+`<div class="slide"><button class="nav" data-act="prev" aria-label="Previous">‹</button>${cardHtml(ws[si])}<button class="nav" data-act="next" aria-label="Next">›</button></div><div class="dots">${ws.map(function(w,i){return `<span class="${i==si?"cur":""}" data-dot="${i}">●</span>`}).join("")}</div>`}
 function go(d){var ws=words();if(!ws.length)return;si=(si+d+ws.length)%ws.length;learn();var w=ws[si];say(w.k+". "+w.s)}
 function quiz(){var ws=words(),v=document.getElementById("view");
@@ -130,7 +136,7 @@ function ask(){var v=document.getElementById("view");
 if(Q.i>=Q.qs.length){var s="";for(var n=0;n<Q.qs.length;n++)s+=n<Q.score?"⭐":"☆";
 v.innerHTML=`<div class="q"><h2>Well done! 🎉</h2><div class="stars">${s}</div><button class="btn" data-act="again">Play again 🔁</button></div>`;say("Well done!");return}
 var t=Q.qs[Q.i];Q.tried=false;
-v.innerHTML=`<div class="q"><h2>Question ${Q.i+1}/${Q.qs.length} – Which one is “${t}”?</h2><button class="btn" data-act="hear">🔊 Hear again</button><div class="grid" style="margin-top:12px">`+shuffle(words()).map(function(w){return `<button class="card opt" data-pick="${w.k}">${scene(w.k)}</button>`}).join("")+'</div></div>';
+v.innerHTML=`<div class="q"><h2>Question ${Q.i+1}/${Q.qs.length} – Which one is “${t}”?</h2><button class="btn" data-act="hear">🔊 Hear again</button><div class="grid g${words().length}" style="--n:${words().length}">`+shuffle(words()).map(function(w){return `<button class="card opt" data-pick="${w.k}">${scene(w.k)}</button>`}).join("")+'</div></div>';
 say("Which one is "+t+"?")}
 function render(){chips();document.querySelectorAll(".tab").forEach(function(b){b.classList.toggle("on",b.dataset.tab==tab)});tab=="learn"?learn():quiz()}
 
