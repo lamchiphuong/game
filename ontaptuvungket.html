@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KET Quest – Hành trình khám phá bản đồ từ vựng</title>
+<style>
+:root{--ink:#16324f;--card:#fffdf6;--gold:#ffc83d;--sea1:#7fd4f2;--sea2:#2f8fc9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:linear-gradient(#bfeaff,var(--sea1) 40%,var(--sea2));min-height:100vh;background-attachment:fixed}
+#app{max-width:520px;margin:0 auto;padding:12px 14px 40px;position:relative}
+h1,h2,h3{margin:.2em 0}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--card);border-radius:18px;padding:8px 12px;box-shadow:0 4px 0 #0003;position:sticky;top:6px;z-index:5}
+.coin{font-weight:800;background:var(--gold);padding:4px 12px;border-radius:99px;box-shadow:0 3px 0 #c38f00}
+.btn{font:inherit;font-weight:700;border:0;border-radius:16px;padding:10px 16px;background:#ff7a59;color:#fff;box-shadow:0 5px 0 #c24a2c;cursor:pointer;transition:transform .1s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #c24a2c}
+.btn.g{background:#3cba74;box-shadow:0 5px 0 #23864f}.btn.w{background:#fff;color:var(--ink);box-shadow:0 5px 0 #0003}
+.btn:disabled{opacity:.55}
+.card{background:var(--card);border-radius:24px;padding:18px;margin:14px 0;box-shadow:0 6px 0 #0003}
+.center{text-align:center}
+.stage{perspective:700px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.av{width:84px;height:104px;border-radius:20px;background:#fff;border:4px solid #fff;box-shadow:0 6px 0 #0003;font-size:46px;display:flex;align-items:center;justify-content:center;cursor:pointer;transform-style:preserve-3d;transition:transform .4s}
+.av:hover{transform:rotateY(20deg) rotateX(8deg)}
+.av.on{border-color:var(--gold);background:#fff4c9;animation:sway 2.2s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotateY(-28deg) translateZ(14px)}50%{transform:rotateY(28deg) translateZ(14px)}}
+.hero{font-size:84px;display:inline-block;filter:drop-shadow(0 14px 6px #0004);animation:sway 3s ease-in-out infinite}
+input[type=text]{font:inherit;width:100%;padding:12px 14px;border-radius:14px;border:3px solid #cfe3f2;font-size:18px}
+.map{position:relative;padding:10px 0 20px;overflow:hidden}
+.cl{position:absolute;font-size:34px;opacity:.85;animation:drift 14s linear infinite}
+@keyframes drift{from{transform:translateX(-60px)}to{transform:translateX(560px)}}
+.fish{position:absolute;font-size:24px;animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.node{position:relative;width:62%;margin:6px 0 0;text-align:center;cursor:pointer}
+.node.r{margin-left:auto}
+.isl{width:120px;height:104px;margin:0 auto;position:relative;transform:rotateX(18deg);transform-style:preserve-3d}
+.isl .base{position:absolute;bottom:0;left:0;right:0;height:62px;border-radius:50%;background:var(--c);box-shadow:0 12px 0 #c9a46a,0 22px 10px #0004}
+.isl .em{position:absolute;top:0;left:0;right:0;font-size:56px;animation:bob 3s ease-in-out infinite;filter:drop-shadow(0 6px 3px #0003)}
+.node.lock .isl{filter:grayscale(.9) brightness(.8)}
+.pl{position:absolute;top:-18px;right:6px;font-size:36px;animation:bob 1s ease-in-out infinite;z-index:2}
+.tag{display:inline-block;background:var(--card);padding:2px 12px;border-radius:99px;font-weight:800;font-size:14px;box-shadow:0 3px 0 #0003;margin-top:6px}
+.dots{letter-spacing:3px;font-size:13px}
+.foot{text-align:center;font-size:22px;opacity:.7;margin:4px 0}
+.mis{display:flex;align-items:center;gap:12px;padding:12px;border-radius:18px;background:#fff;margin:10px 0;box-shadow:0 4px 0 #0002;cursor:pointer}
+.mis b{font-size:17px}.mis small{display:block;opacity:.7}.mis .ic{font-size:30px}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-weight:600;font-size:17px;background:#fff;border:3px solid #cfe3f2;border-radius:16px;padding:12px 14px;margin:9px 0;cursor:pointer;color:var(--ink)}
+.opt.ok{background:#c9f5d5;border-color:#3cba74}.opt.no{background:#ffd6d0;border-color:#ff7a59}
+.q{font-size:26px;font-weight:800;text-align:center;margin:10px 0}
+.q.s{font-size:20px}
+.pb{height:12px;background:#d8e8f3;border-radius:9px;overflow:hidden}.pb i{display:block;height:100%;background:#3cba74;transition:width .3s}
+.pop{position:fixed;left:50%;top:40%;font-size:34px;font-weight:800;color:#c38f00;animation:up 1s forwards;pointer-events:none;z-index:9;text-shadow:0 2px 0 #fff}
+@keyframes up{to{transform:translate(-50%,-90px);opacity:0}}
+.hint{letter-spacing:6px;font-size:30px;font-weight:800;text-align:center;margin:8px 0}
+.row{display:flex;gap:8px;margin-top:10px}.row .btn{flex:1}
+table{width:100%;border-collapse:collapse;font-size:15px}td{padding:6px 4px;border-bottom:1px solid #e3edf4;vertical-align:top}
+.sm{padding:4px 10px;font-size:16px;box-shadow:0 3px 0 #0003}.who{flex:1;font-weight:800;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.world{position:relative;height:1960px;overflow:hidden;border-radius:24px;margin-top:10px;background:linear-gradient(#bfeaff,#8fd3f0)}
+.board{position:absolute;left:4%;right:4%;top:14px;height:1900px;transform:none;border-radius:36px;background:repeating-linear-gradient(0deg,#ffffff1f 0 2px,transparent 2px 60px),repeating-linear-gradient(90deg,#ffffff1f 0 2px,transparent 2px 60px),radial-gradient(circle,#55c1ee,#2b86c2);box-shadow:0 0 0 10px #f3deaa,0 0 0 18px #c9a46a,0 40px 0 18px #8d6a3a}
+.board svg{position:absolute;inset:0;width:100%;height:100%}
+.nd3{position:absolute;width:0;height:0;transform-style:preserve-3d;cursor:pointer}
+.disk{position:absolute;width:150px;height:150px;left:-75px;top:-75px;border-radius:50%;box-shadow:0 10px 0 #b98d4f,0 18px 8px #0003;background:radial-gradient(circle,var(--c) 56%,#f3deaa 59%,#f3deaa 72%,#ffffff66 74%)}
+.disk:before{content:none}
+.up{position:absolute;z-index:3;left:-80px;width:160px;bottom:0;text-align:center;pointer-events:none}
+.up .em{font-size:64px;line-height:1;animation:bob 3s ease-in-out infinite;filter:drop-shadow(0 8px 3px #0004)}
+.nd3.lock .disk{filter:grayscale(.9) brightness(.85)}.nd3.lock .em{filter:grayscale(1)}
+.up .tag{white-space:nowrap}
+.up.pin{margin-left:78px;font-size:46px;animation:bob 1s ease-in-out infinite}
+.up.dc{font-size:40px;opacity:.9}
+.fcard{height:190px;display:flex;align-items:center;justify-content:center;border-radius:22px;background:#fff;box-shadow:0 6px 0 #0003;margin:12px 0;animation:flip .4s}
+@keyframes flip{from{transform:rotateY(90deg)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body><div id="app"></div>
+<script>
+const MAPS=[["Làng Thói Quen","🏡","#8bd46e"],["Đảo Học Đường","🏫","#f6cf5a"],["Bến Cảng Du Lịch","⛵","#6fd0ee"],["Phố Chợ Biển","🛍️","#ffab88"],["Vườn Sức Khỏe","🌿","#9ae0a0"],["Rừng Cảm Xúc","🌳","#cba6f2"],["Công Viên Giải Trí","🎡","#ff8fc0"],["Thị Trấn Xanh","🏞️","#78dcbd"],["Đảo Công Nghệ","💻","#86b0ff"],["Núi Thời Tiết","⛈️","#c3cedd"]];
+const AVS=["🦊","🐼","🐱","🐸","🦁","🐧"];
+const WD=`appointment|n.|cuộc hẹn
+routine|n.|thói quen, lịch sinh hoạt
+schedule|n.|lịch trình
+usually|adv.|thường thường
+immediately|adv.|ngay lập tức
+prepare|v.|chuẩn bị
+organize|v.|sắp xếp, tổ chức
+remind|v.|nhắc nhở
+borrow|v.|mượn
+return|v.|trả lại
+subject|n.|môn học
+project|n.|dự án, bài tập lớn
+presentation|n.|bài thuyết trình
+examination|n.|kỳ thi
+result|n.|kết quả
+improve|v.|cải thiện
+explain|v.|giải thích
+practise|v.|luyện tập
+experience|n.|kinh nghiệm, trải nghiệm
+mistake|n.|lỗi, sai lầm
+destination|n.|điểm đến
+journey|n.|chuyến đi, hành trình
+passenger|n.|hành khách
+luggage|n.|hành lý
+accommodation|n.|chỗ ở
+entrance|n.|lối vào
+departure|n.|sự khởi hành
+arrive|v.|đến nơi
+cancel|v.|hủy bỏ
+explore|v.|khám phá
+discount|n.|giảm giá
+receipt|n.|hóa đơn mua hàng
+customer|n.|khách hàng
+product|n.|sản phẩm
+price|n.|giá cả
+expensive|adj.|đắt tiền
+affordable|adj.|có giá phải chăng
+suitable|adj.|phù hợp
+exchange|v.|đổi hàng
+spend|v.|tiêu tiền; dành thời gian
+headache|n.|đau đầu
+temperature|n.|thân nhiệt; nhiệt độ
+medicine|n.|thuốc
+invitation|n.|lời mời
+exercise|n./v.|bài tập; tập thể dục
+healthy|adj.|khỏe mạnh; lành mạnh
+tired|adj.|mệt mỏi
+comfortable|adj.|thoải mái
+recover|v.|hồi phục
+avoid|v.|tránh
+nervous|adj.|lo lắng, hồi hộp
+disappointed|adj.|thất vọng
+excited|adj.|hào hứng
+surprised|adj.|ngạc nhiên
+confident|adj.|tự tin
+friendly|adj.|thân thiện
+polite|adj.|lịch sự
+patient|adj.|kiên nhẫn
+honest|adj.|trung thực
+helpful|adj.|hay giúp đỡ
+performance|n.|buổi biểu diễn
+exhibition|n.|triển lãm
+concert|n.|buổi hòa nhạc
+competition|n.|cuộc thi
+activity|n.|hoạt động
+programme|n.|chương trình
+popular|adj.|phổ biến
+exciting|adj.|thú vị, hào hứng
+prefer|v.|thích hơn
+recommend|v.|đề xuất, giới thiệu
+neighbourhood|n.|khu dân cư
+countryside|n.|vùng nông thôn
+environment|n.|môi trường
+pollution|n.|sự ô nhiễm
+facility|n.|cơ sở vật chất
+library|n.|thư viện
+crowded|adj.|đông đúc
+peaceful|adj.|yên bình
+convenient|adj.|thuận tiện
+protect|v.|bảo vệ
+message|n.|tin nhắn
+information|n.|thông tin
+website|n.|trang web
+password|n.|mật khẩu
+application|n.|ứng dụng
+download|v.|tải xuống
+upload|v.|tải lên
+search|v.|tìm kiếm
+share|v.|chia sẻ
+receive|v.|nhận
+degree|n.|độ (đơn vị đo nhiệt độ)
+forecast|n.|dự báo
+storm|n.|bão
+sunshine|n.|ánh nắng
+umbrella|n.|ô, dù
+problem|n.|vấn đề
+accident|n.|tai nạn
+broken|adj.|bị hỏng
+repair|v.|sửa chữa
+luckily|adv.|may mắn thay`.split('\n').map(l=>{const[w,t,m]=l.split('|');return{w,t,m}});
+const SD=`I was born in + place.~Tôi sinh ra ở...
+I have lived in + place + for + time.~Tôi đã sống ở... được...
+I have been interested in + N/V-ing + for + time.~Tôi đã yêu thích... được...
+In my free time, I enjoy + V-ing.~Khi rảnh, tôi thích...
+I am keen on + N/V-ing.~Tôi rất thích...
+My favourite ... is ... because ...~... yêu thích của tôi là... bởi vì...
+I would describe myself as + adjective.~Tôi sẽ miêu tả bản thân là...
+I get on well with + person.~Tôi hòa thuận với...
+I spend most of my time + V-ing.~Tôi dành phần lớn thời gian để...
+One thing I really enjoy is + V-ing.~Một điều tôi thực sự thích là...
+I think that + S + V.~Tôi nghĩ rằng...
+In my opinion, + S + V.~Theo ý kiến của tôi...
+I believe that + S + V.~Tôi tin rằng...
+I agree with you because ...~Tôi đồng ý với bạn bởi vì...
+I don’t really agree because ...~Tôi không thực sự đồng ý vì...
+I prefer A to B because ...~Tôi thích A hơn B bởi vì...
+I would rather + V + than + V.~Tôi thà... hơn là...
+The best thing about ... is ...~Điều tuyệt nhất về... là...
+One advantage of ... is ...~Một lợi thế của... là...
+I find it + adjective + to + V.~Tôi thấy việc... thật...
+I’m really interested in + N/V-ing.~Tôi thực sự hứng thú với...
+I’m not very keen on + N/V-ing.~Tôi không thích... lắm.
+I can’t stand + N/V-ing.~Tôi không thể chịu được...
+I am a big fan of + N.~Tôi rất yêu thích...
+I enjoy + V-ing + more than + V-ing.~Tôi thích... hơn...
+I would like to try + N/V-ing.~Tôi muốn thử...
+I’ve always wanted to + V.~Tôi luôn muốn...
+I don’t mind + V-ing.~Tôi không ngại...
+I am used to + N/V-ing.~Tôi đã quen với...
+I’d love to + V, especially because ...~Tôi rất muốn..., đặc biệt vì...
+Would you like to + V?~Bạn có muốn... không?
+How about + V-ing?~Hay là chúng ta...?
+Why don’t we + V?~Tại sao chúng ta không...?
+Let’s + V.~Chúng ta hãy...
+Shall we + V?~Chúng ta cùng... nhé?
+What about going to + place?~Đi đến... thì sao?
+Do you fancy + V-ing?~Bạn có hứng thú với việc... không?
+Would you mind + V-ing?~Bạn có phiền khi...?
+That sounds like a great idea.~Nghe có vẻ là một ý tưởng tuyệt vời.
+I’m afraid I can’t because ...~Tôi e rằng không thể vì...
+Could you tell me where + S + V?~Bạn có thể cho tôi biết... ở đâu không?
+Do you know how much + N + costs?~Bạn có biết... giá bao nhiêu không?
+Could you tell me how to get to + place?~Bạn có thể chỉ tôi cách đến...?
+How long does it take to + V?~Mất bao lâu để...?
+How far is it from A to B?~Từ A đến B bao xa?
+What time does ... open/close?~... mở cửa/đóng cửa lúc mấy giờ?
+Is there anything I should know about ...?~Có điều gì tôi nên biết về...?
+Could you explain what I need to do?~Bạn có thể giải thích tôi cần làm gì không?
+Would it be possible to + V?~Liệu có thể... không?
+Where would you recommend going?~Bạn đề xuất nên đi đâu?
+Last weekend, I went to + place.~Cuối tuần trước tôi đã đến...
+I had a wonderful time + V-ing.~Tôi đã có khoảng thời gian tuyệt vời khi...
+It was the first time I had + past participle.~Đó là lần đầu tiên tôi...
+While I was + V-ing, + S + V2.~Trong khi tôi đang... thì...
+When I arrived, + S + V2.~Khi tôi đến,...
+I decided to + V because ...~Tôi quyết định... bởi vì...
+The most exciting part was ...~Phần thú vị nhất là...
+Unfortunately, + S + V2.~Thật không may,...
+Luckily, + S + V2.~May mắn thay,...
+I hope I can do it again someday.~Tôi hy vọng một ngày nào đó có thể làm lại điều đó.
+I’m going to + V.~Tôi dự định...
+I’m planning to + V.~Tôi đang lên kế hoạch...
+I’d like to + V in the future.~Tôi muốn... trong tương lai.
+I’m looking forward to + N/V-ing.~Tôi mong chờ...
+I hope to + V.~Tôi hy vọng sẽ...
+I haven’t decided what to do yet.~Tôi vẫn chưa quyết định sẽ làm gì.
+I might + V if I have enough time.~Tôi có thể... nếu có đủ thời gian.
+I will probably + V.~Có lẽ tôi sẽ...
+My plan is to + V.~Kế hoạch của tôi là...
+I’m going to be + V-ing at this time next week.~Vào thời điểm này tuần tới, tôi sẽ đang...
+The reason why ... is that ...~Lý do tại sao... là...
+This is because + S + V.~Điều này là bởi vì...
+I couldn’t + V because ...~Tôi đã không thể... bởi vì...
+Although + S + V, + S + V.~Mặc dù... nhưng...
+However, + S + V.~Tuy nhiên,...
+As a result, + S + V.~Kết quả là...
+That’s why + S + V.~Đó là lý do tại sao...
+It depends on + N.~Điều đó phụ thuộc vào...
+The problem is that + S + V.~Vấn đề là...
+If I were you, I would + V.~Nếu tôi là bạn, tôi sẽ...
+A is more + adjective + than B.~A... hơn B.
+A is not as + adjective + as B.~A không... bằng B.
+A is much + comparative + than B.~A ... hơn B rất nhiều.
+The most interesting thing about ... is ...~Điều thú vị nhất về... là...
+It looks similar to + N.~Nó trông tương tự như...
+It is famous for + N/V-ing.~Nó nổi tiếng về...
+There are plenty of + plural noun.~Có rất nhiều...
+It is a great place to + V.~Đó là một nơi tuyệt vời để...
+Compared with + N, + S + V.~So với...,...
+One of the best things about ... is ...~Một trong những điều tuyệt nhất về... là...
+Could I have a look at ...?~Tôi có thể xem... được không?
+I’m afraid there is a problem with ...~Tôi e rằng có vấn đề với...
+I’d like to make a reservation for ...~Tôi muốn đặt chỗ cho...
+Could I change my booking?~Tôi có thể thay đổi đặt chỗ không?
+I’m sorry I’m late.~Tôi xin lỗi vì đến muộn.
+Thank you for inviting me.~Cảm ơn bạn đã mời tôi.
+Please let me know if ...~Vui lòng cho tôi biết nếu...
+I’m writing to ask about ...~Tôi viết thư này để hỏi về...
+I hope to hear from you soon.~Tôi hy vọng sớm nhận được hồi âm từ bạn.
+I look forward to seeing you.~Tôi mong được gặp bạn.`.split('\n').map(l=>{const[e,v]=l.split('~');return{e,v}});
+
+const $=s=>document.querySelector(s),A=$('#app');
+let S={n:'',a:'',c:0,u:1,d:{},snd:1};
+try{Object.assign(S,JSON.parse(localStorage.getItem('ketq')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('ketq',JSON.stringify(S))}catch(e){}};
+const sh=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+let ac;
+function beep(f,d=.12,t=0){if(!S.snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;o.type='triangle';g.gain.setValueAtTime(.15,ac.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+t+d);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+t);o.stop(ac.currentTime+t+d)}catch(e){}}
+const win=()=>[523,659,784].forEach((f,i)=>beep(f,.15,i*.1)),bad=()=>beep(180,.25);
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/\+|\.\.\./g,' '));u.lang='en-GB';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+function pop(t){const p=document.createElement('div');p.className='pop';p.textContent=t;document.body.appendChild(p);setTimeout(()=>p.remove(),1000)}
+const done=(i,k)=>S.d[i+'-'+k],full=i=>[0,1,2,3].every(k=>done(i,k)),nd=i=>[0,1,2,3].filter(k=>done(i,k)).length;
+const bar0=()=>`<div class="bar"><span style="font-size:26px">${S.a}</span><b>${S.n}</b><span><button class="btn w" style="padding:4px 10px" onclick="S.snd=!S.snd;save();this.textContent=S.snd?'🔊':'🔇'">${S.snd?'🔊':'🔇'}</button> <span class="coin">🪙 ${S.c}</span></span></div>`;
+
+function start(){
+ A.innerHTML=`<div class="card center"><h1>🗺️ KET Quest</h1><p>Chinh phục 10 hòn đảo, học 100 từ và 100 mẫu câu Cambridge A2 Key!</p><b>1. Chọn nhân vật</b><div class="stage">${AVS.map(a=>`<div class="av ${a==S.a?'on':''}" onclick="S.a='${a}';beep(660);start()">${a}</div>`).join('')}</div><b>2. Tên của bạn</b><input type="text" id="nm" maxlength="14" placeholder="Nhập tên..." value="${S.n}" style="margin:8px 0 14px"><br><button class="btn g" onclick="S.n=$('#nm').value.trim();if(!S.a)S.a=AVS[0];if(!S.n)return $('#nm').focus();save();win();home()">Bắt đầu hành trình</button></div>`}
+
+function home(){
+ let h=bar()+`<div class="map" style="margin-top:12px"><span class="cl" style="top:20px">☁️</span><span class="cl" style="top:520px;animation-delay:-6s">☁️</span><span class="cl" style="top:1000px;animation-delay:-9s">☁️</span><span class="fish" style="left:8%;top:260px">🐟</span><span class="fish" style="right:10%;top:700px">🐳</span>`;
+ MAPS.forEach((m,i)=>{const open=i<S.u,canBuy=i==S.u&&full(i-1),cur=open&&!full(i)&&(i==S.u-1);
+  h+=`<div class="node ${i%2?'r':''} ${open?'':'lock'}" style="--c:${m[2]}" onclick="${open?`mapScr(${i})`:canBuy?`buy(${i})`:`beep(180);pop('🔒 Hoàn thành đảo trước')`}">${cur?`<span class="pl">${S.a}</span>`:''}<div class="isl"><div class="base"></div><div class="em">${open?m[1]:'🔒'}</div></div><span class="tag">${i+1}. ${m[0]}</span><br><span class="dots">${open?[0,1,2,3].map(k=>done(i,k)?'⭐':'☆').join(''):canBuy?'🪙 40 để mở':''}</span></div>${i<9?'<div class="foot">👣</div>':''}`});
+ A.innerHTML=h+'</div>';
+ const c=document.querySelector('.pl');if(c)c.scrollIntoView({block:'center'})}
+function buy(i){if(S.c>=40){S.c-=40;S.u=i+1;save();win();pop('🎉 Mở khóa đảo mới!');home()}else{bad();pop('Cần 40 🪙')}}
+
+function mapScr(i){BK=home;
+ const m=MAPS[i],ws=WD.slice(i*10,i*10+10),M=[["📖","Từ vựng Anh → Việt","Chọn nghĩa đúng"],["🔄","Từ vựng Việt → Anh","Chọn từ tiếng Anh"],["✍️","Gõ từ tiếng Anh","Có gợi ý từng chữ"],["🧩","Mẫu câu","Chọn cấu trúc đúng"]];
+ A.innerHTML=bar()+`<div class="card"><button class="btn w" onclick="home()" style="padding:6px 12px">← Bản đồ</button><h2 style="margin-top:10px">${m[1]} ${m[0]}</h2>${M.map((x,k)=>`<div class="mis" onclick="play(${i},${k})"><span class="ic">${x[0]}</span><div style="flex:1"><b>${x[1]}</b><small>${x[2]} · +${k==2?3:2} 🪙/câu</small></div><span>${done(i,k)?'✅':'▶️'}</span></div>`).join('')}<p style="font-size:14px">Đạt từ 7/10 để hoàn thành nhiệm vụ (+10 🪙 lần đầu). Xong cả 4 nhiệm vụ để mở đảo tiếp theo!</p></div><div class="card"><h3>📚 Học nhanh (bấm để nghe)</h3><table>${ws.map(w=>`<tr onclick="say('${w.w}')" style="cursor:pointer"><td>🔊 <b>${w.w}</b> <small>${w.t}</small></td><td>${w.m}</td></tr>`).join('')}</table></div><div class="card"><h3>🧩 Mẫu câu của đảo</h3><table>${SD.slice(i*10,i*10+10).map(s=>`<tr onclick="say('${s.e.replace(/'/g,'')}')" style="cursor:pointer"><td>🔊 ${s.e}</td><td>${s.v}</td></tr>`).join('')}</table></div>`}
+
+let G;
+function play(i,k){
+ const ws=WD.slice(i*10,i*10+10),ss=SD.slice(i*10,i*10+10);
+ const others=(c,key)=>{let p=WD.filter(x=>x!==c&&x.t==c.t);if(p.length<3)p=WD.filter(x=>x!==c);return sh(p).slice(0,3).map(x=>x[key])};
+ let items=sh(k<3?ws:ss).map(x=>k==0?{q:x.w,say:x.w,a:x.m,o:sh([x.m,...others(x,'m')])}:k==1?{q:x.m,a:x.w,say:x.w,o:sh([x.w,...others(x,'w')])}:k==2?{q:x.m,a:x.w,say:x.w,type:1,tt:x.t}:{q:x.v,a:x.e,say:x.e,s:1,o:sh([x.e,...sh(ss.filter(y=>y!==x)).slice(0,3).map(y=>y.e)])});
+ G={i,k,items,n:0,ok:0,earn:0,h:0};ask()}
+function ask(){
+ const it=G.items[G.n],pct=G.n/10*100;
+ let h=bar()+`<div class="card"><div class="pb"><i style="width:${pct}%"></i></div><p class="center" style="margin:6px 0">Câu ${G.n+1}/10 · ${MAPS[G.i][0]}</p>`;
+ if(it.type){G.h=0;h+=`<div class="q">${it.q}</div><div class="center">(${it.tt})</div><div class="hint" id="hn">${it.a.split('').map(()=>'_').join(' ')}</div><input type="text" id="ans" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Gõ từ tiếng Anh..."><div class="row"><button class="btn w" onclick="hint()">💡 Gợi ý</button><button class="btn g" onclick="chk()">Kiểm tra</button></div>`}
+ else h+=`<div class="q ${it.s?'s':''}">${it.q}</div>${G.k==0?`<div class="center"><button class="btn w" onclick="say('${it.say}')">🔊 Nghe</button></div>`:''}<div id="os">${it.o.map((o,j)=>`<button class="opt" data-o="${j}" onclick="pick(${j})">${o}</button>`).join('')}</div>`;
+ A.innerHTML=h+'</div>';
+ if(G.k==0)say(it.say);const a=$('#ans');if(a){a.focus();a.onkeydown=e=>{if(e.key=='Enter')chk()}}}
+function hint(){const it=G.items[G.n];G.h=Math.min(G.h+1,it.a.length-1);$('#hn').textContent=it.a.split('').map((c,j)=>j<G.h?c:'_').join(' ');beep(500)}
+function fin(good,extra){
+ const it=G.items[G.n];if(good){G.ok++;const p=G.k==2?(G.h?1:3):2;G.earn+=p;S.c+=p;pop('+'+p+' 🪙');win()}else bad();
+ if(G.k!=0)say(it.say);
+ setTimeout(()=>{G.n++;G.n<10?ask():result()},good?900:1700)}
+function pick(j){const it=G.items[G.n],b=document.querySelectorAll('.opt');b.forEach((x,n)=>{x.disabled=true;if(it.o[n]==it.a)x.classList.add('ok')});const good=it.o[j]==it.a;if(!good)b[j].classList.add('no');fin(good)}
+function chk(){const it=G.items[G.n],v=$('#ans').value.trim().toLowerCase(),good=v==it.a;$('#ans').disabled=true;$('#hn').innerHTML=good?`<span style="color:#23864f">${it.a}</span>`:`<span style="color:#c24a2c">${it.a}</span>`;fin(good)}
+function result(){
+ const pass=G.ok>=7,first=pass&&!done(G.i,G.k);if(first){S.d[G.i+'-'+G.k]=1;S.c+=10;G.earn+=10}save();pass?win():bad();
+ A.innerHTML=bar()+`<div class="card center"><div class="hero">${pass?S.a:'😅'}</div><h2>${pass?'Xuất sắc!':'Cố lên nào!'}</h2><h1>${G.ok}/10</h1><p>Nhận được <b>🪙 ${G.earn}</b>${first?' (gồm thưởng +10 hoàn thành)':''}</p>${full(G.i)&&G.i<9&&S.u==G.i+1?'<p><b>🎊 Hoàn thành đảo! Về bản đồ để mở đảo tiếp theo.</b></p>':''}<div class="row"><button class="btn w" onclick="play(${G.i},${G.k})">Chơi lại</button><button class="btn g" onclick="mapScr(${G.i})">Tiếp tục</button></div></div>`}
+S.w=S.w||{};let BK=null;
+const bar=()=>`<div class="bar">${BK?`<button class="btn w sm" onclick="BK()">←</button>`:''}<button class="btn w sm" onclick="home()">🏠</button><span class="who">${S.a} ${S.n}</span><button class="btn w sm" onclick="S.snd=!S.snd;save();this.textContent=S.snd?'🔊':'🔇'">${S.snd?'🔊':'🔇'}</button><span class="coin">🪙 ${S.c}</span></div>`;
+function home(){BK=null;
+ const P=[[30,7],[68,16.5],[30,26],[70,35.5],[30,45],[68,54.5],[30,64],[68,73.5],[32,83],[60,92]],wc=Object.keys(S.w).length;
+ const DC=[[10,88,'🌴'],[90,94,'🌊'],[8,62,'🐳'],[92,50,'⛵'],[10,36,'🌴'],[90,26,'🐟'],[8,10,'☁️'],[88,6,'🌴']];
+ const nodes=P.map((p,i)=>{const m=MAPS[i],open=i<S.u,canBuy=i==S.u&&full(i-1),cur=open&&!full(i)&&i==S.u-1;
+  return `<div class="nd3 ${open?'':'lock'}" style="left:${p[0]}%;top:${p[1]}%;--c:${m[2]}" onclick="${open?`mapScr(${i})`:canBuy?`buy(${i})`:`beep(180);pop('🔒 Hoàn thành đảo trước')`}"><div class="disk"></div><div class="up"><span class="tag">${i+1}. ${m[0]}</span><br><span class="dots">${open?[0,1,2,3].map(k=>done(i,k)?'⭐':'☆').join(''):canBuy?'🪙 40 để mở':'🔒'}</span><div class="em">${open?m[1]:'🔒'}</div></div>${cur?`<div class="up pin">${S.a}</div>`:''}</div>`}).join('');
+ A.innerHTML=bar()+`<div class="card center" style="margin:10px 0"><button class="btn g" onclick="reviewMenu()">🔁 Ôn lại${wc?` (${wc} câu cần ôn)`:''}</button></div><div class="world"><div class="board"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="${P.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 14" vector-effect="non-scaling-stroke"/></svg>${DC.map(d=>`<div class="nd3" style="left:${d[0]}%;top:${d[1]}%"><div class="up dc">${d[2]}</div></div>`).join('')}${nodes}</div></div>`;
+ setTimeout(()=>{const c=document.querySelector('.pin');if(c)c.scrollIntoView({block:'center'})},60)}
+function mk(k,x){const s=k==3,i=(s?SD:WD).indexOf(x),f=k==0?'m':'w';let o=null;
+ if(s){const g=Math.floor(i/10)*10;o=sh([x.e,...sh(SD.slice(g,g+10).filter(y=>y!==x)).slice(0,3).map(y=>y.e)])}
+ else if(k<2){let p=WD.filter(y=>y!==x&&y.t==x.t);if(p.length<3)p=WD.filter(y=>y!==x);o=sh([x[f],...sh(p).slice(0,3).map(y=>y[f])])}
+ return{id:(s?'s':'w')+i,k,q:k==0?x.w:s?x.v:x.m,a:s?x.e:k==0?x.m:x.w,say:s?x.e:x.w,type:k==2,tt:x.t,s,o}}
+function play(i,k){G={i,k,items:sh(k<3?WD.slice(i*10,i*10+10):SD.slice(i*10,i*10+10)).map(x=>mk(k,x)),n:0,ok:0,earn:0,h:0};BK=()=>mapScr(i);ask()}
+function ask(){const it=G.items[G.n],N=G.items.length;
+ let h=bar()+`<div class="card"><div class="pb"><i style="width:${G.n/N*100}%"></i></div><p class="center" style="margin:6px 0">${G.rv?'🔁 Ôn lại':MAPS[G.i][0]} · Câu ${G.n+1}/${N}</p>`;
+ if(it.type){G.h=0;h+=`<div class="q">${it.q}</div><div class="center">(${it.tt})</div><div class="hint" id="hn">${it.a.split('').map(()=>'_').join(' ')}</div><input type="text" id="ans" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Gõ từ tiếng Anh..."><div class="row"><button class="btn w" onclick="hint()">💡 Gợi ý</button><button class="btn g" onclick="chk()">Kiểm tra</button></div>`}
+ else h+=`<div class="q ${it.s?'s':''}">${it.q}</div>${it.k==0?`<div class="center"><button class="btn w" onclick="say('${it.say}')">🔊 Nghe</button></div>`:''}<div id="os">${it.o.map((o,j)=>`<button class="opt" onclick="pick(${j})">${o}</button>`).join('')}</div>`;
+ A.innerHTML=h+'</div>';if(it.k==0)say(it.say);const a=$('#ans');if(a){a.focus();a.onkeydown=e=>{if(e.key=='Enter')chk()}}}
+function fin(good){const it=G.items[G.n];
+ if(good){G.ok++;const p=it.k==2?(G.h?1:3):2;G.earn+=p;S.c+=p;pop('+'+p+' 🪙');win();delete S.w[it.id]}else{bad();S.w[it.id]=1}
+ save();if(it.k!=0)say(it.say);setTimeout(()=>{G.n++;G.n<G.items.length?ask():result()},good?900:1700)}
+function result(){const N=G.items.length,pass=G.ok>=Math.ceil(N*.7),first=!G.rv&&pass&&!done(G.i,G.k);
+ if(first){S.d[G.i+'-'+G.k]=1;S.c+=10;G.earn+=10}save();pass?win():bad();BK=G.rv?reviewMenu:()=>mapScr(G.i);
+ A.innerHTML=bar()+`<div class="card center"><div class="hero">${pass?S.a:'😅'}</div><h2>${pass?'Xuất sắc!':'Cố lên nào!'}</h2><h1>${G.ok}/${N}</h1><p>Nhận được <b>🪙 ${G.earn}</b>${first?' (gồm thưởng +10 hoàn thành)':''}</p>${!G.rv&&full(G.i)&&G.i<9&&S.u==G.i+1?'<p><b>🎊 Hoàn thành đảo! Về bản đồ để mở đảo tiếp theo.</b></p>':''}<div class="row"><button class="btn w" onclick="${G.rv?'reviewMenu()':`play(${G.i},${G.k})`}">${G.rv?'Menu ôn tập':'Chơi lại'}</button><button class="btn g" onclick="${G.rv?`review('${G.m}')`:`mapScr(${G.i})`}">${G.rv?'Ôn tiếp':'Tiếp tục'}</button></div></div>`}
+function reviewMenu(){BK=home;const w=Object.keys(S.w).length;
+ A.innerHTML=bar()+`<div class="card"><h2>🔁 Ôn lại</h2><div class="mis" onclick="review('w')"><span class="ic">❌</span><div><b>Ôn câu đã làm sai</b><small>${w} câu đang chờ · làm đúng sẽ được xóa khỏi danh sách</small></div></div><div class="mis" onclick="review('m')"><span class="ic">🎲</span><div><b>Ôn tổng hợp</b><small>10 câu ngẫu nhiên từ các đảo đã mở</small></div></div><div class="mis" onclick="flash()"><span class="ic">🃏</span><div><b>Thẻ lật từ vựng</b><small>Chạm để xem nghĩa, nghe phát âm</small></div></div></div>`}
+function review(m){G={rv:1,m,i:0,k:-1,n:0,ok:0,earn:0,h:0};BK=reviewMenu;const U=S.u*10,R=n=>Math.floor(Math.random()*n);let it=[];
+ if(m=='w')it=Object.keys(S.w).slice(0,10).map(id=>{const s=id[0]=='s';return mk(s?3:R(3),(s?SD:WD)[+id.slice(1)])});
+ else for(let j=0;j<10;j++)it.push(Math.random()<.3?mk(3,SD[R(U)]):mk(R(3),WD[R(U)]));
+ if(!it.length){bad();return pop('Chưa có câu sai 🎉')}G.items=sh(it);ask()}
+let F;function flash(){BK=reviewMenu;F={p:sh(WD.slice(0,S.u*10)),n:0,f:0};fc();say(F.p[0].w)}
+function fc(){const w=F.p[F.n],L=F.p.length;A.innerHTML=bar()+`<div class="card center"><p>Thẻ ${F.n+1}/${L}</p><div class="fcard" onclick="F.f=!F.f;fc()">${F.f?`<div><b style="font-size:24px">${w.m}</b><br><small>${w.t}</small></div>`:`<div><b style="font-size:36px">${w.w}</b><br><small>Chạm để lật</small></div>`}</div><div class="row"><button class="btn w" onclick="F.n=(F.n+L-1)%L;F.f=0;fc()">←</button><button class="btn w" onclick="say('${w.w}')">🔊</button><button class="btn g" onclick="F.n=(F.n+1)%L;F.f=0;fc();say(F.p[F.n].w)">→</button></div></div>`}
+S.a&&S.n?home():start();
+</script></body></html>
