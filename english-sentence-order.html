@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>English – Sắp xếp câu (Mã đề 02)</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eaf0f5;--ink:#17212f;--mut:#5d6b7e;--pri:#0b6e69;--pri2:#e0f2f0;--acc:#ffd23f;--bd:#d3dce7;--bad:#b42318}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 "Be Vietnam Pro",system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-text-size-adjust:100%}
+button,input,textarea{font:inherit;color:inherit}
+.hide{display:none!important}
+.top{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding:8px 14px;display:flex;align-items:center;gap:12px}
+.top h1{font-size:15px;margin:0;flex:1;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tm{font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;background:#ffffff1f;padding:4px 12px;border-radius:8px}
+.tm.low{background:var(--bad)}
+.bar{height:4px;background:#ffffff30;position:absolute;left:0;right:0;bottom:0}.bar i{display:block;height:100%;background:var(--acc);width:0;transition:width .3s}
+.btn{border:0;border-radius:10px;padding:10px 18px;font-weight:700;cursor:pointer;background:var(--pri);color:#fff}
+.btn.alt{background:#fff;color:var(--ink);border:1px solid var(--bd)}
+.btn.sm{padding:6px 12px;font-size:14px}
+.wrap{max-width:1100px;margin:0 auto;padding:16px;display:grid;grid-template-columns:1fr 250px;gap:18px}
+.card{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:16px 18px;margin-bottom:14px;scroll-margin-top:70px}
+.sec{margin:22px 0 10px;padding-left:12px;border-left:5px solid var(--pri)}.sec h2{margin:0;font-size:18px}.sec p{margin:2px 0 0;color:var(--mut);font-size:14px}
+.qh{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.n{flex:none;min-width:34px;height:34px;border-radius:9px;background:var(--pri);color:#fff;display:grid;place-items:center;font-weight:700}
+.qt{flex:1;min-width:150px;color:var(--mut);font-size:14px}
+.hint{margin-top:10px;background:#fff9dc;border:1.5px dashed #e0b400;border-radius:10px;padding:8px 12px}
+.zone{margin-top:12px;min-height:68px;border:2px dashed var(--pri);border-radius:12px;padding:6px;background:#f6fbfa;display:flex;flex-wrap:wrap;align-items:center}
+.zone:empty::before{content:"Kéo (hoặc chạm) các từ vào đây để xếp câu";color:var(--mut);font-size:14px;padding:6px 8px}
+.bank{margin-top:10px;min-height:56px;border-radius:12px;padding:6px;background:var(--bg);display:flex;flex-wrap:wrap}
+.chip{display:inline-block;padding:8px 14px;margin:4px;border:1.5px solid var(--pri);background:var(--pri2);border-radius:10px;cursor:grab;font-weight:500;touch-action:none;user-select:none;-webkit-user-select:none}
+.zone .chip{background:#fff}
+.chip.cap::first-letter{text-transform:uppercase}
+.chip.dragging{opacity:.3}
+.chip.ghost{position:fixed;pointer-events:none;z-index:99;opacity:.92;transform:translate(-50%,-50%);box-shadow:0 6px 18px #0004;margin:0}
+.pn{font-weight:700;font-size:20px;margin:0 4px}
+.tools{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start}
+.note{width:100%;border:1.5px dashed #e0b400;background:#fff9dc;border-radius:10px;padding:8px;min-height:60px}
+.nb.has{background:var(--acc)}
+aside{position:sticky;top:64px;align-self:start;background:#fff;border:1px solid var(--bd);border-radius:14px;padding:14px;max-height:calc(100vh - 80px);overflow:auto}
+aside h3{margin:0 0 8px;font-size:15px}
+.pg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.pg button{height:38px;border:1px solid var(--bd);background:#fff;border-radius:8px;cursor:pointer;font-weight:500}
+.pg button.done{background:var(--pri);color:#fff;border-color:var(--pri)}
+.lg{font-size:13px;color:var(--mut);margin-top:10px}
+.ov{position:fixed;inset:0;background:#0b1420c0;z-index:60;display:grid;place-items:center;padding:16px}
+.md{background:#fff;border-radius:16px;max-width:520px;width:100%;padding:22px;max-height:90vh;overflow:auto}
+.md h2{margin:0 0 8px}.md ul{padding-left:20px}.md .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.start{max-width:520px;margin:6vh auto;background:#fff;border-radius:18px;padding:26px;border:1px solid var(--bd)}
+.start h1{margin:0 0 4px;font-size:24px}.start p{color:var(--mut);margin:0 0 16px}
+.start input,.md input{width:100%;padding:12px;border:1.5px solid var(--bd);border-radius:10px;margin-bottom:12px}
+.start .btn{width:100%;padding:13px}
+.late{background:#fde4e0;border-radius:12px;padding:14px;margin-bottom:12px;color:#7a1a10}
+.res{text-align:center}.res .sc{font-size:56px;font-weight:700;color:var(--pri)}
+.fab{display:none}
+.mut{color:var(--mut);font-size:14px;margin:4px 0}
+.hd{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.hd h2{flex:1;margin:0;min-width:160px}
+.ok{color:#0b6b46}.no{color:var(--bad)}
+@media(max-width:900px){
+ .wrap{grid-template-columns:1fr;padding:10px}
+ aside{display:none;position:fixed;inset:auto 0 0 0;top:auto;max-height:60vh;border-radius:16px 16px 0 0;z-index:30;box-shadow:0 -8px 30px #0004}
+ aside.open{display:block}
+ .fab{display:inline-block}
+ .top h1{display:none}.top{justify-content:space-between}
+}
+</style>
+</head>
+<body>
+
+<div id="v-start" class="start">
+  <h1>English – Sắp xếp câu</h1>
+  <p>Bài kiểm tra 40 câu · Kéo thả từ thành câu hoàn chỉnh · 60 phút · Hạn chót 23:00 ngày 27/11/2026 (giờ Việt Nam)</p>
+  <div id="late" class="hide">
+    <div class="late">⏰ <b>Đã quá hạn làm bài</b> (23:00, 27/11/2026 giờ Việt Nam). Vui lòng <b>liên hệ giáo viên để nhận code làm bài</b>.</div>
+    <input id="lc" placeholder="Nhập code do giáo viên cấp" autocomplete="off">
+    <button class="btn" id="lb" type="button">Xác nhận code</button>
+  </div>
+  <form id="f">
+    <input id="nm" placeholder="Họ và tên" required autocomplete="name">
+    <button class="btn" type="submit">Tiếp tục</button>
+  </form>
+  <button class="btn alt" id="vs" type="button" style="margin-top:10px">Xem bảng điểm (giáo viên)</button>
+</div>
+
+<div id="v-score" class="hide" style="max-width:900px;margin:0 auto;padding:16px"></div>
+
+<div id="v-test" class="hide">
+  <div class="top">
+    <h1>English – Sắp xếp câu · Mã đề 02</h1>
+    <span id="pr" style="font-size:14px">0/40</span>
+    <span class="tm" id="tm">60:00</span>
+    <button class="btn alt sm fab" id="pb">Danh sách</button>
+    <button class="btn sm" id="sub" style="background:var(--acc);color:var(--ink)">Nộp bài</button>
+    <div class="bar"><i id="bi"></i></div>
+  </div>
+  <div class="wrap">
+    <main id="qs"></main>
+    <aside id="as">
+      <h3>Danh sách câu hỏi</h3><div class="pg" id="pg"></div>
+      <div class="lg"><b>Cách làm:</b><br>• Kéo từ ở khung xám xuống khung nét đứt; kéo qua lại để đổi vị trí.<br>• Hoặc chạm 1 lần vào từ để chuyển nhanh.<br>• Dấu câu cuối câu đã có sẵn.<br>• Nút 💡 Gợi ý: xem nghĩa tiếng Việt của câu.</div>
+      <button class="btn alt sm" style="margin-top:10px;width:100%" id="pc">Đóng</button>
+    </aside>
+  </div>
+</div>
+
+<div id="v-res" class="start res hide"></div>
+<div id="m" class="ov hide"><div class="md" id="mb"></div></div>
+
+<script>
+const DB="https://gametienganh-9af04-default-rtdb.asia-southeast1.firebasedatabase.app/";
+const EXAM="SENT-40-02",RES_P="sent_results",VIO_P="sent_violations",KEY="ecs_sent40";
+const LIM=3600,DL=Date.parse("2026-11-27T23:00:00+07:00"),LATE="dHJlMjcxMQ==",TPW="bXJwaHVvbmc=";
+/* [từ gợi ý, đáp án (nhiều đáp án cách nhau bằng ||), nghĩa tiếng Việt] */
+const D=[
+["usually / at / up / wakes / seven / Tom / o'clock / .","Tom usually wakes up at seven o'clock.","Tom thường thức dậy lúc bảy giờ."],
+["often / do / how / you / cinema / the / go / to / ?","How often do you go to the cinema?","Bạn đi xem phim thường xuyên như thế nào?"],
+["playing / brothers / are / my / in / football / garden / the / .","My brothers are playing football in the garden.","Các anh/em trai của tôi đang chơi bóng đá trong vườn."],
+["doesn't / coffee / mother / morning / my / in / drink / the / .","My mother doesn't drink coffee in the morning.","Mẹ tôi không uống cà phê vào buổi sáng."],
+["listening / am / to / music / I / right / now / .","I am listening to music right now.","Tôi đang nghe nhạc ngay bây giờ."],
+["never / late / is / school / for / Sarah / .","Sarah is never late for school.","Sarah không bao giờ đi học muộn."],
+["weekends / what / you / do / usually / at / do / ?","What do you usually do at weekends?","Bạn thường làm gì vào cuối tuần?"],
+["reading / is / an / book / interesting / she / .","She is reading an interesting book.","Cô ấy đang đọc một cuốn sách thú vị."],
+["visited / summer / we / grandparents / last / our / .","We visited our grandparents last summer.","Mùa hè năm ngoái chúng tôi đã đến thăm ông bà."],
+["didn't / yesterday / to / go / party / the / they / .","They didn't go to the party yesterday. || Yesterday they didn't go to the party.","Hôm qua họ đã không đi dự bữa tiệc."],
+["did / buy / where / you / jacket / new / that / ?","Where did you buy that new jacket?","Bạn đã mua chiếc áo khoác mới đó ở đâu?"],
+["was / raining / heavily / it / left / when / we / house / the / .","It was raining heavily when we left the house.","Trời đang mưa rất to khi chúng tôi rời khỏi nhà."],
+["born / in / was / London / 2010 / in / he / .","He was born in London in 2010. || He was born in 2010 in London.","Anh ấy sinh ra ở London vào năm 2010."],
+["saw / a / movie / great / night / last / I / .","I saw a great movie last night.","Tối qua tôi đã xem một bộ phim tuyệt vời."],
+["were / doing / you / at / 8 pm / yesterday / what / ?","What were you doing at 8 pm yesterday? || What were you doing yesterday at 8 pm?","Bạn đang làm gì lúc 8 giờ tối hôm qua?"],
+["forgot / bring / to / his / umbrella / John / .","John forgot to bring his umbrella.","John đã quên mang theo ô của anh ấy."],
+["going / are / to / we / visit / museum / the / tomorrow / .","We are going to visit the museum tomorrow. || Tomorrow we are going to visit the museum.","Ngày mai chúng tôi sẽ đi thăm bảo tàng."],
+["think / I / will / it / rain / afternoon / this / .","I think it will rain this afternoon. || This afternoon I think it will rain.","Tôi nghĩ chiều nay trời sẽ mưa."],
+["meeting / am / friends / my / I / tonight / .","I am meeting my friends tonight. || Tonight I am meeting my friends.","Tối nay tôi sẽ gặp các bạn của tôi."],
+["won't / pass / exam / the / you / if / don't / you / study / .","You won't pass the exam if you don't study. || If you don't study, you won't pass the exam.","Bạn sẽ không đậu kỳ thi nếu bạn không học."],
+["she / buy / going / is / to / a / car / next / year / ?","Is she going to buy a car next year?","Năm sau cô ấy có định mua ô tô không?"],
+["help / I / you / carry / will / heavy / boxes / those / .","I will help you carry those heavy boxes.","Tôi sẽ giúp bạn mang những chiếc hộp nặng đó."],
+["flight / leaves / our / at / six / morning / tomorrow / .","Our flight leaves at six tomorrow morning. || Our flight leaves tomorrow morning at six.","Chuyến bay của chúng tôi khởi hành lúc sáu giờ sáng mai."],
+["going / aren't / stay / to / they / at / hotel / that / .","They aren't going to stay at that hotel.","Họ sẽ không ở tại khách sạn đó."],
+["taller / is / than / brother / his / Alex / .","Alex is taller than his brother.","Alex cao hơn anh/em trai của cậu ấy."],
+["most / is / this / the / expensive / restaurant / town / in / .","This is the most expensive restaurant in town.","Đây là nhà hàng đắt nhất trong thị trấn."],
+["been / have / ever / you / to / Japan / ?","Have you ever been to Japan?","Bạn đã từng đến Nhật Bản chưa?"],
+["finished / has / already / homework / her / Maria / .","Maria has already finished her homework. || Maria has finished her homework already.","Maria đã làm xong bài tập về nhà rồi."],
+["should / see / a / doctor / you / if / feel / you / sick / .","You should see a doctor if you feel sick. || If you feel sick, you should see a doctor.","Bạn nên đi khám bác sĩ nếu cảm thấy ốm."],
+["mustn't / use / you / mobile / your / phone / class / in / .","You mustn't use your mobile phone in class.","Bạn không được sử dụng điện thoại di động trong lớp."],
+["hasn't / three / for / rained / it / weeks / .","It hasn't rained for three weeks.","Trời đã không mưa suốt ba tuần."],
+["as / isn't / cold / today / as / yesterday / .","Today isn't as cold as yesterday.","Hôm nay không lạnh như hôm qua."],
+["much / does / how / T-shirt / this / cost / ?","How much does this T-shirt cost?","Chiếc áo phông này giá bao nhiêu?"],
+["tell / could / me / you / way / the / station / to / the / ?","Could you tell me the way to the station?","Bạn có thể chỉ cho tôi đường đến nhà ga được không?"],
+["would / like / to / what / you / drink / ?","What would you like to drink?","Bạn muốn uống gì?"],
+["turn / left / the / at / traffic / lights / .","Turn left at the traffic lights.","Rẽ trái ở chỗ đèn giao thông."],
+["looking / I / am / for / a / pair / of / shoes / black / .","I am looking for a pair of black shoes.","Tôi đang tìm một đôi giày đen."],
+["pay / can / by / I / credit / card / ?","Can I pay by credit card?","Tôi có thể thanh toán bằng thẻ tín dụng không?"],
+["takes / it / twenty / minutes / walk / to / there / .","It takes twenty minutes to walk there.","Đi bộ đến đó mất hai mươi phút."],
+["have / a / nice / weekend / and / see / you / Monday / on / !","Have a nice weekend and see you on Monday!","Chúc bạn cuối tuần vui vẻ và hẹn gặp bạn vào thứ Hai!"]
+];
+const SEC={1:["Chủ đề 1 · Thói quen hằng ngày & Sở thích","Hiện tại đơn / Hiện tại tiếp diễn (câu 1–8)"],9:["Chủ đề 2 · Quá khứ & Kỷ niệm","Quá khứ đơn / Quá khứ tiếp diễn (câu 9–16)"],17:["Chủ đề 3 · Kế hoạch & Dự định tương lai","Will / Be going to / Present Continuous (câu 17–24)"],25:["Chủ đề 4 · So sánh, Trải nghiệm & Lời khuyên","So sánh hơn/nhất, Hiện tại hoàn thành, Động từ khuyết thiếu (câu 25–32)"],33:["Chủ đề 5 · Giao tiếp, Hỏi đường & Mua sắm","Câu 33–40"]};
+const Q=D.map(([w,k,vi],i)=>{const p=w.split(" / "),pn=p.pop();return{i:i+1,w:p,pn,k:k.split(" || "),vi}});
+const $=s=>document.querySelector(s);
+const nz=s=>String(s||"").toLowerCase().replace(/[’']/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const sent=(q,ids)=>(ids||[]).map(j=>q.w[j]).join(" ");
+const isOk=(q,s)=>!!s&&q.k.some(k=>nz(k)==nz(s));
+let S=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+S=S||{strikes:0,viol:[],attempt:1,ans:{},notes:{},hint:{},running:false,late:false};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const endAt=()=>S.late?S.start+LIM*1000:Math.min(S.start+LIM*1000,DL);
+
+function M(title,body,btns){
+  $("#mb").innerHTML=`<h2>${title}</h2>${body}<div class="acts"></div>`;
+  btns.forEach(([t,fn,c])=>{const b=document.createElement("button");b.className="btn "+(c||"");b.textContent=t;b.onclick=()=>{$("#m").classList.add("hide");fn&&fn()};$("#mb .acts").appendChild(b)});
+  $("#m").classList.remove("hide");
+}
+
+/* ---------- render ---------- */
+const chip=(q,j,cap)=>`<span class="chip${cap?" cap":""}" data-q="${q.i}" data-c="${j}">${esc(q.w[j])}</span>`;
+function zoneH(q){const a=S.ans[q.i]||[];return a.map((j,x)=>chip(q,j,!x)).join("")+(a.length?`<span class="pn">${q.pn}</span>`:"")}
+function bankH(q){const a=S.ans[q.i]||[];return q.w.map((_,j)=>a.includes(j)?"":chip(q,j)).join("")}
+function card(q){
+  const i=q.i,hs=S.hint[i];
+  return `<section class="card" id="q${i}"><div class="qh"><b class="n">${i}</b><div class="qt">Sắp xếp thành câu hoàn chỉnh</div><button class="btn alt sm" data-hint="${i}">💡 Gợi ý</button><button class="btn alt sm" data-rs="${i}">Xoá làm lại</button></div>
+  <div class="hint${hs?"":" hide"}" id="h${i}"><b>Nghĩa tiếng Việt:</b> ${esc(q.vi)}</div>
+  <div class="zone" data-z="${i}">${zoneH(q)}</div><div class="bank" data-bk="${i}">${bankH(q)}</div>
+  <div class="tools"><button class="btn alt sm nb${S.notes[i]?" has":""}" data-n="${i}">Ghi chú</button><textarea class="note${S.notes[i]?"":" hide"}" data-nt="${i}" placeholder="Ghi chú nháp của bạn...">${esc(S.notes[i]||"")}</textarea></div></section>`;
+}
+function render(){
+  $("#qs").innerHTML=Q.map(q=>(SEC[q.i]?`<div class="sec"><h2>${SEC[q.i][0]}</h2><p>${SEC[q.i][1]}</p></div>`:"")+card(q)).join("");
+  $("#pg").innerHTML=Q.map(q=>`<button data-go="${q.i}">${q.i}</button>`).join("");pal();
+}
+function draw(i){const q=Q[i-1];$(`[data-z="${i}"]`).innerHTML=zoneH(q);$(`[data-bk="${i}"]`).innerHTML=bankH(q);pal()}
+const full=q=>(S.ans[q.i]||[]).length==q.w.length;
+function pal(){
+  let c=0;Q.forEach(q=>{const d=full(q);if(d)c++;const b=$(`[data-go="${q.i}"]`);b&&b.classList.toggle("done",d)});
+  $("#pr").textContent=c+"/40";$("#bi").style.width=c*2.5+"%";
+}
+
+/* ---------- kéo thả (chuột + cảm ứng) ---------- */
+let G=null;
+document.addEventListener("pointerdown",e=>{
+  const c=e.target.closest(".chip");if(!c||!S.running||e.button>0)return;
+  G={c,q:+c.dataset.q,id:+c.dataset.c,x:e.clientX,y:e.clientY,mv:false,g:null};
+});
+document.addEventListener("pointermove",e=>{
+  if(!G)return;
+  if(!G.mv){if(Math.hypot(e.clientX-G.x,e.clientY-G.y)<6)return;G.mv=true;G.g=G.c.cloneNode(true);G.g.classList.add("ghost");document.body.appendChild(G.g);G.c.classList.add("dragging")}
+  G.g.style.left=e.clientX+"px";G.g.style.top=e.clientY+"px";e.preventDefault();
+},{passive:false});
+function endDrag(e,cancel){
+  if(!G)return;const{q,id,mv,g,c}=G;G=null;g&&g.remove();c.classList.remove("dragging");
+  const a=(S.ans[q]||[]).slice();
+  if(!mv){if(cancel)return;const p=a.indexOf(id);p<0?a.push(id):a.splice(p,1)}
+  else{
+    if(cancel)return;
+    const t=document.elementFromPoint(e.clientX,e.clientY),z=t&&t.closest(".zone"),b=t&&t.closest(".bank");
+    if(z&&+z.dataset.z==q){
+      const cur=a.indexOf(id);if(cur>=0)a.splice(cur,1);
+      const cs=[...z.querySelectorAll(".chip")].filter(x=>+x.dataset.c!=id);let idx=cs.length;
+      for(let k=0;k<cs.length;k++){const r=cs[k].getBoundingClientRect();if(e.clientY<r.top||(e.clientY<=r.bottom&&e.clientX<r.left+r.width/2)){idx=k;break}}
+      a.splice(idx,0,id);
+    }else if(b&&+b.dataset.bk==q){const cur=a.indexOf(id);if(cur>=0)a.splice(cur,1)}
+    else{draw(q);return}
+  }
+  S.ans[q]=a;save();draw(q);
+}
+document.addEventListener("pointerup",e=>endDrag(e,false));
+document.addEventListener("pointercancel",e=>endDrag(e,true));
+
+/* ---------- sự kiện khác ---------- */
+document.addEventListener("click",e=>{
+  const t=e.target;let x;
+  if((x=t.closest("[data-hint]"))){const i=x.dataset.hint;S.hint[i]=1;$("#h"+i).classList.toggle("hide");save();return}
+  if((x=t.closest("[data-rs]"))){S.ans[x.dataset.rs]=[];save();draw(+x.dataset.rs);return}
+  if((x=t.closest("[data-n]"))){const ta=$(`[data-nt="${x.dataset.n}"]`);ta.classList.toggle("hide");if(!ta.classList.contains("hide"))ta.focus();return}
+  if((x=t.closest("[data-go]"))){const el=$("#q"+x.dataset.go);el&&el.scrollIntoView({behavior:"smooth",block:"start"});$("#as").classList.remove("open")}
+});
+document.addEventListener("input",e=>{const t=e.target;if(t.dataset.nt){S.notes[t.dataset.nt]=t.value;$(`[data-n="${t.dataset.nt}"]`).classList.toggle("has",!!t.value);save()}});
+$("#pb").onclick=()=>$("#as").classList.add("open");$("#pc").onclick=()=>$("#as").classList.remove("open");
+
+/* ---------- bắt đầu / deadline ---------- */
+function chkLate(){const l=Date.now()>DL&&!S.late;$("#late").classList.toggle("hide",!l);$("#f").classList.toggle("hide",l);return l}
+$("#lb").onclick=()=>{if(btoa($("#lc").value.trim())===LATE){S.late=true;save();chkLate()}else M("Code không đúng","<p>Vui lòng liên hệ giáo viên để nhận đúng code làm bài.</p>",[["Đóng"]])};
+$("#f").onsubmit=e=>{
+  e.preventDefault();if(chkLate())return;
+  M("⚠️ Nội quy làm bài",`<ul><li>Thời gian: <b>60 phút</b>${S.late?"":", và <b>không quá 23:00 ngày 27/11/2026</b> (giờ Việt Nam) — đến lúc đó bài sẽ tự động nộp"}. Hết giờ bài tự động nộp.</li><li><b>Không được thoát khỏi bài làm, chuyển tab, thu nhỏ trình duyệt hoặc tải lại trang.</b></li><li>Mọi hành vi rời khỏi bài đều được <b>ghi lại</b> và gửi cho giáo viên.</li><li>Vi phạm có thể dẫn đến việc <b>phải làm lại bài từ đầu</b>.</li><li>Điểm được lưu tự động vào hệ thống khi nộp bài.</li></ul>`,
+  [["Quay lại",null,"alt"],["Tôi đã hiểu – Bắt đầu",begin]]);
+};
+function begin(){
+  if(chkLate())return;
+  S.name=$("#nm").value.trim();S.running=true;S.start=Date.now();save();showTest();
+}
+function showTest(){$("#v-start").classList.add("hide");$("#v-test").classList.remove("hide");render();tick();window.scrollTo(0,0)}
+
+/* ---------- chống thoát bài ---------- */
+let last=0;
+async function post(p,d){try{const r=await fetch(DB+p+".json",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)});return r.ok}catch(e){return false}}
+function viol(type){
+  if(!S.running||Date.now()-last<1500)return;last=Date.now();
+  S.strikes++;const v={time:new Date().toISOString(),type,attempt:S.attempt,strike:S.strikes};S.viol.push(v);
+  post(VIO_P,{name:S.name,exam:EXAM,...v});
+  if(S.strikes<2){save();M("⚠️ Cảnh báo",`<p>Bạn vừa <b>rời khỏi bài làm</b> (${type}). Hành vi này đã được ghi lại.</p><p>Lần này chưa bị phạt, nhưng nếu tái phạm <b>bài làm sẽ bị xoá và bạn phải làm lại từ đầu</b>.</p>`,[["Quay lại làm bài"]])}
+  else{
+    S.attempt++;S.ans={};S.notes={};S.hint={};S.start=Date.now();save();render();window.scrollTo(0,0);
+    M("⛔ Vi phạm – làm lại từ đầu",`<p>Bạn đã rời khỏi bài làm lần thứ ${S.strikes} (${type}). Toàn bộ bài làm đã bị xoá, thời gian được tính lại${S.late?"":" (vẫn không vượt quá 23:00 ngày 27/11/2026)"}.</p><p>Lịch sử thoát bài đã được gửi cho giáo viên.</p>`,[["Làm lại từ đầu"]]);
+  }
+}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)viol("Chuyển tab / thu nhỏ cửa sổ")});
+window.addEventListener("blur",()=>viol("Rời khỏi cửa sổ bài làm"));
+
+/* ---------- đồng hồ ---------- */
+let timer;
+function tick(){
+  clearInterval(timer);
+  const f=()=>{
+    if(!S.running)return;
+    const left=Math.max(0,Math.ceil((endAt()-Date.now())/1000));
+    $("#tm").textContent=String(Math.floor(left/60)).padStart(2,"0")+":"+String(left%60).padStart(2,"0");
+    $("#tm").classList.toggle("low",left<300);
+    if(!left){clearInterval(timer);finish(true)}
+  };f();timer=setInterval(f,1000);
+}
+
+/* ---------- nộp bài ---------- */
+$("#sub").onclick=()=>{
+  const un=Q.filter(q=>!full(q)).length;
+  M("Nộp bài?",`<p>${un?`Bạn còn <b>${un}</b> câu chưa xếp xong.`:"Bạn đã xếp xong tất cả các câu."} Sau khi nộp sẽ không thể sửa.</p>`,[["Làm tiếp",null,"alt"],["Nộp bài",()=>finish(false)]]);
+};
+async function finish(auto){
+  S.running=false;clearInterval(timer);
+  let c=0;const wrong=[],answers={};
+  Q.forEach(q=>{const s=sent(q,S.ans[q.i]);answers[q.i]=s;isOk(q,s)?c++:wrong.push(q.i)});
+  const hints=Object.keys(S.hint).map(Number).sort((a,b)=>a-b);
+  const payload={name:S.name,exam:EXAM,score:+(c*0.25).toFixed(2),max:10,correct:c,total:40,wrong,answers,hints,notes:S.notes,violations:S.viol,strikes:S.strikes,attempts:S.attempt,late:!!S.late,durationSec:Math.min(LIM,Math.round((Date.now()-S.start)/1000)),autoSubmitted:!!auto,submittedAt:new Date().toISOString()};
+  $("#v-test").classList.add("hide");$("#v-res").classList.remove("hide");
+  $("#v-res").innerHTML=`<h1>Đã nộp bài</h1><p>${esc(S.name)}</p><div class="sc">${payload.score}<small style="font-size:22px"> / 10</small></div><p>Đúng ${c}/40 câu. Câu sai: ${wrong.length?wrong.join(", "):"không có"}.</p><p id="st">Đang lưu điểm...</p><button class="btn hide" id="rt">Thử lưu lại</button>`;
+  localStorage.removeItem(KEY);
+  const send=async()=>{const ok=await post(RES_P,payload);$("#st").textContent=ok?"✅ Điểm đã được lưu vào hệ thống.":"❌ Chưa lưu được điểm. Kiểm tra mạng rồi bấm “Thử lưu lại” (đừng đóng trang).";$("#rt").classList.toggle("hide",ok)};
+  $("#rt").onclick=send;send();
+}
+
+/* ---------- bảng điểm (giáo viên) ---------- */
+function askCode(err){
+  M("Xem bảng điểm",`<p>Nhập mã bảo mật để xem điểm.</p><input id="cd" type="password" placeholder="Mã bảo mật" autocomplete="off">${err?'<p class="no">Mã không đúng, thử lại.</p>':""}`,
+  [["Huỷ",null,"alt"],["Xem",()=>{btoa($("#cd").value.trim())===TPW?openScores():askCode(1)}]]);
+}
+$("#vs").onclick=()=>askCode(0);
+let RES={};
+const dt=x=>{const d=new Date(x);return isNaN(d)?"":d.toLocaleString("vi-VN")};
+const sorted=()=>Object.entries(RES).sort((a,b)=>String(b[1].submittedAt).localeCompare(String(a[1].submittedAt)));
+const wrongOf=r=>Q.filter(q=>!isOk(q,(r.answers||{})[q.i]));
+async function openScores(){
+  $("#v-start").classList.add("hide");$("#v-score").classList.remove("hide");
+  $("#v-score").innerHTML='<p style="text-align:center">Đang tải bảng điểm...</p>';
+  let bad=false;RES={};
+  try{const r=await fetch(DB+RES_P+".json");if(!r.ok)throw 0;RES=await r.json()||{}}catch(e){bad=true}
+  const rows=sorted();
+  $("#v-score").innerHTML=`<div class="hd"><h2>Bảng điểm (${rows.length} bài)</h2><button class="btn alt sm" id="rf">Làm mới</button><button class="btn alt sm" id="csv">Tải CSV</button><button class="btn sm" id="bk">Quay lại</button></div>`+
+  (bad?'<div class="card">Không tải được dữ liệu. Kiểm tra mạng và Rules của Firebase.</div>':"")+(!bad&&!rows.length?'<div class="card">Chưa có bài nộp nào.</div>':"")+
+  rows.map(([k,r])=>{const w=wrongOf(r);return `<details class="card"><summary><b>${esc(r.name)}</b> · <b style="color:var(--pri)">${(40-w.length)*0.25}/10</b> · ${esc(dt(r.submittedAt))}${r.late?" · <span class='no'>làm trễ</span>":""}<br><span class="mut">vi phạm: ${esc(r.strikes||0)} · lượt làm: ${esc(r.attempts||1)} · dùng gợi ý: ${(r.hints||[]).length} câu · ${Math.round((r.durationSec||0)/60)} phút${r.autoSubmitted?" (hết giờ)":""}</span></summary>
+  ${w.length?w.map(q=>`<p class="mut"><b class="no">Câu ${q.i}</b> · HS: ${esc((r.answers||{})[q.i]||"(bỏ trống)")}<br><span class="ok">Đúng: ${esc(q.k[0])}</span></p>`).join(""):'<p class="ok">Không sai câu nào.</p>'}
+  ${(r.violations||[]).length?`<p class="mut"><b>Lịch sử thoát bài:</b></p>`+r.violations.map(x=>`<p class="mut">• Lượt ${esc(x.attempt)} · lần ${esc(x.strike)} · ${esc(x.type)} · ${esc(dt(x.time))}</p>`).join(""):""}</details>`}).join("");
+}
+$("#v-score").addEventListener("click",e=>{
+  const g=s=>e.target.closest(s);
+  if(g("#rf"))openScores();
+  else if(g("#bk")){$("#v-score").classList.add("hide");$("#v-start").classList.remove("hide")}
+  else if(g("#csv")){
+    const rows=[["Họ tên","Điểm /10","Số câu đúng","Vi phạm","Lượt làm","Làm trễ","Dùng gợi ý (số câu)","Thời gian (giây)","Nộp lúc","Câu sai"]];
+    sorted().forEach(([k,r])=>{const w=wrongOf(r);rows.push([r.name,(40-w.length)*0.25,40-w.length,r.strikes||0,r.attempts||1,r.late?"Có":"Không",(r.hints||[]).length,r.durationSec||0,r.submittedAt,w.map(q=>q.i).join(" ")])});
+    const t=rows.map(a=>a.map(c=>{c=String(c??"");if(/^[=+\-@]/.test(c))c="'"+c;return '"'+c.replace(/"/g,'""')+'"'}).join(",")).join("\r\n");
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+t],{type:"text/csv"}));a.download="bang-diem-sap-xep-cau.csv";a.click();
+  }
+});
+
+/* ---------- khởi động ---------- */
+chkLate();
+if(S.running&&S.name){showTest();viol("Tải lại / đóng rồi mở lại trang")}
+</script>
+</body>
+</html>
