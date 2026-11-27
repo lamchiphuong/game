@@ -64,6 +64,15 @@ aside h3{margin:0 0 8px;font-size:15px}
  .fab{display:inline-block}
  .top h1{display:none}.top{justify-content:space-between}
 }
+.qc.ok{border-left:6px solid #1a9a6c}.qc.bad{border-left:6px solid var(--bad)}
+.rv[data-flt=wrong] .qc.ok{display:none}
+.badge{display:inline-block;font-weight:700;font-size:13px;padding:2px 10px;border-radius:99px;margin-bottom:6px}
+.qc.ok .badge{background:#d9f3e8;color:#0b6b46}.qc.bad .badge{background:#fde4e0;color:var(--bad)}
+.sumb{position:sticky;top:0;z-index:5;background:#17212f;color:#fff;border-radius:12px;padding:10px 14px;margin-bottom:12px}
+#v-rep{max-width:820px;margin:0 auto;background:#fff;padding:24px}
+#v-rep h1{font-size:20px;margin:0 0 4px}#v-rep h3{margin:18px 0 6px}
+#v-rep table{width:100%;border-collapse:collapse;font-size:14px}#v-rep td,#v-rep th{border:1px solid #999;padding:6px;text-align:left;vertical-align:top}
+@media print{body>*:not(#v-rep){display:none!important}body{background:#fff}#v-rep{padding:0;max-width:none}.noprint{display:none!important}}
 </style>
 </head>
 <body>
@@ -104,6 +113,7 @@ aside h3{margin:0 0 8px;font-size:15px}
   </div>
 </div>
 
+<div id="v-rep" class="hide"></div>
 <div id="v-res" class="start res hide"></div>
 <div id="m" class="ov hide"><div class="md" id="mb"></div></div>
 
@@ -297,38 +307,87 @@ async function finish(auto){
   $("#rt").onclick=send;send();
 }
 
-/* ---------- bảng điểm (giáo viên) ---------- */
+/* ---------- bảng điểm (giáo viên) – giữ cách báo cáo như công cụ cũ ---------- */
 function askCode(err){
   M("Xem bảng điểm",`<p>Nhập mã bảo mật để xem điểm.</p><input id="cd" type="password" placeholder="Mã bảo mật" autocomplete="off">${err?'<p class="no">Mã không đúng, thử lại.</p>':""}`,
   [["Huỷ",null,"alt"],["Xem",()=>{btoa($("#cd").value.trim())===TPW?openScores():askCode(1)}]]);
 }
 $("#vs").onclick=()=>askCode(0);
-let RES={};
+let RES={},CUR=null,TT=null;
+const A=(r,i)=>(r.answers||{})[i]||"";
 const dt=x=>{const d=new Date(x);return isNaN(d)?"":d.toLocaleString("vi-VN")};
 const sorted=()=>Object.entries(RES).sort((a,b)=>String(b[1].submittedAt).localeCompare(String(a[1].submittedAt)));
-const wrongOf=r=>Q.filter(q=>!isOk(q,(r.answers||{})[q.i]));
-async function openScores(){
-  $("#v-start").classList.add("hide");$("#v-score").classList.remove("hide");
+const okQ=(q,r,ov)=>{const o=(ov||{})[q.i];return o!=null?!!o:isOk(q,A(r,q.i))};
+const calc=(r,T)=>{let c=0;Q.forEach(q=>{if(okQ(q,r,(T||{}).ov))c++});return{c,total:+(c*0.25).toFixed(2)}};
+const qtxt=q=>"Sắp xếp: "+esc(q.w.join(" / "))+" "+esc(q.pn);
+function openScores(){$("#v-start").classList.add("hide");$("#v-score").classList.remove("hide");loadScores()}
+async function loadScores(){
   $("#v-score").innerHTML='<p style="text-align:center">Đang tải bảng điểm...</p>';
   let bad=false;RES={};
   try{const r=await fetch(DB+RES_P+".json");if(!r.ok)throw 0;RES=await r.json()||{}}catch(e){bad=true}
-  const rows=sorted();
-  $("#v-score").innerHTML=`<div class="hd"><h2>Bảng điểm (${rows.length} bài)</h2><button class="btn alt sm" id="rf">Làm mới</button><button class="btn alt sm" id="csv">Tải CSV</button><button class="btn sm" id="bk">Quay lại</button></div>`+
-  (bad?'<div class="card">Không tải được dữ liệu. Kiểm tra mạng và Rules của Firebase.</div>':"")+(!bad&&!rows.length?'<div class="card">Chưa có bài nộp nào.</div>':"")+
-  rows.map(([k,r])=>{const w=wrongOf(r);return `<details class="card"><summary><b>${esc(r.name)}</b> · <b style="color:var(--pri)">${(40-w.length)*0.25}/10</b> · ${esc(dt(r.submittedAt))}${r.late?" · <span class='no'>làm trễ</span>":""}<br><span class="mut">vi phạm: ${esc(r.strikes||0)} · lượt làm: ${esc(r.attempts||1)} · dùng gợi ý: ${(r.hints||[]).length} câu · ${Math.round((r.durationSec||0)/60)} phút${r.autoSubmitted?" (hết giờ)":""}</span></summary>
-  ${w.length?w.map(q=>`<p class="mut"><b class="no">Câu ${q.i}</b> · HS: ${esc((r.answers||{})[q.i]||"(bỏ trống)")}<br><span class="ok">Đúng: ${esc(q.k[0])}</span></p>`).join(""):'<p class="ok">Không sai câu nào.</p>'}
-  ${(r.violations||[]).length?`<p class="mut"><b>Lịch sử thoát bài:</b></p>`+r.violations.map(x=>`<p class="mut">• Lượt ${esc(x.attempt)} · lần ${esc(x.strike)} · ${esc(x.type)} · ${esc(dt(x.time))}</p>`).join(""):""}</details>`}).join("");
+  drawList(bad);
+}
+function drawList(bad){
+  CUR=null;TT=null;const rows=sorted();
+  $("#v-score").innerHTML=`<div class="hd"><h2>Bảng điểm (${rows.length} bài)</h2><button class="btn alt sm" id="rf">Làm mới</button><button class="btn alt sm" id="csv">Tải CSV cả lớp</button><button class="btn sm" id="bk">Quay lại</button></div>`+
+  (bad?'<div class="card">Không tải được dữ liệu. Kiểm tra mạng và Rules của Firebase (cần cho phép đọc <code>'+RES_P+'</code>).</div>':"")+
+  (!bad&&!rows.length?'<div class="card">Chưa có bài nộp nào.</div>':"")+
+  rows.map(([k,r])=>{const x=calc(r,r.teacher);
+    return `<div class="card" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div style="flex:1;min-width:200px"><b>${esc(r.name)}</b><br><span class="mut">${esc(dt(r.submittedAt))} · vi phạm: ${esc(r.strikes||0)} · lượt làm: ${esc(r.attempts||1)}${r.late?" · <span class='no'>làm trễ</span>":""} · gợi ý: ${(r.hints||[]).length} câu</span></div><b style="color:var(--pri)">${x.total}/10${r.teacher?" · đã chấm":""}</b><button class="btn sm" data-rv="${esc(k)}">Chấm / xem bài</button><button class="btn alt sm" data-rp="${esc(k)}">Báo cáo</button></div>`}).join("");
+}
+function cardHTML(q,r){
+  const i=q.i,ok=okQ(q,r,TT.ov);
+  return `<div class="card qc ${ok?"ok":"bad"}" id="c${i}" data-i="${i}"><div class="qh"><b class="n">${i}</b><div style="flex:1"><div>${qtxt(q)}</div><p>Học sinh xếp: <b>${esc(A(r,i)||"(bỏ trống)")}</b></p><p>Đáp án đúng: <b>${esc(q.k.join("  |  "))}</b></p>${(r.hints||[]).includes(i)?'<p class="mut">HS đã bấm xem gợi ý.</p>':""}${(r.notes||{})[i]?`<p class="mut">Ghi chú của HS: ${esc(r.notes[i])}</p>`:""}</div><div style="text-align:center"><span class="badge">${ok?"✔ Đúng":"✖ Sai"}</span><br><button class="btn alt sm" data-ov="${i}">Đổi đúng/sai</button></div></div></div>`;
+}
+function sum(){const x=calc(RES[CUR],TT);$("#sm").innerHTML=`Đúng: ${x.c}/40 câu · <b>Tổng: ${x.total}/10</b>`}
+function showReview(k){
+  CUR=k;const r=RES[k],t=r.teacher||{};TT={ov:Object.assign({},t.ov)};
+  const v=r.violations||[];
+  $("#v-score").innerHTML=`<div class="hd"><button class="btn alt sm" id="bl">← Danh sách</button><h2>${esc(r.name)}</h2><button class="btn alt sm" id="rpt">Xuất báo cáo</button><button class="btn sm" id="sv">Lưu chấm bài</button></div>
+  <div class="sumb"><div id="sm"></div><div id="ss" style="font-size:13px;opacity:.8">Nộp lúc ${esc(dt(r.submittedAt))} · làm ${Math.round((r.durationSec||0)/60)} phút${r.autoSubmitted?" (hết giờ)":""}${r.late?" · làm trễ (có code)":""}</div></div>
+  <details class="card"><summary>Lịch sử thoát bài (${v.length})</summary>${v.map(x=>`<p class="mut">• Lượt ${esc(x.attempt)} · lần ${esc(x.strike)} · ${esc(x.type)} · ${esc(dt(x.time))}</p>`).join("")||'<p class="mut">Không có.</p>'}</details>
+  <div class="hd"><button class="btn alt sm" data-f="all">Tất cả</button><button class="btn alt sm" data-f="wrong">Chỉ câu sai</button></div>
+  <div class="rv" data-flt="all">${Q.map(q=>cardHTML(q,r)).join("")}</div>`;
+  sum();window.scrollTo(0,0);
+}
+async function saveT(){
+  const r=RES[CUR],x=calc(r,TT);
+  const data={ov:TT.ov,total:x.total,gradedAt:new Date().toISOString()};
+  let ok=false;
+  try{const q=await fetch(DB+RES_P+"/"+CUR+"/teacher.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});ok=q.ok}catch(e){}
+  if(ok)r.teacher=data;
+  $("#ss").textContent=ok?"✅ Đã lưu chấm bài lên hệ thống.":"❌ Chưa lưu được. Kiểm tra mạng / Rules Firebase (cần cho phép ghi vào "+RES_P+").";
+}
+function csv(){
+  const rows=[["Họ tên","Tổng điểm /10","Số câu đúng","Trạng thái","Số lần vi phạm","Lượt làm","Làm trễ","Dùng gợi ý (số câu)","Thời gian (giây)","Nộp lúc","Câu sai"]];
+  sorted().forEach(([k,r])=>{const T=r.teacher||{},x=calc(r,T);
+    rows.push([r.name,x.total,x.c,r.teacher?"Đã chấm":"Tự chấm",r.strikes||0,r.attempts||1,r.late?"Có":"Không",(r.hints||[]).length,r.durationSec||0,r.submittedAt,Q.filter(q=>!okQ(q,r,T.ov)).map(q=>q.i).join(" ")])});
+  const t=rows.map(a=>a.map(c=>{c=String(c??"");if(/^[=+\-@]/.test(c))c="'"+c;return '"'+c.replace(/"/g,'""')+'"'}).join(",")).join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+t],{type:"text/csv"}));a.download="bang-diem-sap-xep-cau.csv";a.click();
+}
+function showReport(k,T,back){
+  const r=RES[k],x=calc(r,T),wr=Q.filter(q=>!okQ(q,r,T.ov));
+  $("#v-score").classList.add("hide");$("#v-rep").classList.remove("hide");
+  $("#v-rep").innerHTML=`<div class="noprint hd"><button class="btn alt sm" id="rb">← Quay lại</button><h2></h2><button class="btn sm" id="pr2">In / Lưu PDF</button></div>
+  <h1>KẾT QUẢ BÀI KIỂM TRA</h1><div>English – Sắp xếp câu · Mã đề 02</div>
+  <p><b>Học sinh:</b> ${esc(r.name)} &nbsp; <b>Ngày nộp:</b> ${esc(dt(r.submittedAt))}</p>
+  <table><tr><th>Số câu đúng</th><th>Tổng điểm</th></tr><tr><td>${x.c} / 40</td><td><b>${x.total} / 10</b></td></tr></table>
+  <h3>Các câu cần sửa (${wr.length})</h3>${wr.length?`<table><tr><th>Câu</th><th>Đề bài</th><th>Bài làm</th><th>Đáp án đúng</th></tr>${wr.map(q=>`<tr><td>${q.i}</td><td>${qtxt(q)}</td><td>${esc(A(r,q.i)||"(bỏ trống)")}</td><td><b>${esc(q.k[0])}</b></td></tr>`).join("")}</table>`:"<p>Không có câu sai. Làm rất tốt!</p>"}`;
+  $("#rb").onclick=()=>{$("#v-rep").classList.add("hide");$("#v-score").classList.remove("hide");back()};
+  $("#pr2").onclick=()=>window.print();window.scrollTo(0,0);
 }
 $("#v-score").addEventListener("click",e=>{
-  const g=s=>e.target.closest(s);
-  if(g("#rf"))openScores();
+  const t=e.target,g=s=>t.closest(s);let x;
+  if(g("#rf"))loadScores();
   else if(g("#bk")){$("#v-score").classList.add("hide");$("#v-start").classList.remove("hide")}
-  else if(g("#csv")){
-    const rows=[["Họ tên","Điểm /10","Số câu đúng","Vi phạm","Lượt làm","Làm trễ","Dùng gợi ý (số câu)","Thời gian (giây)","Nộp lúc","Câu sai"]];
-    sorted().forEach(([k,r])=>{const w=wrongOf(r);rows.push([r.name,(40-w.length)*0.25,40-w.length,r.strikes||0,r.attempts||1,r.late?"Có":"Không",(r.hints||[]).length,r.durationSec||0,r.submittedAt,w.map(q=>q.i).join(" ")])});
-    const t=rows.map(a=>a.map(c=>{c=String(c??"");if(/^[=+\-@]/.test(c))c="'"+c;return '"'+c.replace(/"/g,'""')+'"'}).join(",")).join("\r\n");
-    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+t],{type:"text/csv"}));a.download="bang-diem-sap-xep-cau.csv";a.click();
-  }
+  else if(g("#csv"))csv();
+  else if(g("#bl"))drawList();
+  else if(g("#sv"))saveT();
+  else if(g("#rpt")){const k=CUR;showReport(k,TT,()=>showReview(k))}
+  else if((x=g("[data-rv]")))showReview(x.dataset.rv);
+  else if((x=g("[data-rp]"))){const k=x.dataset.rp;showReport(k,RES[k].teacher||{ov:{}},drawList)}
+  else if((x=g("[data-f]")))g(".hd").parentNode.querySelector(".rv").dataset.flt=x.dataset.f;
+  else if((x=g("[data-ov]"))){const i=+x.dataset.ov,q=Q[i-1],r=RES[CUR];TT.ov[i]=!okQ(q,r,TT.ov);$("#c"+i).outerHTML=cardHTML(q,r);sum()}
 });
 
 /* ---------- khởi động ---------- */
